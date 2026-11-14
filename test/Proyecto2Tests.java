@@ -1,4 +1,4 @@
-package clubdeportivo;
+
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -21,6 +21,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import clubdeportivo.ClubDeportivo;
 import clubdeportivo.deportes.Categoria;
 import clubdeportivo.deportes.DeporteConjunto;
 import clubdeportivo.deportes.DeporteIndividual;
@@ -57,7 +58,7 @@ import usuarios.tipos.Socio;
 import usuarios.tipos.empleados.Entrenador;
 import utilidades.persistencia.PersistenciaClub;
 
-public class Proyecto2IntegracionTest {
+public class Proyecto2Tests {
     private ClubDeportivo club;
     private DeporteIndividual tenis;
     private LocalDate fechaTorneo;
