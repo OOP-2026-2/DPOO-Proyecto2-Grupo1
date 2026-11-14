@@ -27,7 +27,12 @@ import clubdeportivo.torneos.EncuentroTorneo;
 import clubdeportivo.torneos.BonoDescuento;
 import clubdeportivo.torneos.EstadoTorneo;
 import clubdeportivo.torneos.FormatoTorneo;
+import clubdeportivo.torneos.InscripcionEquipoTorneo;
+import clubdeportivo.torneos.InscripcionIndividualTorneo;
+import clubdeportivo.torneos.InscripcionTorneo;
+import clubdeportivo.torneos.ParticipanteTorneo;
 import clubdeportivo.torneos.PoliticaPremio;
+import clubdeportivo.torneos.PosicionTorneo;
 import clubdeportivo.torneos.PremioCompetitivo;
 import clubdeportivo.torneos.PremioMonetario;
 import clubdeportivo.torneos.PremioRecreativo;
@@ -291,13 +296,15 @@ public class ConsolaAdministrador implements Subconsola {
                 System.out.println("  Código de descuento: "
                         + empleado.getCodigoDescuento());
             } else if (usuario instanceof EstudianteUniversidad) {
-                EstudianteUniversidad estudiante = (EstudianteUniversidad) usuario;
+                EstudianteUniversidad estudiante =
+                        (EstudianteUniversidad) usuario;
                 System.out.println("  Universidad: "
                         + estudiante.getUniversidad()
                         + " | Correo: "
                         + estudiante.getCorreoInstitucional());
             } else if (usuario instanceof ParticipanteExterno) {
-                ParticipanteExterno externo = (ParticipanteExterno) usuario;
+                ParticipanteExterno externo =
+                        (ParticipanteExterno) usuario;
                 System.out.println("  Contacto: "
                         + externo.getContacto());
             }
@@ -441,7 +448,8 @@ public class ConsolaAdministrador implements Subconsola {
                         "¿Pertenece a un deporte individual? (s/n): ")) {
 
             System.out.println("Deportes individuales disponibles:");
-            for (DeporteIndividual deporte : club.getDeportesIndividuales()) {
+            for (DeporteIndividual deporte :
+                    club.getDeportesIndividuales()) {
 
                 System.out.println("- " + deporte.getNombre());
             }
@@ -493,7 +501,8 @@ public class ConsolaAdministrador implements Subconsola {
             System.out.println("- No hay deportes registrados.");
         }
 
-        for (DeporteIndividual deporte : club.getDeportesIndividuales()) {
+        for (DeporteIndividual deporte :
+                club.getDeportesIndividuales()) {
 
             System.out.println("- " + deporte.getNombre()
                     + " | Máximo de instalaciones: "
@@ -566,13 +575,15 @@ public class ConsolaAdministrador implements Subconsola {
         }
 
         System.out.println("Ubicaciones disponibles:");
-        for (UbicacionInventario ubicacion : club.getUbicacionesInventario()) {
+        for (UbicacionInventario ubicacion :
+                club.getUbicacionesInventario()) {
 
             System.out.println("- " + ubicacion.getNombre());
         }
 
-        UbicacionInventario ubicacion = club.buscarUbicacionInventario(
-                readString("Nombre de la ubicación: "));
+        UbicacionInventario ubicacion =
+                club.buscarUbicacionInventario(
+                        readString("Nombre de la ubicación: "));
 
         if (ubicacion == null) {
             System.out.println("No existe esa ubicación.");
@@ -602,7 +613,8 @@ public class ConsolaAdministrador implements Subconsola {
 
             boolean tieneExistencias = false;
 
-            for (UbicacionInventario ubicacion : club.getUbicacionesInventario()) {
+            for (UbicacionInventario ubicacion :
+                    club.getUbicacionesInventario()) {
 
                 ExistenciaInventario existencia = club.buscarExistencia(
                         producto, ubicacion);
@@ -845,12 +857,18 @@ public class ConsolaAdministrador implements Subconsola {
         System.out.println();
         System.out.println("--- TORNEOS REGISTRADOS ---");
 
-        if (club.getTorneos().isEmpty()) {
-            System.out.println("No hay torneos registrados.");
+        TipoTorneo tipo = seleccionarFiltroTipoTorneo();
+        EstadoTorneo estado = seleccionarFiltroEstadoTorneo();
+        List<Torneo> torneos = club.consultarTorneos(
+                tipo, estado);
+
+        if (torneos.isEmpty()) {
+            System.out.println(
+                    "No hay torneos que coincidan con los filtros.");
             return;
         }
 
-        for (Torneo torneo : club.getTorneos()) {
+        for (Torneo torneo : torneos) {
             System.out.println();
             System.out.println("ID: " + torneo.getId());
             System.out.println("Nombre: " + torneo.getNombre());
@@ -866,7 +884,118 @@ public class ConsolaAdministrador implements Subconsola {
             System.out.println("Cupos disponibles: "
                     + torneo.cantidadCuposDisponibles());
             System.out.println("Recaudo: " + torneo.calcularRecaudo());
+            mostrarHistorialTorneo(torneo);
         }
+    }
+
+    private TipoTorneo seleccionarFiltroTipoTorneo() {
+        System.out.println("Tipos disponibles:");
+        System.out.println("- TODOS");
+
+        for (TipoTorneo tipo : TipoTorneo.values()) {
+            System.out.println("- " + tipo);
+        }
+
+        String valor = readString(
+                "Tipo que desea consultar: ").toUpperCase();
+
+        if (valor.equals("TODOS")) {
+            return null;
+        }
+
+        return TipoTorneo.valueOf(valor);
+    }
+
+    private EstadoTorneo seleccionarFiltroEstadoTorneo() {
+        System.out.println("Estados disponibles:");
+        System.out.println("- TODOS");
+
+        for (EstadoTorneo estado : EstadoTorneo.values()) {
+            System.out.println("- " + estado);
+        }
+
+        String valor = readString(
+                "Estado que desea consultar: ").toUpperCase();
+
+        if (valor.equals("TODOS")) {
+            return null;
+        }
+
+        return EstadoTorneo.valueOf(valor);
+    }
+
+    private void mostrarHistorialTorneo(Torneo torneo) {
+        System.out.println("Inscripciones:");
+
+        if (torneo.getInscripciones().isEmpty()) {
+            System.out.println("- Sin inscripciones");
+        } else {
+            for (InscripcionTorneo inscripcion : torneo.getInscripciones()) {
+                System.out.println("- " + describirInscripcion(inscripcion)
+                        + " | Estado: " + inscripcion.getEstado());
+            }
+        }
+
+        System.out.println("Encuentros:");
+
+        if (torneo.getEncuentros().isEmpty()) {
+            System.out.println("- Sin encuentros");
+        } else {
+            for (EncuentroTorneo encuentro : torneo.getEncuentros()) {
+                System.out.println("- " + encuentro.getId()
+                        + " | " + describirInscripcion(
+                                encuentro.getInscripcionLocal())
+                        + " contra " + describirInscripcion(
+                                encuentro.getInscripcionVisitante())
+                        + " | Estado: " + encuentro.getEstado()
+                        + " | Marcador: "
+                        + (encuentro.getMarcador() == null
+                                ? "Sin resultado"
+                                : encuentro.getMarcador()));
+            }
+        }
+
+        if (!torneo.getPosiciones().isEmpty()) {
+            System.out.println("Posiciones:");
+
+            for (PosicionTorneo posicion : torneo.getPosiciones()) {
+                System.out.println("- " + posicion.getPosicion()
+                        + ". " + describirInscripcion(
+                                posicion.getInscripcion())
+                        + " | Puntos: " + posicion.getPuntos()
+                        + " | Victorias: " + posicion.getVictorias()
+                        + " | Empates: " + posicion.getEmpates()
+                        + " | Derrotas: " + posicion.getDerrotas());
+            }
+        }
+    }
+
+    private String describirInscripcion(
+            InscripcionTorneo inscripcion) {
+
+        if (inscripcion instanceof InscripcionEquipoTorneo) {
+            return ((InscripcionEquipoTorneo) inscripcion)
+                    .getEquipo().getNombre();
+        }
+
+        if (inscripcion instanceof InscripcionIndividualTorneo) {
+            String nombres = "";
+
+            for (ParticipanteTorneo inscrito
+                    : ((InscripcionIndividualTorneo) inscripcion)
+                            .getParticipantes()) {
+
+                if (!nombres.isEmpty()) {
+                    nombres += " / ";
+                }
+
+                nombres += inscrito.getNombre();
+            }
+
+            return nombres;
+        }
+
+        return "Inscripción sin participante";
     }
 
     private void liberarCupos() {
@@ -1184,9 +1313,11 @@ public class ConsolaAdministrador implements Subconsola {
     }
 
     private void gestionarSolicitudesCambioTurno() {
-        List<SolicitudCambioTurno> pendientes = new ArrayList<SolicitudCambioTurno>();
+        List<SolicitudCambioTurno> pendientes =
+                new ArrayList<SolicitudCambioTurno>();
 
-        for (SolicitudCambioTurno solicitud : club.getSolicitudesCambioTurno()) {
+        for (SolicitudCambioTurno solicitud :
+                club.getSolicitudesCambioTurno()) {
 
             if (solicitud.estaPendiente()) {
                 pendientes.add(solicitud);
@@ -1233,9 +1364,11 @@ public class ConsolaAdministrador implements Subconsola {
     }
 
     private void gestionarSugerenciasProducto() {
-        List<SugerenciaProducto> pendientes = new ArrayList<SugerenciaProducto>();
+        List<SugerenciaProducto> pendientes =
+                new ArrayList<SugerenciaProducto>();
 
-        for (SugerenciaProducto sugerencia : club.getSugerenciasProducto()) {
+        for (SugerenciaProducto sugerencia :
+                club.getSugerenciasProducto()) {
 
             if (sugerencia.estaPendiente()) {
                 pendientes.add(sugerencia);

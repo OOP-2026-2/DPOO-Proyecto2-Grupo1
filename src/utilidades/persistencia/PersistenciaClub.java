@@ -102,37 +102,80 @@ import usuarios.tipos.empleados.Entrenador;
 import usuarios.tipos.empleados.Fisioterapeuta;
 
 public class PersistenciaClub {
-    private static final Path CARPETA = Paths.get("datos");
-    private static final Path ARCHIVO_SOCIOS = CARPETA.resolve("socios.txt");
-    private static final Path ARCHIVO_DEPORTES_CONJUNTO = CARPETA.resolve("deportes_conjunto.txt");
-    private static final Path ARCHIVO_DEPORTES_INDIVIDUALES = CARPETA.resolve("deportes_individuales.txt");
-    private static final Path ARCHIVO_EQUIPOS = CARPETA.resolve("equipos.txt");
-    private static final Path ARCHIVO_INSCRIPCIONES_EQUIPO = CARPETA.resolve("inscripciones_equipo.txt");
-    private static final Path ARCHIVO_INSCRIPCIONES_ACADEMIA = CARPETA.resolve("inscripciones_academia.txt");
-    private static final Path ARCHIVO_PRODUCTOS = CARPETA.resolve("productos.txt");
-    private static final Path ARCHIVO_INVENTARIO = CARPETA.resolve("inventario.txt");
-    private static final Path ARCHIVO_MOVIMIENTOS = CARPETA.resolve("movimientos.txt");
-    private static final Path ARCHIVO_PAGOS = CARPETA.resolve("pagos.txt");
-    private static final Path ARCHIVO_INSTALACIONES = CARPETA.resolve("instalaciones.txt");
-    private static final Path ARCHIVO_RESERVAS = CARPETA.resolve("reservas.txt");
-    private static final Path ARCHIVO_VENTAS = CARPETA.resolve("ventas.txt");
-    private static final Path ARCHIVO_EMPLEADOS = CARPETA.resolve("empleados.txt");
-    private static final Path ARCHIVO_SOLICITUDES_TURNO = CARPETA.resolve("solicitudes_turno.txt");
-    private static final Path ARCHIVO_TURNOS = CARPETA.resolve("turnos.txt");
-    private static final Path ARCHIVO_COMPETENCIAS = CARPETA.resolve("competencias.txt");
-    private static final Path ARCHIVO_INSCRIPCIONES_COMPETENCIA = CARPETA.resolve("inscripciones_competencia.txt");
-    private static final Path ARCHIVO_PARTIDOS = CARPETA.resolve("partidos.txt");
-    private static final Path ARCHIVO_ESTADISTICAS = CARPETA.resolve("estadisticas.txt");
-    private static final Path ARCHIVO_SESIONES = CARPETA.resolve("sesiones.txt");
-    private static final Path ARCHIVO_ASISTENCIAS = CARPETA.resolve("asistencias.txt");
-    private static final Path ARCHIVO_SUGERENCIAS = CARPETA.resolve("sugerencias.txt");
-    private static final Path ARCHIVO_ESTUDIANTES = CARPETA.resolve("estudiantes.txt");
-    private static final Path ARCHIVO_PARTICIPANTES_EXTERNOS = CARPETA.resolve("participantes_externos.txt");
-    private static final Path ARCHIVO_TORNEOS = CARPETA.resolve("torneos.txt");
-    private static final Path ARCHIVO_INSCRIPCIONES_TORNEO = CARPETA.resolve("inscripciones_torneo.txt");
-    private static final Path ARCHIVO_ENCUENTROS_TORNEO = CARPETA.resolve("encuentros_torneo.txt");
-    private static final Path ARCHIVO_POSICIONES_TORNEO = CARPETA.resolve("posiciones_torneo.txt");
-    private static final Path ARCHIVO_PREMIOS_TORNEO = CARPETA.resolve("premios_torneo.txt");
+    private final Path CARPETA;
+    private final Path ARCHIVO_SOCIOS;
+    private final Path ARCHIVO_DEPORTES_CONJUNTO;
+    private final Path ARCHIVO_DEPORTES_INDIVIDUALES;
+    private final Path ARCHIVO_EQUIPOS;
+    private final Path ARCHIVO_INSCRIPCIONES_EQUIPO;
+    private final Path ARCHIVO_INSCRIPCIONES_ACADEMIA;
+    private final Path ARCHIVO_PRODUCTOS;
+    private final Path ARCHIVO_INVENTARIO;
+    private final Path ARCHIVO_MOVIMIENTOS;
+    private final Path ARCHIVO_PAGOS;
+    private final Path ARCHIVO_INSTALACIONES;
+    private final Path ARCHIVO_RESERVAS;
+    private final Path ARCHIVO_VENTAS;
+    private final Path ARCHIVO_EMPLEADOS;
+    private final Path ARCHIVO_SOLICITUDES_TURNO;
+    private final Path ARCHIVO_TURNOS;
+    private final Path ARCHIVO_COMPETENCIAS;
+    private final Path ARCHIVO_INSCRIPCIONES_COMPETENCIA;
+    private final Path ARCHIVO_PARTIDOS;
+    private final Path ARCHIVO_ESTADISTICAS;
+    private final Path ARCHIVO_SESIONES;
+    private final Path ARCHIVO_ASISTENCIAS;
+    private final Path ARCHIVO_SUGERENCIAS;
+    private final Path ARCHIVO_ESTUDIANTES;
+    private final Path ARCHIVO_PARTICIPANTES_EXTERNOS;
+    private final Path ARCHIVO_TORNEOS;
+    private final Path ARCHIVO_INSCRIPCIONES_TORNEO;
+    private final Path ARCHIVO_ENCUENTROS_TORNEO;
+    private final Path ARCHIVO_POSICIONES_TORNEO;
+    private final Path ARCHIVO_PREMIOS_TORNEO;
+
+    public PersistenciaClub() {
+        this(Paths.get("datos"));
+    }
+
+    public PersistenciaClub(Path carpeta) {
+        if (carpeta == null) {
+            throw new IllegalArgumentException(
+                    "La carpeta de persistencia es obligatoria");
+        }
+
+        CARPETA = carpeta;
+        ARCHIVO_SOCIOS = CARPETA.resolve("socios.txt");
+        ARCHIVO_DEPORTES_CONJUNTO = CARPETA.resolve("deportes_conjunto.txt");
+        ARCHIVO_DEPORTES_INDIVIDUALES = CARPETA.resolve("deportes_individuales.txt");
+        ARCHIVO_EQUIPOS = CARPETA.resolve("equipos.txt");
+        ARCHIVO_INSCRIPCIONES_EQUIPO = CARPETA.resolve("inscripciones_equipo.txt");
+        ARCHIVO_INSCRIPCIONES_ACADEMIA = CARPETA.resolve("inscripciones_academia.txt");
+        ARCHIVO_PRODUCTOS = CARPETA.resolve("productos.txt");
+        ARCHIVO_INVENTARIO = CARPETA.resolve("inventario.txt");
+        ARCHIVO_MOVIMIENTOS = CARPETA.resolve("movimientos.txt");
+        ARCHIVO_PAGOS = CARPETA.resolve("pagos.txt");
+        ARCHIVO_INSTALACIONES = CARPETA.resolve("instalaciones.txt");
+        ARCHIVO_RESERVAS = CARPETA.resolve("reservas.txt");
+        ARCHIVO_VENTAS = CARPETA.resolve("ventas.txt");
+        ARCHIVO_EMPLEADOS = CARPETA.resolve("empleados.txt");
+        ARCHIVO_SOLICITUDES_TURNO = CARPETA.resolve("solicitudes_turno.txt");
+        ARCHIVO_TURNOS = CARPETA.resolve("turnos.txt");
+        ARCHIVO_COMPETENCIAS = CARPETA.resolve("competencias.txt");
+        ARCHIVO_INSCRIPCIONES_COMPETENCIA = CARPETA.resolve("inscripciones_competencia.txt");
+        ARCHIVO_PARTIDOS = CARPETA.resolve("partidos.txt");
+        ARCHIVO_ESTADISTICAS = CARPETA.resolve("estadisticas.txt");
+        ARCHIVO_SESIONES = CARPETA.resolve("sesiones.txt");
+        ARCHIVO_ASISTENCIAS = CARPETA.resolve("asistencias.txt");
+        ARCHIVO_SUGERENCIAS = CARPETA.resolve("sugerencias.txt");
+        ARCHIVO_ESTUDIANTES = CARPETA.resolve("estudiantes.txt");
+        ARCHIVO_PARTICIPANTES_EXTERNOS = CARPETA.resolve("participantes_externos.txt");
+        ARCHIVO_TORNEOS = CARPETA.resolve("torneos.txt");
+        ARCHIVO_INSCRIPCIONES_TORNEO = CARPETA.resolve("inscripciones_torneo.txt");
+        ARCHIVO_ENCUENTROS_TORNEO = CARPETA.resolve("encuentros_torneo.txt");
+        ARCHIVO_POSICIONES_TORNEO = CARPETA.resolve("posiciones_torneo.txt");
+        ARCHIVO_PREMIOS_TORNEO = CARPETA.resolve("premios_torneo.txt");
+    }
 
     public void guardar(ClubDeportivo club) throws IOException {
         if (club == null) {
@@ -1474,7 +1517,7 @@ public class PersistenciaClub {
                     sesion.asignarDeporteIndividual(deporte);
                 }
 
-                club.programarSesion(sesion);
+                club.cargarSesion(sesion);
             }
         }
     }

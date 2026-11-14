@@ -2,6 +2,7 @@ package clubdeportivo;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
@@ -227,7 +228,8 @@ public class ClubDeportivo {
         }
 
         if (usuario instanceof EstudianteUniversidad) {
-            EstudianteUniversidad estudiante = (EstudianteUniversidad) usuario;
+            EstudianteUniversidad estudiante =
+                    (EstudianteUniversidad) usuario;
 
             if (!estudiante.getUniversidad().equalsIgnoreCase(institucion)) {
                 throw new IllegalArgumentException(
@@ -525,6 +527,14 @@ public class ClubDeportivo {
                     "El equipo está inactivo");
         }
 
+        int edad = calcularEdad(socio.getFechaNacimiento());
+
+        if (!equipo.getCategoria().admiteEdad(edad)) {
+            throw new IllegalArgumentException(
+                    "La edad del socio no corresponde a la categoría "
+                            + equipo.getCategoria());
+        }
+
         for (Equipo otroEquipo : equipo.getDeporte().getEquipos()) {
 
             boolean mismaCategoria = otroEquipo
@@ -551,6 +561,19 @@ public class ClubDeportivo {
 
         equipo.agregarInscripcion(inscripcion);
         return inscripcion;
+    }
+
+    private int calcularEdad(LocalDate fechaNacimiento) {
+        if (fechaNacimiento == null
+                || fechaNacimiento.isAfter(LocalDate.now())) {
+
+            throw new IllegalArgumentException(
+                    "La fecha de nacimiento no es válida");
+        }
+
+        return Period.between(
+                fechaNacimiento,
+                LocalDate.now()).getYears();
     }
 
     public InscripcionAcademia inscribirSocioEnAcademia(
@@ -739,6 +762,12 @@ public class ClubDeportivo {
                             + "del horario del club");
         }
 
+        if (!entrenadorEnTurno(sesion)) {
+            throw new IllegalStateException(
+                    "El entrenador no tiene un turno asignado "
+                            + "que cubra el horario de la sesión");
+        }
+
         if (!consultarDisponibilidad(
                 sesion.getInstalacion(),
                 sesion.getFecha(),
@@ -762,10 +791,69 @@ public class ClubDeportivo {
         sesionesEntrenamiento.add(sesion);
     }
 
+    private boolean entrenadorEnTurno(
+            SesionEntrenamiento sesion) {
+
+        DiaSemana dia = DiaSemana.values()[
+                sesion.getFecha().getDayOfWeek().getValue() - 1];
+
+        for (Turno turno : sesion.getEntrenador().getTurnos()) {
+            if (turno.getDiaSemana() == dia
+                    && turno.contieneHorario(
+                            sesion.getHoraInicio(),
+                            sesion.calcularHoraFin())) {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void registrarSesion(
             SesionEntrenamiento sesion) {
 
         programarSesion(sesion);
+    }
+
+    public void cargarSesion(
+            SesionEntrenamiento sesion) {
+
+        if (sesion == null) {
+            throw new IllegalArgumentException(
+                    "La sesión no puede ser nula");
+        }
+
+        if (sesionesEntrenamiento.contains(sesion)) {
+            throw new IllegalArgumentException(
+                    "La sesión ya está registrada");
+        }
+
+        if (buscarUsuario(
+                sesion.getEntrenador().getId()) != sesion.getEntrenador()) {
+
+            throw new IllegalArgumentException(
+                    "El entrenador no está registrado en el club");
+        }
+
+        if (buscarInstalacion(
+                sesion.getInstalacion().getId()) != sesion.getInstalacion()) {
+
+            throw new IllegalArgumentException(
+                    "La instalación no está registrada en el club");
+        }
+
+        boolean tieneEquipo = sesion.getEquipo() != null;
+        boolean tieneDeporteIndividual = sesion
+                .getDeporteIndividual() != null;
+
+        if (tieneEquipo == tieneDeporteIndividual) {
+            throw new IllegalArgumentException(
+                    "La sesión debe corresponder a un equipo "
+                            + "o a un deporte individual");
+        }
+
+        sesionesEntrenamiento.add(sesion);
     }
 
     public List<SesionEntrenamiento> consultarSesiones(LocalDate fecha) {
@@ -1254,7 +1342,8 @@ public class ClubDeportivo {
                     "Solo un socio puede utilizar un bono de torneo");
         }
 
-        DescuentoBonoTorneo descuento = (DescuentoBonoTorneo) venta.getPoliticaDescuento();
+        DescuentoBonoTorneo descuento =
+                (DescuentoBonoTorneo) venta.getPoliticaDescuento();
 
         BonoDescuento bono = descuento.getBono();
         Socio comprador = (Socio) venta.getComprador();
@@ -1305,12 +1394,14 @@ public class ClubDeportivo {
     }
 
     private void validarCodigoCompartido(Venta venta) {
-        if (!(venta.getPoliticaDescuento() instanceof DescuentoCodigoCompartido)) {
+        if (!(venta.getPoliticaDescuento()
+                instanceof DescuentoCodigoCompartido)) {
 
             return;
         }
 
-        DescuentoCodigoCompartido descuento = (DescuentoCodigoCompartido) venta.getPoliticaDescuento();
+        DescuentoCodigoCompartido descuento =
+                (DescuentoCodigoCompartido) venta.getPoliticaDescuento();
 
         if (buscarEmpleadoPorCodigoDescuento(
                 descuento.getCodigo()) == null) {

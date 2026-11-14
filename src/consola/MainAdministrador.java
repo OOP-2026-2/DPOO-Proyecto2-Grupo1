@@ -1,7 +1,9 @@
 package consola;
 
+import static consola.InputHandler.readDate;
 import static consola.InputHandler.readString;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Scanner;
 import clubdeportivo.ClubDeportivo;
 import usuarios.Usuario;
@@ -19,6 +21,11 @@ public class MainAdministrador {
 
     public void ejecutar() {
         cargarDatos();
+
+        if (!existeAdministrador()) {
+            registrarAdministradorInicial();
+            guardarDatos();
+        }
 
         System.out.println("================================");
         System.out.println("   ACCESO DEL ADMINISTRADOR");
@@ -39,6 +46,40 @@ public class MainAdministrador {
 
         consola.ejecutar();
         guardarDatos();
+    }
+
+    private boolean existeAdministrador() {
+        for (Usuario usuario : club.getUsuarios()) {
+            if (usuario instanceof Administrador) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void registrarAdministradorInicial() {
+        System.out.println();
+        System.out.println("No existe un administrador registrado.");
+        System.out.println("--- REGISTRAR ADMINISTRADOR INICIAL ---");
+
+        String id = readString("ID: ");
+        String nombre = readString("Nombre: ");
+        LocalDate fechaNacimiento = readDate(
+                "Fecha de nacimiento (AAAA-MM-DD): ");
+        String login = readString("Login: ");
+        String contrasena = readString("Contraseña: ");
+
+        Administrador administrador = new Administrador(
+                id,
+                nombre,
+                fechaNacimiento,
+                login,
+                contrasena);
+
+        club.registrarUsuario(administrador);
+        System.out.println(
+                "Administrador inicial registrado correctamente.");
     }
 
     private void cargarDatos() {
