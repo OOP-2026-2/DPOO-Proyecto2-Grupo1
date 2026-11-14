@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mxfile host="app.diagrams.net">
-  <diagram name="Diseño V3" id="C6FAoGEut1ish4EjnbNH">
-    <mxGraphModel dx="12760" dy="7536" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+<mxfile host="app.diagrams.net" pages="13">
+  <diagram name="UML Proyecto2" id="C6FAoGEut1ish4EjnbNH">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -2397,6 +2397,1563 @@
         </mxCell>
         <mxCell id="HTd9g-edktkBVw1SVu5C-6" parent="HTd9g-edktkBVw1SVu5C-5" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=1;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;movable=1;resizable=1;deletable=1;editable=1;locked=0;connectable=1;labelBackgroundColor=none;defaultLabelBackgroundColor=page;labelBorderColor=none;textShadow=0;container=0;snapToPoint=0;fixDash=0;metaEdit=0;fontColor=light-dark(#1A1A1A,#FFFFFF);rounded=0;dashed=1;fillColor=#F2F2F2;" value="&lt;div style=&quot;font-size:11px;line-height:112%;&quot;&gt;&lt;div&gt;- serialVersionUID: long&lt;/div&gt;&lt;div&gt;- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -&lt;/div&gt;&lt;div&gt;+ReservaNoDisponibleException(mensaje: String)&lt;/div&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="62" width="220" y="28" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="01 Autenticacion y apertura de consola" id="e_pI6bh8YMsF5OFRIzV5">
+    <mxGraphModel dx="2469" dy="1317" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="2600" background="light-dark(#ffffff, #121212)" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=28;fontStyle=1;labelBackgroundColor=none;" value="Diagrama de secuencia 1 — Autenticación y apertura de la consola correspondiente" vertex="1">
+          <mxGeometry height="45" width="1700" x="30" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" parent="1" style="text;html=1;align=left;fontSize=15;labelBackgroundColor=none;" value="Flecha continua: llamada · Flecha punteada: respuesta · Flecha roja: excepción · Recuadro alt: flujo alternativo" vertex="1">
+          <mxGeometry height="30" width="1700" x="30" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="p0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Usuario" vertex="1">
+          <mxGeometry height="80" width="260" x="10" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life0" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="205" as="sourcePoint" />
+            <mxPoint x="140" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Main del rol" vertex="1">
+          <mxGeometry height="80" width="260" x="390" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life1" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="205" as="sourcePoint" />
+            <mxPoint x="520" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":PersistenciaClub" vertex="1">
+          <mxGeometry height="80" width="260" x="770" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life2" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="205" as="sourcePoint" />
+            <mxPoint x="900" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":ClubDeportivo" vertex="1">
+          <mxGeometry height="80" width="260" x="1150" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life3" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="205" as="sourcePoint" />
+            <mxPoint x="1280" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Consola del rol" vertex="1">
+          <mxGeometry height="80" width="260" x="1530" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life4" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="205" as="sourcePoint" />
+            <mxPoint x="1660" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m0" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="1: main(args)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="260" as="sourcePoint" />
+            <mxPoint x="520" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m1" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="2: cargar(club)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="375" as="sourcePoint" />
+            <mxPoint x="900" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="3: registrar y cargar objetos">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="490" as="sourcePoint" />
+            <mxPoint x="1280" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="4: datos cargados">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="605" as="sourcePoint" />
+            <mxPoint x="520" y="605" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="5: ingresar login y contraseña">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="720" as="sourcePoint" />
+            <mxPoint x="520" y="720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="6: autenticar(login, contrasena)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="835" as="sourcePoint" />
+            <mxPoint x="1280" y="835" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="7: Usuario o null">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="950" as="sourcePoint" />
+            <mxPoint x="520" y="950" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="&lt;b&gt;alt&lt;/b&gt; [credenciales inválidas o rol incorrecto]&lt;br&gt;&lt;font color=&quot;#FF7B7B&quot;&gt;&lt;b&gt;acceso rechazado y el flujo termina&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="138.75" width="1690" x="55" y="1047" as="geometry" />
+        </mxCell>
+        <mxCell id="m8" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="8: validar tipo de usuario">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="1220.75" as="sourcePoint" />
+            <mxPoint x="625" y="1260.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="9: crear y ejecutar()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="1335.75" as="sourcePoint" />
+            <mxPoint x="1660" y="1335.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m10" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="10: mostrar menú autorizado">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="1450.75" as="sourcePoint" />
+            <mxPoint x="140" y="1450.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rules" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=12;labelBackgroundColor=none;" value="&lt;b&gt;Reglas del enunciado que se ven en este flujo&lt;/b&gt;&lt;br&gt;• Si las credenciales o el tipo de usuario no corresponden al rol, el proceso termina sin abrir la consola." vertex="1">
+          <mxGeometry height="300" width="1800" y="2280" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="02 Crear torneo" id="3B4s_Ih3n9ORpxLh_r3U">
+    <mxGraphModel dx="4938" dy="2634" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="2600" background="light-dark(#ffffff, #121212)" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=28;fontStyle=1;labelBackgroundColor=none;" value="Diagrama de secuencia 2 — Crear y registrar un torneo interno" vertex="1">
+          <mxGeometry height="45" width="1700" x="30" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" parent="1" style="text;html=1;align=left;fontSize=15;labelBackgroundColor=none;" value="Flecha continua: llamada · Flecha punteada: respuesta · Flecha roja: excepción · Recuadro alt: flujo alternativo" vertex="1">
+          <mxGeometry height="30" width="1700" x="30" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="p0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Administrador" vertex="1">
+          <mxGeometry height="80" width="260" x="10" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life0" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="205" as="sourcePoint" />
+            <mxPoint x="140" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":ConsolaAdministrador" vertex="1">
+          <mxGeometry height="80" width="260" x="516.6666666666667" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life1" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="646.6666666666667" y="205" as="sourcePoint" />
+            <mxPoint x="646.6666666666667" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":TorneoConjunto o Individual" vertex="1">
+          <mxGeometry height="80" width="260" x="1023.3333333333335" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life2" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1153.3333333333335" y="205" as="sourcePoint" />
+            <mxPoint x="1153.3333333333335" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":ClubDeportivo" vertex="1">
+          <mxGeometry height="80" width="260" x="1530" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life3" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="205" as="sourcePoint" />
+            <mxPoint x="1660" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m0" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="1: seleccionar tipo e ingresar datos">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="260" as="sourcePoint" />
+            <mxPoint x="646.6666666666667" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m1" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="2: leerDatosTorneo()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="646.6666666666667" y="375" as="sourcePoint" />
+            <mxPoint x="751.6666666666667" y="415" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="3: «create» new Torneo...(datos, politicaPremio)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="646.6666666666667" y="490" as="sourcePoint" />
+            <mxPoint x="1153.3333333333335" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="4: validar fecha, horario, capacidad, tipo y tarifa">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1153.3333333333335" y="605" as="sourcePoint" />
+            <mxPoint x="1258.3333333333335" y="645" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="5: calcularCuposPreferenciales()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1153.3333333333335" y="720" as="sourcePoint" />
+            <mxPoint x="1258.3333333333335" y="760" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="&lt;b&gt;alt&lt;/b&gt; [datos del torneo inválidos]&lt;br&gt;&lt;font color=&quot;#FF7B7B&quot;&gt;&lt;b&gt;«throw» IllegalArgumentException&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="138.75" width="1690" x="55" y="817" as="geometry" />
+        </mxCell>
+        <mxCell id="m6" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="6: torneo ABIERTO">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1153.3333333333335" y="990.75" as="sourcePoint" />
+            <mxPoint x="646.6666666666667" y="990.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m7" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="7: registrarTorneo(torneo)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="646.6666666666667" y="1105.75" as="sourcePoint" />
+            <mxPoint x="1660" y="1105.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="8: buscarTorneo(id)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="1220.75" as="sourcePoint" />
+            <mxPoint x="1765" y="1260.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="9: registro confirmado">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="1335.75" as="sourcePoint" />
+            <mxPoint x="646.6666666666667" y="1335.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="&lt;b&gt;alt&lt;/b&gt; [ya existe un torneo con ese identificador]&lt;br&gt;&lt;font color=&quot;#FF7B7B&quot;&gt;&lt;b&gt;«throw» IllegalArgumentException&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="138.75" width="1690" x="55" y="1432.75" as="geometry" />
+        </mxCell>
+        <mxCell id="m11" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="10: mostrar confirmación y cupos">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="646.6666666666667" y="1606.5" as="sourcePoint" />
+            <mxPoint x="140" y="1606.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rules" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=12;labelBackgroundColor=none;" value="&lt;b&gt;Reglas del enunciado que se ven en este flujo&lt;/b&gt;&lt;br&gt;• El constructor rechaza combinaciones inválidas: torneo recreativo con tarifa o competitivo sin tarifa." vertex="1">
+          <mxGeometry height="300" width="1800" y="2280" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="03 Consultar torneos e historial" id="-LDYGl4MxtIAieDpkhrl">
+    <mxGraphModel dx="4938" dy="2634" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="2600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=28;fontStyle=1;labelBackgroundColor=none;" value="Diagrama de secuencia 3 — Consultar torneos con filtros y visualizar su historial" vertex="1">
+          <mxGeometry height="45" width="1700" x="30" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" parent="1" style="text;html=1;align=left;fontSize=15;labelBackgroundColor=none;" value="Flecha continua: llamada · Flecha punteada: respuesta · Flecha roja: excepción · Recuadro alt: flujo alternativo" vertex="1">
+          <mxGeometry height="30" width="1700" x="30" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="p0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Usuario autenticado" vertex="1">
+          <mxGeometry height="80" width="260" x="10" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life0" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="205" as="sourcePoint" />
+            <mxPoint x="140" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Consola" vertex="1">
+          <mxGeometry height="80" width="260" x="516.6666666666667" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life1" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="646.6666666666667" y="205" as="sourcePoint" />
+            <mxPoint x="646.6666666666667" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":ClubDeportivo" vertex="1">
+          <mxGeometry height="80" width="260" x="1023.3333333333335" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life2" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1153.3333333333335" y="205" as="sourcePoint" />
+            <mxPoint x="1153.3333333333335" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Torneo" vertex="1">
+          <mxGeometry height="80" width="260" x="1530" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life3" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="205" as="sourcePoint" />
+            <mxPoint x="1660" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m0" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="1: seleccionar filtros de tipo y estado">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="260" as="sourcePoint" />
+            <mxPoint x="646.6666666666667" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m1" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="2: consultarTorneos(tipo, estado)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="646.6666666666667" y="375" as="sourcePoint" />
+            <mxPoint x="1153.3333333333335" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="3: filtrar lista de torneos">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1153.3333333333335" y="490" as="sourcePoint" />
+            <mxPoint x="1258.3333333333335" y="530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="4: List&lt;Torneo&gt;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1153.3333333333335" y="605" as="sourcePoint" />
+            <mxPoint x="646.6666666666667" y="605" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="&lt;b&gt;alt&lt;/b&gt; [no existen torneos que coincidan]&lt;br&gt;&lt;font color=&quot;#FF7B7B&quot;&gt;&lt;b&gt;se muestra una lista vacía&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="138.75" width="1690" x="55" y="702" as="geometry" />
+        </mxCell>
+        <mxCell id="m5" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="5: mostrar resumen de torneos">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="646.6666666666667" y="875.75" as="sourcePoint" />
+            <mxPoint x="140" y="875.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="6: seleccionar torneo">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="990.75" as="sourcePoint" />
+            <mxPoint x="646.6666666666667" y="990.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m7" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="7: getInscripciones(), getEncuentros(), getPosiciones()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="646.6666666666667" y="1105.75" as="sourcePoint" />
+            <mxPoint x="1660" y="1105.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="8: copias de las colecciones">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="1220.75" as="sourcePoint" />
+            <mxPoint x="646.6666666666667" y="1220.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="9: mostrar historial detallado">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="646.6666666666667" y="1335.75" as="sourcePoint" />
+            <mxPoint x="140" y="1335.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rules" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=12;labelBackgroundColor=none;" value="&lt;b&gt;Reglas del enunciado que se ven en este flujo&lt;/b&gt;&lt;br&gt;• La consulta admite filtros nulos para mostrar todos los tipos o todos los estados." vertex="1">
+          <mxGeometry height="300" width="1800" y="2280" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="04 Inscripcion individual o pareja" id="JyEp1UwfNYSvzd5SBD2y">
+    <mxGraphModel dx="4938" dy="2634" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="2600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=28;fontStyle=1;labelBackgroundColor=none;" value="Diagrama de secuencia 4 — Inscribir una persona o pareja en un torneo individual" vertex="1">
+          <mxGeometry height="45" width="1700" x="30" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" parent="1" style="text;html=1;align=left;fontSize=15;labelBackgroundColor=none;" value="Flecha continua: llamada · Flecha punteada: respuesta · Flecha roja: excepción · Recuadro alt: flujo alternativo" vertex="1">
+          <mxGeometry height="30" width="1700" x="30" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="p0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Participante o empleado" vertex="1">
+          <mxGeometry height="80" width="260" x="10" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life0" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="205" as="sourcePoint" />
+            <mxPoint x="140" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Consola" vertex="1">
+          <mxGeometry height="80" width="260" x="390" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life1" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="205" as="sourcePoint" />
+            <mxPoint x="520" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":ClubDeportivo" vertex="1">
+          <mxGeometry height="80" width="260" x="770" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life2" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="205" as="sourcePoint" />
+            <mxPoint x="900" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":TorneoIndividual" vertex="1">
+          <mxGeometry height="80" width="260" x="1150" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life3" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="205" as="sourcePoint" />
+            <mxPoint x="1280" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":InscripcionIndividualTorneo" vertex="1">
+          <mxGeometry height="80" width="260" x="1530" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life4" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="205" as="sourcePoint" />
+            <mxPoint x="1660" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m0" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="1: seleccionar torneo y tipo de cupo">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="260" as="sourcePoint" />
+            <mxPoint x="520" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m1" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="2: inscribirParticipantesEnTorneo(torneo, lista, tipoCupo)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="375" as="sourcePoint" />
+            <mxPoint x="900" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="3: validar participante registrado">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="490" as="sourcePoint" />
+            <mxPoint x="1005" y="530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="4: inscribirParticipantes(lista, tipoCupo)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="605" as="sourcePoint" />
+            <mxPoint x="1280" y="605" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="5: validar cantidad según modalidad">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="720" as="sourcePoint" />
+            <mxPoint x="1385" y="760" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="6: validarParticipante() y duplicados">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="835" as="sourcePoint" />
+            <mxPoint x="1385" y="875" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="7: calcularValorInscripcion()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="950" as="sourcePoint" />
+            <mxPoint x="1385" y="990" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="&lt;b&gt;alt&lt;/b&gt; [modalidad, participante o cupo inválido]&lt;br&gt;&lt;font color=&quot;#FF7B7B&quot;&gt;&lt;b&gt;«throw» IllegalArgumentException&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="138.75" width="1690" x="55" y="1047" as="geometry" />
+        </mxCell>
+        <mxCell id="m8" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="8: «create» new InscripcionIndividualTorneo(...)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1220.75" as="sourcePoint" />
+            <mxPoint x="1660" y="1220.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="9: agregarInscripcion(inscripcion)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1335.75" as="sourcePoint" />
+            <mxPoint x="1385" y="1375.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m10" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="10: inscripción activa">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1450.75" as="sourcePoint" />
+            <mxPoint x="520" y="1450.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m11" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="11: mostrar valor pagado y confirmación">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="1565.75" as="sourcePoint" />
+            <mxPoint x="140" y="1565.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rules" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=12;labelBackgroundColor=none;" value="&lt;b&gt;Reglas del enunciado que se ven en este flujo&lt;/b&gt;&lt;br&gt;• SENCILLOS exige una persona y DOBLES exige dos. El empleado competitivo paga cero y debe estar fuera de turno." vertex="1">
+          <mxGeometry height="300" width="1800" y="2280" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="05 Inscripcion de equipo" id="_cUDb86YFnK7XT6zUCDF">
+    <mxGraphModel dx="4938" dy="2634" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="2600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=28;fontStyle=1;labelBackgroundColor=none;" value="Diagrama de secuencia 5 — Inscribir un equipo en un torneo de conjunto" vertex="1">
+          <mxGeometry height="45" width="1700" x="30" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" parent="1" style="text;html=1;align=left;fontSize=15;labelBackgroundColor=none;" value="Flecha continua: llamada · Flecha punteada: respuesta · Flecha roja: excepción · Recuadro alt: flujo alternativo" vertex="1">
+          <mxGeometry height="30" width="1700" x="30" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="p0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Participante" vertex="1">
+          <mxGeometry height="80" width="260" x="10" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life0" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="205" as="sourcePoint" />
+            <mxPoint x="140" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":ConsolaParticipante" vertex="1">
+          <mxGeometry height="80" width="260" x="390" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life1" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="205" as="sourcePoint" />
+            <mxPoint x="520" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":ClubDeportivo" vertex="1">
+          <mxGeometry height="80" width="260" x="770" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life2" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="205" as="sourcePoint" />
+            <mxPoint x="900" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":TorneoConjunto" vertex="1">
+          <mxGeometry height="80" width="260" x="1150" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life3" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="205" as="sourcePoint" />
+            <mxPoint x="1280" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":InscripcionEquipoTorneo" vertex="1">
+          <mxGeometry height="80" width="260" x="1530" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life4" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="205" as="sourcePoint" />
+            <mxPoint x="1660" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m0" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="1: seleccionar torneo, equipo y cupo">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="260" as="sourcePoint" />
+            <mxPoint x="520" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m1" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="2: inscribirEquipoEnTorneo(torneo, equipo, tipoCupo)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="375" as="sourcePoint" />
+            <mxPoint x="900" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="3: validar torneo registrado">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="490" as="sourcePoint" />
+            <mxPoint x="1005" y="530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="4: inscribirEquipo(equipo, tipoCupo)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="605" as="sourcePoint" />
+            <mxPoint x="1280" y="605" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="5: validarEquipo(equipo)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="720" as="sourcePoint" />
+            <mxPoint x="1385" y="760" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="6: verificar deporte, categoría, estado y jugadores">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="835" as="sourcePoint" />
+            <mxPoint x="1385" y="875" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="7: verificar que no esté inscrito">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="950" as="sourcePoint" />
+            <mxPoint x="1385" y="990" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="&lt;b&gt;alt&lt;/b&gt; [equipo inválido, duplicado o sin cupo]&lt;br&gt;&lt;font color=&quot;#FF7B7B&quot;&gt;&lt;b&gt;«throw» IllegalArgumentException&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="138.75" width="1690" x="55" y="1047" as="geometry" />
+        </mxCell>
+        <mxCell id="m8" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="8: «create» new InscripcionEquipoTorneo(...)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1220.75" as="sourcePoint" />
+            <mxPoint x="1660" y="1220.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="9: agregarInscripcion(inscripcion)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1335.75" as="sourcePoint" />
+            <mxPoint x="1385" y="1375.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m10" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="10: inscripción activa">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1450.75" as="sourcePoint" />
+            <mxPoint x="520" y="1450.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m11" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="11: mostrar confirmación">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="1565.75" as="sourcePoint" />
+            <mxPoint x="140" y="1565.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rules" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=12;labelBackgroundColor=none;" value="&lt;b&gt;Reglas del enunciado que se ven en este flujo&lt;/b&gt;&lt;br&gt;• El equipo debe estar activo, pertenecer al deporte y categoría del torneo y cumplir el mínimo de jugadores." vertex="1">
+          <mxGeometry height="300" width="1800" y="2280" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="06 Retirar inscripcion" id="kYsgjDwiSOhC8JKOGXYf">
+    <mxGraphModel dx="4938" dy="2634" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="2600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=28;fontStyle=1;labelBackgroundColor=none;" value="Diagrama de secuencia 6 — Retirar una inscripción antes del inicio del torneo" vertex="1">
+          <mxGeometry height="45" width="1700" x="30" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" parent="1" style="text;html=1;align=left;fontSize=15;labelBackgroundColor=none;" value="Flecha continua: llamada · Flecha punteada: respuesta · Flecha roja: excepción · Recuadro alt: flujo alternativo" vertex="1">
+          <mxGeometry height="30" width="1700" x="30" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="p0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Participante" vertex="1">
+          <mxGeometry height="80" width="260" x="10" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life0" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="205" as="sourcePoint" />
+            <mxPoint x="140" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Consola" vertex="1">
+          <mxGeometry height="80" width="260" x="390" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life1" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="205" as="sourcePoint" />
+            <mxPoint x="520" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":ClubDeportivo" vertex="1">
+          <mxGeometry height="80" width="260" x="770" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life2" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="205" as="sourcePoint" />
+            <mxPoint x="900" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Torneo" vertex="1">
+          <mxGeometry height="80" width="260" x="1150" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life3" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="205" as="sourcePoint" />
+            <mxPoint x="1280" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":InscripcionTorneo" vertex="1">
+          <mxGeometry height="80" width="260" x="1530" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life4" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="205" as="sourcePoint" />
+            <mxPoint x="1660" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m0" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="1: seleccionar inscripción activa">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="260" as="sourcePoint" />
+            <mxPoint x="520" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m1" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="2: retirarInscripcionTorneo(inscripcion)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="375" as="sourcePoint" />
+            <mxPoint x="900" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="3: retirarInscripcion(inscripcion)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="490" as="sourcePoint" />
+            <mxPoint x="1280" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="4: validar estado ABIERTO y pertenencia">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="605" as="sourcePoint" />
+            <mxPoint x="1385" y="645" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="&lt;b&gt;alt&lt;/b&gt; [el torneo no está ABIERTO o la inscripción no está activa]&lt;br&gt;&lt;font color=&quot;#FF7B7B&quot;&gt;&lt;b&gt;«throw» IllegalStateException&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="138.75" width="1690" x="55" y="702" as="geometry" />
+        </mxCell>
+        <mxCell id="m5" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="5: retirar()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="875.75" as="sourcePoint" />
+            <mxPoint x="1660" y="875.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="6: estado = RETIRADA">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="990.75" as="sourcePoint" />
+            <mxPoint x="1765" y="1030.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m7" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="7: retiro confirmado">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="1105.75" as="sourcePoint" />
+            <mxPoint x="1280" y="1105.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="8: cupo liberado">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1220.75" as="sourcePoint" />
+            <mxPoint x="520" y="1220.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="9: mostrar confirmación">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="1335.75" as="sourcePoint" />
+            <mxPoint x="140" y="1335.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rules" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=12;labelBackgroundColor=none;" value="&lt;b&gt;Reglas del enunciado que se ven en este flujo&lt;/b&gt;&lt;br&gt;• Después de iniciar el torneo, la inscripción ya no puede retirarse." vertex="1">
+          <mxGeometry height="300" width="1800" y="2280" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="07 Liberar cupos e iniciar torneo" id="fTa_oIKoY0zm-rfvsVLw">
+    <mxGraphModel dx="4938" dy="2634" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="2600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=28;fontStyle=1;labelBackgroundColor=none;" value="Diagrama de secuencia 7 — Liberar cupos preferenciales e iniciar el torneo" vertex="1">
+          <mxGeometry height="45" width="1700" x="30" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" parent="1" style="text;html=1;align=left;fontSize=15;labelBackgroundColor=none;" value="Flecha continua: llamada · Flecha punteada: respuesta · Flecha roja: excepción · Recuadro alt: flujo alternativo" vertex="1">
+          <mxGeometry height="30" width="1700" x="30" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="p0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Administrador" vertex="1">
+          <mxGeometry height="80" width="260" x="10" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life0" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="205" as="sourcePoint" />
+            <mxPoint x="140" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":ConsolaAdministrador" vertex="1">
+          <mxGeometry height="80" width="260" x="390" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life1" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="205" as="sourcePoint" />
+            <mxPoint x="520" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":ClubDeportivo" vertex="1">
+          <mxGeometry height="80" width="260" x="770" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life2" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="205" as="sourcePoint" />
+            <mxPoint x="900" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Torneo" vertex="1">
+          <mxGeometry height="80" width="260" x="1150" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life3" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="205" as="sourcePoint" />
+            <mxPoint x="1280" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":EncuentroTorneo" vertex="1">
+          <mxGeometry height="80" width="260" x="1530" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life4" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="205" as="sourcePoint" />
+            <mxPoint x="1660" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m0" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="1: seleccionar liberar cupos">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="260" as="sourcePoint" />
+            <mxPoint x="520" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m1" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="2: liberarCuposPreferenciales(torneo)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="375" as="sourcePoint" />
+            <mxPoint x="900" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="3: liberarCuposPreferenciales()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="490" as="sourcePoint" />
+            <mxPoint x="1280" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="4: validar fecha de liberación y estado">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="605" as="sourcePoint" />
+            <mxPoint x="1385" y="645" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="&lt;b&gt;alt&lt;/b&gt; [el torneo ya inició]&lt;br&gt;&lt;font color=&quot;#FF7B7B&quot;&gt;&lt;b&gt;«throw» IllegalStateException&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="138.75" width="1690" x="55" y="702" as="geometry" />
+        </mxCell>
+        <mxCell id="m5" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="5: cupos convertidos en regulares">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="875.75" as="sourcePoint" />
+            <mxPoint x="520" y="875.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="6: seleccionar iniciar torneo">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="990.75" as="sourcePoint" />
+            <mxPoint x="520" y="990.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m7" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="7: iniciarTorneo(torneo)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="1105.75" as="sourcePoint" />
+            <mxPoint x="900" y="1105.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="8: iniciar()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="1220.75" as="sourcePoint" />
+            <mxPoint x="1280" y="1220.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="9: puedeIniciar() y generarEncuentros()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1335.75" as="sourcePoint" />
+            <mxPoint x="1385" y="1375.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="&lt;b&gt;alt&lt;/b&gt; [no hay participantes suficientes o el horario es inválido]&lt;br&gt;&lt;font color=&quot;#FF7B7B&quot;&gt;&lt;b&gt;«throw» IllegalStateException&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="138.75" width="1690" x="55" y="1432.75" as="geometry" />
+        </mxCell>
+        <mxCell id="m11" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="10: «create» crear encuentros de la primera ronda">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1606.5" as="sourcePoint" />
+            <mxPoint x="1660" y="1606.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m12" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="11: estado = EN_CURSO">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1721.5" as="sourcePoint" />
+            <mxPoint x="1385" y="1761.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m13" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="12: torneo iniciado">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1836.5" as="sourcePoint" />
+            <mxPoint x="520" y="1836.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rules" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=12;labelBackgroundColor=none;" value="&lt;b&gt;Reglas del enunciado que se ven en este flujo&lt;/b&gt;&lt;br&gt;• El torneo exige al menos dos inscripciones activas; en eliminación se generan rondas progresivas." vertex="1">
+          <mxGeometry height="300" width="1800" y="2280" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="08 Registrar resultado" id="9FGPybn4OSVHFkH3EG3C">
+    <mxGraphModel dx="2469" dy="1317" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="2600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=28;fontStyle=1;labelBackgroundColor=none;" value="Diagrama de secuencia 8 — Registrar un resultado y actualizar las posiciones" vertex="1">
+          <mxGeometry height="45" width="1700" x="30" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" parent="1" style="text;html=1;align=left;fontSize=15;labelBackgroundColor=none;" value="Flecha continua: llamada · Flecha punteada: respuesta · Flecha roja: excepción · Recuadro alt: flujo alternativo" vertex="1">
+          <mxGeometry height="30" width="1700" x="30" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="p0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Administrador" vertex="1">
+          <mxGeometry height="80" width="260" x="10" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life0" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="205" as="sourcePoint" />
+            <mxPoint x="140" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":ConsolaAdministrador" vertex="1">
+          <mxGeometry height="80" width="260" x="390" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life1" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="205" as="sourcePoint" />
+            <mxPoint x="520" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":ClubDeportivo" vertex="1">
+          <mxGeometry height="80" width="260" x="770" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life2" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="205" as="sourcePoint" />
+            <mxPoint x="900" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Torneo" vertex="1">
+          <mxGeometry height="80" width="260" x="1150" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life3" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="205" as="sourcePoint" />
+            <mxPoint x="1280" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":EncuentroTorneo" vertex="1">
+          <mxGeometry height="80" width="260" x="1530" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life4" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="205" as="sourcePoint" />
+            <mxPoint x="1660" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m0" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="1: seleccionar encuentro e ingresar marcador">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="260" as="sourcePoint" />
+            <mxPoint x="520" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m1" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="2: registrarResultadoEncuentro(encuentro, marcador)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="375" as="sourcePoint" />
+            <mxPoint x="900" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="3: buscarTorneoDelEncuentro(encuentro)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="490" as="sourcePoint" />
+            <mxPoint x="1005" y="530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="4: registrarResultadoEncuentro(encuentro, marcador)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="605" as="sourcePoint" />
+            <mxPoint x="1280" y="605" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="5: registrarResultado(marcador)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="720" as="sourcePoint" />
+            <mxPoint x="1660" y="720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="6: validar estado y marcador">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="835" as="sourcePoint" />
+            <mxPoint x="1765" y="875" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="&lt;b&gt;alt&lt;/b&gt; [encuentro cancelado o finalizado]&lt;br&gt;&lt;font color=&quot;#FF7B7B&quot;&gt;&lt;b&gt;«throw» IllegalStateException&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="138.75" width="1690" x="55" y="932" as="geometry" />
+        </mxCell>
+        <mxCell id="m7" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="7: interpretarMarcador(marcador)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1105.75" as="sourcePoint" />
+            <mxPoint x="1385" y="1145.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="8: actualizarPosiciones(encuentro)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1220.75" as="sourcePoint" />
+            <mxPoint x="1385" y="1260.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="&lt;b&gt;alt&lt;/b&gt; [marcador inválido o empate en eliminación]&lt;br&gt;&lt;font color=&quot;#FF7B7B&quot;&gt;&lt;b&gt;«throw» IllegalArgumentException&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="138.75" width="1690" x="55" y="1317.75" as="geometry" />
+        </mxCell>
+        <mxCell id="m10" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="9: generarSiguienteRondaSiCorresponde()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1491.5" as="sourcePoint" />
+            <mxPoint x="1385" y="1531.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m11" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="10: resultado registrado">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1606.5" as="sourcePoint" />
+            <mxPoint x="520" y="1606.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m12" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="11: mostrar posiciones actualizadas">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="1721.5" as="sourcePoint" />
+            <mxPoint x="140" y="1721.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rules" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=12;labelBackgroundColor=none;" value="&lt;b&gt;Reglas del enunciado que se ven en este flujo&lt;/b&gt;&lt;br&gt;• En eliminación directa no se admiten empates. El marcador debe tener el formato numérico esperado." vertex="1">
+          <mxGeometry height="300" width="1800" y="2280" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="09 Finalizar torneo y otorgar premios" id="gXxrqqhVifeyw5UH4eV-">
+    <mxGraphModel dx="4938" dy="2634" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="2600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=28;fontStyle=1;labelBackgroundColor=none;" value="Diagrama de secuencia 9 — Finalizar el torneo y otorgar los premios" vertex="1">
+          <mxGeometry height="45" width="1700" x="30" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" parent="1" style="text;html=1;align=left;fontSize=15;labelBackgroundColor=none;" value="Flecha continua: llamada · Flecha punteada: respuesta · Flecha roja: excepción · Recuadro alt: flujo alternativo" vertex="1">
+          <mxGeometry height="30" width="1700" x="30" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="p0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Administrador" vertex="1">
+          <mxGeometry height="80" width="260" x="10" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life0" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="205" as="sourcePoint" />
+            <mxPoint x="140" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":ConsolaAdministrador" vertex="1">
+          <mxGeometry height="80" width="260" x="390" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life1" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="205" as="sourcePoint" />
+            <mxPoint x="520" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":ClubDeportivo" vertex="1">
+          <mxGeometry height="80" width="260" x="770" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life2" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="205" as="sourcePoint" />
+            <mxPoint x="900" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Torneo" vertex="1">
+          <mxGeometry height="80" width="260" x="1150" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life3" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="205" as="sourcePoint" />
+            <mxPoint x="1280" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":PoliticaPremio" vertex="1">
+          <mxGeometry height="80" width="260" x="1530" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life4" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="205" as="sourcePoint" />
+            <mxPoint x="1660" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m0" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="1: seleccionar torneo finalizable">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="260" as="sourcePoint" />
+            <mxPoint x="520" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m1" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="2: finalizarTorneo(torneo)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="375" as="sourcePoint" />
+            <mxPoint x="900" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="3: finalizar()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="490" as="sourcePoint" />
+            <mxPoint x="1280" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="4: puedeFinalizar()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="605" as="sourcePoint" />
+            <mxPoint x="1385" y="645" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="5: determinarGanador()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="720" as="sourcePoint" />
+            <mxPoint x="1385" y="760" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="&lt;b&gt;alt&lt;/b&gt; [existe un encuentro pendiente]&lt;br&gt;&lt;font color=&quot;#FF7B7B&quot;&gt;&lt;b&gt;«throw» IllegalStateException&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="138.75" width="1690" x="55" y="817" as="geometry" />
+        </mxCell>
+        <mxCell id="m6" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="6: generarPremios(ganador, recaudo)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="990.75" as="sourcePoint" />
+            <mxPoint x="1660" y="990.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m7" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="7: crear bono o premio monetario">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="1105.75" as="sourcePoint" />
+            <mxPoint x="1765" y="1145.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="8: List&lt;PremioTorneo&gt;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="1220.75" as="sourcePoint" />
+            <mxPoint x="1280" y="1220.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="9: estado = FINALIZADO">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1335.75" as="sourcePoint" />
+            <mxPoint x="1385" y="1375.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m10" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="10: premios otorgados">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1450.75" as="sourcePoint" />
+            <mxPoint x="900" y="1450.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m11" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="11: List&lt;PremioTorneo&gt;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="1565.75" as="sourcePoint" />
+            <mxPoint x="520" y="1565.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m12" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="12: mostrar ganador y premios">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="1680.75" as="sourcePoint" />
+            <mxPoint x="140" y="1680.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rules" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=12;labelBackgroundColor=none;" value="&lt;b&gt;Reglas del enunciado que se ven en este flujo&lt;/b&gt;&lt;br&gt;• El recreativo genera bonos para socios ganadores; el competitivo calcula el premio sobre el recaudo y excluye empleados." vertex="1">
+          <mxGeometry height="300" width="1800" y="2280" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="10 Comprar con bono" id="tRMw-bXpvJ5SHhfycdyn">
+    <mxGraphModel dx="4938" dy="2634" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="2600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=28;fontStyle=1;labelBackgroundColor=none;" value="Diagrama de secuencia 10 — Aplicar un bono recreativo en una compra" vertex="1">
+          <mxGeometry height="45" width="1700" x="30" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" parent="1" style="text;html=1;align=left;fontSize=15;labelBackgroundColor=none;" value="Flecha continua: llamada · Flecha punteada: respuesta · Flecha roja: excepción · Recuadro alt: flujo alternativo" vertex="1">
+          <mxGeometry height="30" width="1700" x="30" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="p0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Socio" vertex="1">
+          <mxGeometry height="80" width="260" x="10" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life0" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="205" as="sourcePoint" />
+            <mxPoint x="140" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":ConsolaParticipante" vertex="1">
+          <mxGeometry height="80" width="260" x="390" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life1" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="205" as="sourcePoint" />
+            <mxPoint x="520" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Venta" vertex="1">
+          <mxGeometry height="80" width="260" x="770" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life2" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="205" as="sourcePoint" />
+            <mxPoint x="900" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":ClubDeportivo" vertex="1">
+          <mxGeometry height="80" width="260" x="1150" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life3" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="205" as="sourcePoint" />
+            <mxPoint x="1280" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":BonoDescuento" vertex="1">
+          <mxGeometry height="80" width="260" x="1530" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life4" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="205" as="sourcePoint" />
+            <mxPoint x="1660" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m0" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="1: seleccionar bono, producto y cantidad">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="260" as="sourcePoint" />
+            <mxPoint x="520" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m1" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="2: «create» crear venta y agregarDetalle()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="375" as="sourcePoint" />
+            <mxPoint x="900" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="3: finalizarVenta(DescuentoBonoTorneo)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="490" as="sourcePoint" />
+            <mxPoint x="900" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="4: procesarVenta(venta, ubicacion)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="605" as="sourcePoint" />
+            <mxPoint x="1280" y="605" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="5: validar inventario y bono">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="720" as="sourcePoint" />
+            <mxPoint x="1385" y="760" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="6: estaDisponible()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="835" as="sourcePoint" />
+            <mxPoint x="1660" y="835" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="7: true o false">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="950" as="sourcePoint" />
+            <mxPoint x="1280" y="950" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="&lt;b&gt;alt&lt;/b&gt; [bono ajeno, vencido o utilizado]&lt;br&gt;&lt;font color=&quot;#FF7B7B&quot;&gt;&lt;b&gt;«throw» IllegalArgumentException&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="138.75" width="1690" x="55" y="1047" as="geometry" />
+        </mxCell>
+        <mxCell id="m8" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="8: calcularTotal()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1220.75" as="sourcePoint" />
+            <mxPoint x="900" y="1220.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="9: descontar inventario y registrar movimiento">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1335.75" as="sourcePoint" />
+            <mxPoint x="1385" y="1375.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="&lt;b&gt;alt&lt;/b&gt; [inventario insuficiente]&lt;br&gt;&lt;font color=&quot;#FF7B7B&quot;&gt;&lt;b&gt;«throw» InventarioInsuficienteException&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="138.75" width="1690" x="55" y="1432.75" as="geometry" />
+        </mxCell>
+        <mxCell id="m11" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="10: usar()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1606.5" as="sourcePoint" />
+            <mxPoint x="1660" y="1606.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m12" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="11: venta registrada">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1721.5" as="sourcePoint" />
+            <mxPoint x="520" y="1721.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m13" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="12: mostrar descuento y total">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="1836.5" as="sourcePoint" />
+            <mxPoint x="140" y="1836.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rules" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=12;labelBackgroundColor=none;" value="&lt;b&gt;Reglas del enunciado que se ven en este flujo&lt;/b&gt;&lt;br&gt;• El bono debe pertenecer al socio, estar disponible y no puede acumularse con otra política de descuento." vertex="1">
+          <mxGeometry height="300" width="1800" y="2280" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="11 Participacion de empleado" id="fPMpUKfhxeXViZJccN6v">
+    <mxGraphModel dx="4938" dy="2634" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="2600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=28;fontStyle=1;labelBackgroundColor=none;" value="Diagrama de secuencia 11 — Validar e inscribir a un empleado en un torneo individual" vertex="1">
+          <mxGeometry height="45" width="1700" x="30" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" parent="1" style="text;html=1;align=left;fontSize=15;labelBackgroundColor=none;" value="Flecha continua: llamada · Flecha punteada: respuesta · Flecha roja: excepción · Recuadro alt: flujo alternativo" vertex="1">
+          <mxGeometry height="30" width="1700" x="30" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="p0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Empleado" vertex="1">
+          <mxGeometry height="80" width="260" x="10" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life0" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="205" as="sourcePoint" />
+            <mxPoint x="140" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":ConsolaEmpleado" vertex="1">
+          <mxGeometry height="80" width="260" x="390" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life1" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="205" as="sourcePoint" />
+            <mxPoint x="520" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":ClubDeportivo" vertex="1">
+          <mxGeometry height="80" width="260" x="770" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life2" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="205" as="sourcePoint" />
+            <mxPoint x="900" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":TorneoIndividual" vertex="1">
+          <mxGeometry height="80" width="260" x="1150" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life3" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="205" as="sourcePoint" />
+            <mxPoint x="1280" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Turno" vertex="1">
+          <mxGeometry height="80" width="260" x="1530" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life4" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="205" as="sourcePoint" />
+            <mxPoint x="1660" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m0" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="1: seleccionar torneo y cupo">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="260" as="sourcePoint" />
+            <mxPoint x="520" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m1" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="2: inscribirParticipantesEnTorneo(...)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="375" as="sourcePoint" />
+            <mxPoint x="900" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="3: inscribirParticipantes(lista, tipoCupo)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="490" as="sourcePoint" />
+            <mxPoint x="1280" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="4: validarParticipante(empleado)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="605" as="sourcePoint" />
+            <mxPoint x="1385" y="645" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="5: estaDeTurno(empleado)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="720" as="sourcePoint" />
+            <mxPoint x="1385" y="760" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="6: getDiaSemana()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="835" as="sourcePoint" />
+            <mxPoint x="1660" y="835" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="&lt;b&gt;alt&lt;/b&gt; [empleado de turno o tipo de empleado no permitido]&lt;br&gt;&lt;font color=&quot;#FF7B7B&quot;&gt;&lt;b&gt;«throw» IllegalArgumentException&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="138.75" width="1690" x="55" y="932" as="geometry" />
+        </mxCell>
+        <mxCell id="m7" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="7: día del turno">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="1105.75" as="sourcePoint" />
+            <mxPoint x="1280" y="1105.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="8: calcularValorInscripcion(empleado)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1220.75" as="sourcePoint" />
+            <mxPoint x="1385" y="1260.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="9: inscripción activa con valor cero si es competitivo">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="1335.75" as="sourcePoint" />
+            <mxPoint x="520" y="1335.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m10" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="10: mostrar confirmación">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="1450.75" as="sourcePoint" />
+            <mxPoint x="140" y="1450.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rules" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=12;labelBackgroundColor=none;" value="&lt;b&gt;Reglas del enunciado que se ven en este flujo&lt;/b&gt;&lt;br&gt;• Solo entrenadores y fisioterapeutas pueden participar; el administrador queda excluido." vertex="1">
+          <mxGeometry height="300" width="1800" y="2280" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="12 Persistencia automatica" id="TWBMlZkKh1kfq6JbX8Ov">
+    <mxGraphModel dx="4938" dy="2634" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="2600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=28;fontStyle=1;labelBackgroundColor=none;" value="Diagrama de secuencia 12 — Cargar los datos al iniciar y guardarlos al finalizar" vertex="1">
+          <mxGeometry height="45" width="1700" x="30" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" parent="1" style="text;html=1;align=left;fontSize=15;labelBackgroundColor=none;" value="Flecha continua: llamada · Flecha punteada: respuesta · Flecha roja: excepción · Recuadro alt: flujo alternativo" vertex="1">
+          <mxGeometry height="30" width="1700" x="30" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="p0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Usuario" vertex="1">
+          <mxGeometry height="80" width="260" x="10" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life0" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="205" as="sourcePoint" />
+            <mxPoint x="140" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Main del rol" vertex="1">
+          <mxGeometry height="80" width="260" x="390" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life1" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="205" as="sourcePoint" />
+            <mxPoint x="520" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":PersistenciaClub" vertex="1">
+          <mxGeometry height="80" width="260" x="770" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life2" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="205" as="sourcePoint" />
+            <mxPoint x="900" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":Archivos de datos" vertex="1">
+          <mxGeometry height="80" width="260" x="1150" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life3" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="205" as="sourcePoint" />
+            <mxPoint x="1280" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fontStyle=1;labelBackgroundColor=none;" value=":ClubDeportivo" vertex="1">
+          <mxGeometry height="80" width="260" x="1530" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="life4" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;endArrow=none;labelBackgroundColor=none;fontColor=default;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="205" as="sourcePoint" />
+            <mxPoint x="1660" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m0" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="1: iniciar aplicación">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="260" as="sourcePoint" />
+            <mxPoint x="520" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m1" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="2: cargar(club)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="375" as="sourcePoint" />
+            <mxPoint x="900" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="3: leer archivos en orden de dependencias">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="490" as="sourcePoint" />
+            <mxPoint x="1280" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="4: líneas separadas por punto y coma">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1280" y="605" as="sourcePoint" />
+            <mxPoint x="900" y="605" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="5: registrar y cargar entidades">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="720" as="sourcePoint" />
+            <mxPoint x="1660" y="720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="&lt;b&gt;alt&lt;/b&gt; [un archivo no existe]&lt;br&gt;&lt;font color=&quot;#FF7B7B&quot;&gt;&lt;b&gt;la colección correspondiente inicia vacía&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="138.75" width="1690" x="55" y="817" as="geometry" />
+        </mxCell>
+        <mxCell id="m6" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="6: carga terminada">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="990.75" as="sourcePoint" />
+            <mxPoint x="520" y="990.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m7" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="7: permitir operaciones">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="1105.75" as="sourcePoint" />
+            <mxPoint x="140" y="1105.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="8: salir de la consola">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="1220.75" as="sourcePoint" />
+            <mxPoint x="520" y="1220.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="9: guardar(club)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="1335.75" as="sourcePoint" />
+            <mxPoint x="900" y="1335.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m10" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="10: consultar colecciones">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="1450.75" as="sourcePoint" />
+            <mxPoint x="1660" y="1450.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m11" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="11: copias de los datos">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1660" y="1565.75" as="sourcePoint" />
+            <mxPoint x="900" y="1565.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m12" edge="1" parent="1" style="edgeStyle=none;html=1;fontColor=default;fontSize=16;endArrow=block;endFill=1;labelBackgroundColor=none;" value="12: sobrescribir archivos predeterminados">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="1680.75" as="sourcePoint" />
+            <mxPoint x="1280" y="1680.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m13" edge="1" parent="1" style="edgeStyle=none;html=1;dashed=1;dashPattern=8 8;fontColor=default;fontSize=16;endArrow=open;endFill=1;labelBackgroundColor=none;" value="13: guardado terminado">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="1795.75" as="sourcePoint" />
+            <mxPoint x="520" y="1795.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt14" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=10;labelBackgroundColor=none;" value="&lt;b&gt;alt&lt;/b&gt; [ocurre un error de escritura]&lt;br&gt;&lt;font color=&quot;#FF7B7B&quot;&gt;&lt;b&gt;se informa el error sin solicitar otra ruta&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="138.75" width="1690" x="55" y="1892.75" as="geometry" />
+        </mxCell>
+        <mxCell id="rules" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;verticalAlign=top;spacing=12;labelBackgroundColor=none;" value="&lt;b&gt;Reglas del enunciado que se ven en este flujo&lt;/b&gt;&lt;br&gt;• La aplicación no solicita rutas al usuario. Los archivos se ubican en la carpeta datos de la raíz del proyecto." vertex="1">
+          <mxGeometry height="300" width="1800" y="2280" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
