@@ -2,6 +2,7 @@ package clubdeportivo.turnos;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+
 import usuarios.tipos.Empleado;
 import usuarios.tipos.empleados.Administrador;
 
@@ -20,12 +21,14 @@ public class SolicitudCambioTurno {
             LocalTime nuevaHoraInicio, LocalTime nuevaHoraFin) {
 
         this(empleadoSolicitante, turnoOriginal, nuevoDia,
-                nuevaHoraInicio, nuevaHoraFin, true);
+                nuevaHoraInicio, nuevaHoraFin,
+                LocalDate.now(), true);
     }
 
     private SolicitudCambioTurno(Empleado empleadoSolicitante,
             Turno turnoOriginal, DiaSemana nuevoDia,
             LocalTime nuevaHoraInicio, LocalTime nuevaHoraFin,
+            LocalDate fechaSolicitud,
             boolean validarPertenenciaTurno) {
 
         if (empleadoSolicitante == null) {
@@ -63,9 +66,14 @@ public class SolicitudCambioTurno {
                     "La hora final debe ser posterior a la inicial");
         }
 
+        if (fechaSolicitud == null) {
+            throw new IllegalArgumentException(
+                    "La fecha de solicitud es obligatoria");
+        }
+
         this.empleadoSolicitante = empleadoSolicitante;
         this.turnoOriginal = turnoOriginal;
-        this.fechaSolicitud = LocalDate.now();
+        this.fechaSolicitud = fechaSolicitud;
         this.nuevoDia = nuevoDia;
         this.nuevaHoraInicio = nuevaHoraInicio;
         this.nuevaHoraFin = nuevaHoraFin;
@@ -79,6 +87,7 @@ public class SolicitudCambioTurno {
             DiaSemana nuevoDia,
             LocalTime nuevaHoraInicio,
             LocalTime nuevaHoraFin,
+            LocalDate fechaSolicitud,
             EstadoSolicitud estado,
             Administrador administradorDecision) {
 
@@ -100,6 +109,7 @@ public class SolicitudCambioTurno {
                 nuevoDia,
                 nuevaHoraInicio,
                 nuevaHoraFin,
+                fechaSolicitud,
                 false);
 
         solicitud.estado = estado;

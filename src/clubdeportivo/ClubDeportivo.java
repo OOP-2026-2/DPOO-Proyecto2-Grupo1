@@ -3,8 +3,8 @@ package clubdeportivo;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import clubdeportivo.competencias.Competencia;
 import clubdeportivo.competencias.Partidos.Partido;
@@ -25,19 +25,6 @@ import clubdeportivo.instalaciones.Instalacion;
 import clubdeportivo.instalaciones.Reserva;
 import clubdeportivo.instalaciones.TipoInstalacion;
 import clubdeportivo.membresias.PagoMensualidad;
-import clubdeportivo.torneos.BonoDescuento;
-import clubdeportivo.torneos.EncuentroTorneo;
-import clubdeportivo.torneos.EstadoTorneo;
-import clubdeportivo.torneos.InscripcionEquipoTorneo;
-import clubdeportivo.torneos.InscripcionIndividualTorneo;
-import clubdeportivo.torneos.InscripcionTorneo;
-import clubdeportivo.torneos.ParticipanteTorneo;
-import clubdeportivo.torneos.PremioTorneo;
-import clubdeportivo.torneos.TipoCupo;
-import clubdeportivo.torneos.TipoTorneo;
-import clubdeportivo.torneos.Torneo;
-import clubdeportivo.torneos.TorneoConjunto;
-import clubdeportivo.torneos.TorneoIndividual;
 import clubdeportivo.turnos.DiaSemana;
 import clubdeportivo.turnos.SolicitudCambioTurno;
 import clubdeportivo.turnos.Turno;
@@ -49,9 +36,6 @@ import tiendaclub.inventario.SugerenciaProducto;
 import tiendaclub.inventario.TipoMovimiento;
 import tiendaclub.inventario.UbicacionInventario;
 import tiendaclub.ventas.Venta;
-import tiendaclub.ventas.descuentos.DescuentoBonoTorneo;
-import tiendaclub.ventas.descuentos.DescuentoCodigoCompartido;
-import tiendaclub.ventas.descuentos.DescuentoPuntos;
 import tiendaclub.ventas.detalles.DetalleVenta;
 import usuarios.Usuario;
 import usuarios.tipos.Empleado;
@@ -62,6 +46,22 @@ import usuarios.tipos.empleados.Entrenador;
 import usuarios.tipos.empleados.Fisioterapeuta;
 import utilidades.excepciones.InventarioInsuficienteException;
 import utilidades.excepciones.ReservaNoDisponibleException;
+import clubdeportivo.torneos.Torneo;
+import clubdeportivo.torneos.BonoDescuento;
+import tiendaclub.ventas.descuentos.DescuentoBonoTorneo;
+import tiendaclub.ventas.descuentos.DescuentoCodigoCompartido;
+import tiendaclub.ventas.descuentos.DescuentoPuntos;
+import clubdeportivo.torneos.EstadoTorneo;
+import clubdeportivo.torneos.TipoTorneo;
+import clubdeportivo.torneos.InscripcionEquipoTorneo;
+import clubdeportivo.torneos.InscripcionIndividualTorneo;
+import clubdeportivo.torneos.ParticipanteTorneo;
+import clubdeportivo.torneos.TipoCupo;
+import clubdeportivo.torneos.TorneoConjunto;
+import clubdeportivo.torneos.TorneoIndividual;
+import clubdeportivo.torneos.InscripcionTorneo;
+import clubdeportivo.torneos.EncuentroTorneo;
+import clubdeportivo.torneos.PremioTorneo;
 
 public class ClubDeportivo {
     private final String nombre;
@@ -862,12 +862,22 @@ public class ClubDeportivo {
             return false;
         }
 
-        if (!instalacion.estaDisponible(
-                fecha, inicio, duracionMinutos)) {
+        if (fecha.isBefore(LocalDate.now())) {
             return false;
         }
 
         LocalTime fin = inicio.plusMinutes(duracionMinutos);
+
+        if (inicio.isBefore(horaApertura)
+                || fin.isAfter(horaCierre)) {
+
+            return false;
+        }
+
+        if (!instalacion.estaDisponible(
+                fecha, inicio, duracionMinutos)) {
+            return false;
+        }
 
         for (SesionEntrenamiento sesion : sesionesEntrenamiento) {
 

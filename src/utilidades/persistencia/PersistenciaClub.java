@@ -82,10 +82,10 @@ import tiendaclub.inventario.SugerenciaProducto;
 import tiendaclub.inventario.TipoMovimiento;
 import tiendaclub.inventario.UbicacionInventario;
 import tiendaclub.ventas.Venta;
-import tiendaclub.ventas.descuentos.DescuentoBonoTorneo;
 import tiendaclub.ventas.descuentos.DescuentoCodigoCompartido;
-import tiendaclub.ventas.descuentos.DescuentoEmpleado;
+import tiendaclub.ventas.descuentos.DescuentoBonoTorneo;
 import tiendaclub.ventas.descuentos.DescuentoPuntos;
+import tiendaclub.ventas.descuentos.DescuentoEmpleado;
 import tiendaclub.ventas.descuentos.PoliticaDescuento;
 import tiendaclub.ventas.descuentos.SinDescuento;
 import tiendaclub.ventas.detalles.DetalleVenta;
@@ -2072,7 +2072,8 @@ public class PersistenciaClub {
                         + solicitud.getNuevaHoraInicio() + ";"
                         + solicitud.getNuevaHoraFin() + ";"
                         + solicitud.getEstado() + ";"
-                        + idAdministrador);
+                        + idAdministrador + ";"
+                        + solicitud.getFechaSolicitud());
                 escritor.newLine();
             }
         }
@@ -2122,12 +2123,16 @@ public class PersistenciaClub {
 
                 Turno turnoOriginal = new Turno(
                         diaOriginal, inicioOriginal, finOriginal);
+                LocalDate fechaSolicitud = datos.length > 9
+                        ? LocalDate.parse(datos[9])
+                        : LocalDate.now();
                 SolicitudCambioTurno solicitud = SolicitudCambioTurno.cargar(
                         empleado,
                         turnoOriginal,
                         DiaSemana.valueOf(datos[4]),
                         LocalTime.parse(datos[5]),
                         LocalTime.parse(datos[6]),
+                        fechaSolicitud,
                         estado,
                         administrador);
 

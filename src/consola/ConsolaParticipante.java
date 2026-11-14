@@ -2,15 +2,21 @@ package consola;
 
 import static consola.InputHandler.readInt;
 import static consola.InputHandler.readBoolean;
+import static consola.InputHandler.readDate;
 import static consola.InputHandler.readDouble;
 import static consola.InputHandler.readString;
+import static consola.InputHandler.readTime;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import clubdeportivo.ClubDeportivo;
 import clubdeportivo.deportes.Equipo;
+import clubdeportivo.deportes.Modalidad;
+import clubdeportivo.instalaciones.Instalacion;
+import clubdeportivo.instalaciones.Reserva;
 import clubdeportivo.torneos.BonoDescuento;
 import clubdeportivo.torneos.InscripcionEquipoTorneo;
 import clubdeportivo.torneos.InscripcionIndividualTorneo;
@@ -40,6 +46,7 @@ import usuarios.Usuario;
 import usuarios.tipos.Socio;
 import usuarios.tipos.Empleado;
 import utilidades.excepciones.InventarioInsuficienteException;
+import utilidades.excepciones.ReservaNoDisponibleException;
 
 public class ConsolaParticipante implements Subconsola {
     private final ClubDeportivo club;
@@ -97,6 +104,12 @@ public class ConsolaParticipante implements Subconsola {
                     case 11:
                         comprarConCodigoCompartido();
                         break;
+                    case 12:
+                        consultarDisponibilidadInstalacion();
+                        break;
+                    case 13:
+                        registrarReserva();
+                        break;
                     case 0:
                         ejecutando = false;
                         break;
@@ -104,7 +117,8 @@ public class ConsolaParticipante implements Subconsola {
                         System.out.println("Opción inválida.");
                 }
             } catch (IllegalArgumentException | IllegalStateException
-                    | InventarioInsuficienteException e) {
+                    | InventarioInsuficienteException
+                    | ReservaNoDisponibleException e) {
                 System.out.println("No fue posible realizar la operación: " + e.getMessage());
             }
         }
@@ -125,7 +139,111 @@ public class ConsolaParticipante implements Subconsola {
         System.out.println("9. Comprar en cafetería");
         System.out.println("10. Comprar redimiendo puntos");
         System.out.println("11. Comprar con código compartido");
+
+        if (participante instanceof Socio) {
+            System.out.println("12. Consultar disponibilidad de instalación");
+            System.out.println("13. Reservar instalación");
+        }
+
         System.out.println("0. Salir");
+    }
+
+    private void consultarDisponibilidadInstalacion() {
+        if (!(participante instanceof Socio)) {
+            System.out.println(
+                    "Esta opción está disponible únicamente para socios.");
+            return;
+        }
+
+        System.out.println();
+        System.out.println("--- CONSULTAR DISPONIBILIDAD ---");
+
+        if (!mostrarInstalaciones()) {
+            return;
+        }
+
+        Instalacion instalacion = club.buscarInstalacion(
+                readString("ID de la instalación: "));
+
+        if (instalacion == null) {
+            System.out.println("No existe esa instalación.");
+            return;
+        }
+
+        LocalDate fecha = readDate("Fecha (AAAA-MM-DD): ");
+        LocalTime horaInicio = readTime(
+                "Hora de inicio (HH:MM): ");
+        int duracion = readInt("Duración en minutos: ");
+        boolean disponible = club.consultarDisponibilidad(
+                instalacion, fecha, horaInicio, duracion);
+
+        System.out.println(disponible
+                ? "La instalación está disponible."
+                : "La instalación no está disponible.");
+    }
+
+    private void registrarReserva() {
+        if (!(participante instanceof Socio)) {
+            System.out.println(
+                    "Esta opción está disponible únicamente para socios.");
+            return;
+        }
+
+        System.out.println();
+        System.out.println("--- RESERVAR INSTALACIÓN ---");
+
+        if (!mostrarInstalaciones()) {
+            return;
+        }
+
+        Instalacion instalacion = club.buscarInstalacion(
+                readString("ID de la instalación: "));
+
+        if (instalacion == null) {
+            System.out.println("No existe esa instalación.");
+            return;
+        }
+
+        LocalDate fecha = readDate("Fecha (AAAA-MM-DD): ");
+        LocalTime horaInicio = readTime(
+                "Hora de inicio (HH:MM): ");
+        int duracion = readInt("Duración en minutos: ");
+        int numeroJugadores = readInt("Número de jugadores: ");
+
+        System.out.println("Modalidades disponibles:");
+        for (Modalidad modalidad : Modalidad.values()) {
+            System.out.println("- " + modalidad);
+        }
+
+        Modalidad modalidad = Modalidad.valueOf(
+                readString("Modalidad: ").toUpperCase());
+        Reserva reserva = new Reserva(
+                (Socio) participante,
+                instalacion,
+                fecha,
+                horaInicio,
+                duracion,
+                numeroJugadores,
+                modalidad);
+
+        club.registrarReserva(reserva);
+        System.out.println("Reserva registrada correctamente.");
+        System.out.println("Horario: " + reserva.getHoraInicio()
+                + " - " + reserva.calcularHoraFin());
+    }
+
+    private boolean mostrarInstalaciones() {
+        if (club.getInstalaciones().isEmpty()) {
+            System.out.println("No hay instalaciones registradas.");
+            return false;
+        }
+
+        System.out.println("Instalaciones disponibles:");
+        for (Instalacion instalacion : club.getInstalaciones()) {
+            System.out.println("- " + instalacion);
+        }
+
+        return true;
     }
 
     private void consultarTorneos() {
