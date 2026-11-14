@@ -1,3 +1,5 @@
+package clubdeportivo;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -49,7 +51,8 @@ final class DatosPruebaTorneo {
     }
 
     static List<ParticipanteTorneo> lista(ParticipanteTorneo participante) {
-        List<ParticipanteTorneo> participantes = new ArrayList<ParticipanteTorneo>();
+        List<ParticipanteTorneo> participantes =
+                new ArrayList<ParticipanteTorneo>();
         participantes.add(participante);
         return participantes;
     }
