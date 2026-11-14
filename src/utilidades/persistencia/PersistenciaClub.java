@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,28 @@ import clubdeportivo.instalaciones.Instalacion;
 import clubdeportivo.instalaciones.Reserva;
 import clubdeportivo.instalaciones.TipoInstalacion;
 import clubdeportivo.membresias.PagoMensualidad;
+import clubdeportivo.torneos.BonoDescuento;
+import clubdeportivo.torneos.EncuentroTorneo;
+import clubdeportivo.torneos.EstadoBono;
+import clubdeportivo.torneos.EstadoEncuentro;
+import clubdeportivo.torneos.EstadoInscripcionTorneo;
+import clubdeportivo.torneos.EstadoTorneo;
+import clubdeportivo.torneos.FormatoTorneo;
+import clubdeportivo.torneos.InscripcionEquipoTorneo;
+import clubdeportivo.torneos.InscripcionIndividualTorneo;
+import clubdeportivo.torneos.InscripcionTorneo;
+import clubdeportivo.torneos.ParticipanteTorneo;
+import clubdeportivo.torneos.PoliticaPremio;
+import clubdeportivo.torneos.PosicionTorneo;
+import clubdeportivo.torneos.PremioCompetitivo;
+import clubdeportivo.torneos.PremioMonetario;
+import clubdeportivo.torneos.PremioRecreativo;
+import clubdeportivo.torneos.PremioTorneo;
+import clubdeportivo.torneos.TipoCupo;
+import clubdeportivo.torneos.TipoTorneo;
+import clubdeportivo.torneos.Torneo;
+import clubdeportivo.torneos.TorneoConjunto;
+import clubdeportivo.torneos.TorneoIndividual;
 import clubdeportivo.turnos.DiaSemana;
 import clubdeportivo.turnos.EstadoSolicitud;
 import clubdeportivo.turnos.SolicitudCambioTurno;
@@ -66,6 +89,8 @@ import tiendaclub.ventas.tipos.VentaTienda;
 import usuarios.Comprador;
 import usuarios.Usuario;
 import usuarios.tipos.Empleado;
+import usuarios.tipos.EstudianteUniversidad;
+import usuarios.tipos.ParticipanteExterno;
 import usuarios.tipos.Socio;
 import usuarios.tipos.empleados.Administrador;
 import usuarios.tipos.empleados.Entrenador;
@@ -96,6 +121,13 @@ public class PersistenciaClub {
     private static final Path ARCHIVO_SESIONES = CARPETA.resolve("sesiones.txt");
     private static final Path ARCHIVO_ASISTENCIAS = CARPETA.resolve("asistencias.txt");
     private static final Path ARCHIVO_SUGERENCIAS = CARPETA.resolve("sugerencias.txt");
+    private static final Path ARCHIVO_ESTUDIANTES = CARPETA.resolve("estudiantes.txt");
+    private static final Path ARCHIVO_PARTICIPANTES_EXTERNOS = CARPETA.resolve("participantes_externos.txt");
+    private static final Path ARCHIVO_TORNEOS = CARPETA.resolve("torneos.txt");
+    private static final Path ARCHIVO_INSCRIPCIONES_TORNEO = CARPETA.resolve("inscripciones_torneo.txt");
+    private static final Path ARCHIVO_ENCUENTROS_TORNEO = CARPETA.resolve("encuentros_torneo.txt");
+    private static final Path ARCHIVO_POSICIONES_TORNEO = CARPETA.resolve("posiciones_torneo.txt");
+    private static final Path ARCHIVO_PREMIOS_TORNEO = CARPETA.resolve("premios_torneo.txt");
 
     public void guardar(ClubDeportivo club) throws IOException {
         if (club == null) {
@@ -105,6 +137,8 @@ public class PersistenciaClub {
         Files.createDirectories(CARPETA);
         guardarSocios(club);
         guardarEmpleados(club);
+        guardarEstudiantes(club);
+        guardarParticipantesExternos(club);
         guardarTurnos(club);
         guardarSolicitudesTurno(club);
         guardarDeportesConjunto(club);
@@ -126,6 +160,11 @@ public class PersistenciaClub {
         guardarAsistencias(club);
         guardarSugerencias(club);
         guardarVentas(club);
+        guardarTorneos(club);
+        guardarInscripcionesTorneo(club);
+        guardarEncuentrosTorneo(club);
+        guardarPosicionesTorneo(club);
+        guardarPremiosTorneo(club);
     }
 
     public void cargar(ClubDeportivo club) throws IOException {
@@ -136,8 +175,10 @@ public class PersistenciaClub {
         Files.createDirectories(CARPETA);
         cargarSocios(club);
         cargarEmpleados(club);
-        cargarSolicitudesTurno(club);
+        cargarEstudiantes(club);
+        cargarParticipantesExternos(club);
         cargarTurnos(club);
+        cargarSolicitudesTurno(club);
         cargarDeportesConjunto(club);
         cargarDeportesIndividuales(club);
         cargarEquipos(club);
@@ -158,6 +199,11 @@ public class PersistenciaClub {
         cargarAsistencias(club);
         cargarSugerencias(club);
         cargarVentas(club);
+        cargarTorneos(club);
+        cargarInscripcionesTorneo(club);
+        cargarEncuentrosTorneo(club);
+        cargarPosicionesTorneo(club);
+        cargarPremiosTorneo(club);
     }
 
     // Socios
@@ -2017,4 +2063,586 @@ public class PersistenciaClub {
             }
         }
     }
+
+    private void guardarEstudiantes(ClubDeportivo club) throws IOException {
+        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_ESTUDIANTES)) {
+            for (Usuario usuario : club.getUsuarios()) {
+                if (usuario instanceof EstudianteUniversidad) {
+                    EstudianteUniversidad estudiante = (EstudianteUniversidad) usuario;
+
+                    escritor.write(estudiante.getId() + ";"
+                            + estudiante.getNombre() + ";"
+                            + estudiante.getFechaNacimiento() + ";"
+                            + estudiante.getLogin() + ";"
+                            + estudiante.getContrasena() + ";"
+                            + estudiante.getUniversidad() + ";"
+                            + estudiante.getCorreoInstitucional());
+
+                    escritor.newLine();
+                }
+            }
+        }
+    }
+
+    private void cargarEstudiantes(ClubDeportivo club) throws IOException {
+        if (!Files.exists(ARCHIVO_ESTUDIANTES)) {
+            return;
+        }
+
+        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_ESTUDIANTES)) {
+            String linea;
+
+            while ((linea = lector.readLine()) != null) {
+                if (linea.trim().isEmpty()) {
+                    continue;
+                }
+
+                String[] partes = linea.split(";", -1);
+
+                if (partes.length != 7) {
+                    continue;
+                }
+
+                if (club.buscarUsuario(partes[0]) != null) {
+                    continue;
+                }
+
+                EstudianteUniversidad estudiante = new EstudianteUniversidad(
+                        partes[0],
+                        partes[1],
+                        LocalDate.parse(partes[2]),
+                        partes[3],
+                        partes[4],
+                        partes[5],
+                        partes[6]);
+
+                club.registrarUsuario(estudiante);
+            }
+        }
+    }
+
+    private void guardarParticipantesExternos(ClubDeportivo club) throws IOException {
+        try (BufferedWriter escritor = Files.newBufferedWriter(
+                ARCHIVO_PARTICIPANTES_EXTERNOS)) {
+
+            for (Usuario usuario : club.getUsuarios()) {
+                if (usuario instanceof ParticipanteExterno) {
+                    ParticipanteExterno participante = (ParticipanteExterno) usuario;
+
+                    escritor.write(participante.getId() + ";"
+                            + participante.getNombre() + ";"
+                            + participante.getFechaNacimiento() + ";"
+                            + participante.getLogin() + ";"
+                            + participante.getContrasena() + ";"
+                            + participante.getContacto());
+
+                    escritor.newLine();
+                }
+            }
+        }
+    }
+
+    private void cargarParticipantesExternos(ClubDeportivo club) throws IOException {
+        if (!Files.exists(ARCHIVO_PARTICIPANTES_EXTERNOS)) {
+            return;
+        }
+
+        try (BufferedReader lector = Files.newBufferedReader(
+                ARCHIVO_PARTICIPANTES_EXTERNOS)) {
+
+            String linea;
+
+            while ((linea = lector.readLine()) != null) {
+                if (linea.trim().isEmpty()) {
+                    continue;
+                }
+
+                String[] partes = linea.split(";", -1);
+
+                if (partes.length != 6) {
+                    continue;
+                }
+
+                if (club.buscarUsuario(partes[0]) != null) {
+                    continue;
+                }
+
+                ParticipanteExterno participante = new ParticipanteExterno(
+                        partes[0],
+                        partes[1],
+                        LocalDate.parse(partes[2]),
+                        partes[3],
+                        partes[4],
+                        partes[5]);
+
+                club.registrarUsuario(participante);
+            }
+        }
+    }
+
+    // Torneos
+
+    private void guardarTorneos(ClubDeportivo club) throws IOException {
+        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_TORNEOS)) {
+            for (Torneo torneo : club.getTorneos()) {
+                String clase;
+                String deporte;
+                String clasificacion;
+                String modalidad;
+
+                if (torneo instanceof TorneoConjunto) {
+                    TorneoConjunto conjunto = (TorneoConjunto) torneo;
+                    clase = "CONJUNTO";
+                    deporte = conjunto.getDeporte().getNombre();
+                    clasificacion = conjunto.getCategoria().name();
+                    modalidad = "";
+                } else {
+                    TorneoIndividual individual = (TorneoIndividual) torneo;
+                    clase = "INDIVIDUAL";
+                    deporte = individual.getDeporte().getNombre();
+                    clasificacion = individual.getNivel().name();
+                    modalidad = individual.getModalidad().name();
+                }
+
+                PoliticaPremio politica = torneo.getPoliticaPremio();
+                String tipoPolitica;
+                double parametroUno;
+                int parametroDos;
+
+                if (politica instanceof PremioRecreativo) {
+                    PremioRecreativo premio = (PremioRecreativo) politica;
+                    tipoPolitica = "RECREATIVO";
+                    parametroUno = premio.getPorcentajeBono();
+                    parametroDos = premio.getDiasVigencia();
+                } else {
+                    PremioCompetitivo premio = (PremioCompetitivo) politica;
+                    tipoPolitica = "COMPETITIVO";
+                    parametroUno = premio.getPorcentajeRecaudo();
+                    parametroDos = 0;
+                }
+
+                escritor.write(clase + ";"
+                        + torneo.getId() + ";"
+                        + torneo.getNombre() + ";"
+                        + torneo.getFechaInicio() + ";"
+                        + torneo.getHoraInicio() + ";"
+                        + torneo.getHoraFin() + ";"
+                        + torneo.getFormato() + ";"
+                        + torneo.getCapacidad() + ";"
+                        + torneo.getTipo() + ";"
+                        + torneo.getEstado() + ";"
+                        + torneo.getFechaLiberacionPreferenciales() + ";"
+                        + tipoPolitica + ";"
+                        + parametroUno + ";"
+                        + parametroDos + ";"
+                        + torneo.getTarifaInscripcion() + ";"
+                        + torneo.isCuposPreferencialesLiberados() + ";"
+                        + deporte + ";"
+                        + clasificacion + ";"
+                        + modalidad);
+                escritor.newLine();
+            }
+        }
+    }
+
+    private void cargarTorneos(ClubDeportivo club) throws IOException {
+        if (!Files.exists(ARCHIVO_TORNEOS)) {
+            return;
+        }
+
+        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_TORNEOS)) {
+            String linea;
+
+            while ((linea = lector.readLine()) != null) {
+                if (linea.trim().isEmpty()) {
+                    continue;
+                }
+
+                String[] partes = linea.split(";", -1);
+
+                if (partes.length != 19 || club.buscarTorneo(partes[1]) != null) {
+                    continue;
+                }
+
+                PoliticaPremio politica;
+
+                if (partes[11].equals("RECREATIVO")) {
+                    politica = new PremioRecreativo(
+                            Double.parseDouble(partes[12]),
+                            Integer.parseInt(partes[13]));
+                } else {
+                    politica = new PremioCompetitivo(
+                            Double.parseDouble(partes[12]));
+                }
+
+                Torneo torneo;
+
+                if (partes[0].equals("CONJUNTO")) {
+                    DeporteConjunto deporte = club.buscarDeporteConjunto(partes[16]);
+
+                    if (deporte == null) {
+                        continue;
+                    }
+
+                    torneo = new TorneoConjunto(
+                            partes[1], partes[2], LocalDate.parse(partes[3]),
+                            LocalTime.parse(partes[4]), LocalTime.parse(partes[5]),
+                            FormatoTorneo.valueOf(partes[6]), Integer.parseInt(partes[7]),
+                            TipoTorneo.valueOf(partes[8]), LocalDateTime.parse(partes[10]),
+                            politica, Double.parseDouble(partes[14]), deporte,
+                            Categoria.valueOf(partes[17]));
+                } else {
+                    DeporteIndividual deporte = club.buscarDeporteIndividual(partes[16]);
+
+                    if (deporte == null) {
+                        continue;
+                    }
+
+                    torneo = new TorneoIndividual(
+                            partes[1], partes[2], LocalDate.parse(partes[3]),
+                            LocalTime.parse(partes[4]), LocalTime.parse(partes[5]),
+                            FormatoTorneo.valueOf(partes[6]), Integer.parseInt(partes[7]),
+                            TipoTorneo.valueOf(partes[8]), LocalDateTime.parse(partes[10]),
+                            politica, Double.parseDouble(partes[14]), deporte,
+                            Nivel.valueOf(partes[17]), Modalidad.valueOf(partes[18]));
+                }
+
+                club.registrarTorneo(torneo);
+                torneo.cargarEstado(
+                        EstadoTorneo.valueOf(partes[9]),
+                        Boolean.parseBoolean(partes[15]));
+            }
+        }
+    }
+
+    private void guardarInscripcionesTorneo(ClubDeportivo club) throws IOException {
+        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_INSCRIPCIONES_TORNEO)) {
+            for (Torneo torneo : club.getTorneos()) {
+                List<InscripcionTorneo> inscripciones = torneo.getInscripciones();
+
+                for (int indice = 0; indice < inscripciones.size(); indice++) {
+                    InscripcionTorneo inscripcion = inscripciones.get(indice);
+                    String clase;
+                    String participantes;
+
+                    if (inscripcion instanceof InscripcionEquipoTorneo) {
+                        clase = "EQUIPO";
+                        participantes = ((InscripcionEquipoTorneo) inscripcion)
+                                .getEquipo().getNombre();
+                    } else {
+                        clase = "INDIVIDUAL";
+                        participantes = obtenerIdsParticipantes(
+                                ((InscripcionIndividualTorneo) inscripcion).getParticipantes());
+                    }
+
+                    escritor.write(torneo.getId() + ";"
+                            + indice + ";"
+                            + clase + ";"
+                            + inscripcion.getFechaInscripcion() + ";"
+                            + inscripcion.getEstado() + ";"
+                            + inscripcion.getTipoCupo() + ";"
+                            + inscripcion.getValorPagado() + ";"
+                            + participantes);
+                    escritor.newLine();
+                }
+            }
+        }
+    }
+
+    private String obtenerIdsParticipantes(List<ParticipanteTorneo> participantes) {
+        StringBuilder resultado = new StringBuilder();
+
+        for (ParticipanteTorneo participante : participantes) {
+            if (resultado.length() > 0) {
+                resultado.append(",");
+            }
+
+            resultado.append(participante.getId());
+        }
+
+        return resultado.toString();
+    }
+
+    private void cargarInscripcionesTorneo(ClubDeportivo club) throws IOException {
+        if (!Files.exists(ARCHIVO_INSCRIPCIONES_TORNEO)) {
+            return;
+        }
+
+        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_INSCRIPCIONES_TORNEO)) {
+            String linea;
+
+            while ((linea = lector.readLine()) != null) {
+                if (linea.trim().isEmpty()) {
+                    continue;
+                }
+
+                String[] partes = linea.split(";", -1);
+
+                if (partes.length != 8) {
+                    continue;
+                }
+
+                Torneo torneo = club.buscarTorneo(partes[0]);
+
+                if (torneo == null) {
+                    continue;
+                }
+
+                InscripcionTorneo inscripcion;
+
+                if (partes[2].equals("EQUIPO")) {
+                    Equipo equipo = club.buscarEquipo(partes[7]);
+
+                    if (equipo == null) {
+                        continue;
+                    }
+
+                    inscripcion = new InscripcionEquipoTorneo(
+                            LocalDate.parse(partes[3]), torneo,
+                            TipoCupo.valueOf(partes[5]), Double.parseDouble(partes[6]), equipo);
+                } else {
+                    InscripcionIndividualTorneo individual = new InscripcionIndividualTorneo(
+                            LocalDate.parse(partes[3]), torneo,
+                            TipoCupo.valueOf(partes[5]), Double.parseDouble(partes[6]));
+
+                    if (!partes[7].isEmpty()) {
+                        String[] ids = partes[7].split(",");
+
+                        for (String id : ids) {
+                            Usuario usuario = club.buscarUsuario(id);
+
+                            if (!(usuario instanceof ParticipanteTorneo)) {
+                                throw new IOException("No existe el participante de torneo con ID " + id);
+                            }
+
+                            individual.agregarParticipante((ParticipanteTorneo) usuario);
+                        }
+                    }
+
+                    inscripcion = individual;
+                }
+
+                torneo.cargarInscripcion(inscripcion);
+
+                if (EstadoInscripcionTorneo.valueOf(partes[4]) == EstadoInscripcionTorneo.RETIRADA) {
+                    inscripcion.retirar();
+                }
+            }
+        }
+    }
+
+    private void guardarEncuentrosTorneo(ClubDeportivo club) throws IOException {
+        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_ENCUENTROS_TORNEO)) {
+            for (Torneo torneo : club.getTorneos()) {
+                List<InscripcionTorneo> inscripciones = torneo.getInscripciones();
+
+                for (EncuentroTorneo encuentro : torneo.getEncuentros()) {
+                    escritor.write(torneo.getId() + ";"
+                            + encuentro.getId() + ";"
+                            + encuentro.getFecha() + ";"
+                            + encuentro.getHoraInicio() + ";"
+                            + inscripciones.indexOf(encuentro.getInscripcionLocal()) + ";"
+                            + inscripciones.indexOf(encuentro.getInscripcionVisitante()) + ";"
+                            + encuentro.getEstado() + ";"
+                            + (encuentro.getMarcador() == null ? "" : encuentro.getMarcador()));
+                    escritor.newLine();
+                }
+            }
+        }
+    }
+
+    private void cargarEncuentrosTorneo(ClubDeportivo club) throws IOException {
+        if (!Files.exists(ARCHIVO_ENCUENTROS_TORNEO)) {
+            return;
+        }
+
+        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_ENCUENTROS_TORNEO)) {
+            String linea;
+
+            while ((linea = lector.readLine()) != null) {
+                if (linea.trim().isEmpty()) {
+                    continue;
+                }
+
+                String[] partes = linea.split(";", -1);
+
+                if (partes.length != 8) {
+                    continue;
+                }
+
+                Torneo torneo = club.buscarTorneo(partes[0]);
+
+                if (torneo == null) {
+                    continue;
+                }
+
+                InscripcionTorneo local = buscarInscripcionTorneo(
+                        torneo, Integer.parseInt(partes[4]));
+                InscripcionTorneo visitante = buscarInscripcionTorneo(
+                        torneo, Integer.parseInt(partes[5]));
+
+                EncuentroTorneo encuentro = new EncuentroTorneo(
+                        partes[1], LocalDate.parse(partes[2]), LocalTime.parse(partes[3]),
+                        local, visitante);
+
+                EstadoEncuentro estado = EstadoEncuentro.valueOf(partes[6]);
+
+                if (estado == EstadoEncuentro.FINALIZADO) {
+                    encuentro.registrarResultado(partes[7]);
+                    encuentro.finalizar();
+                } else if (estado == EstadoEncuentro.CANCELADO) {
+                    encuentro.cancelar();
+                }
+
+                torneo.cargarEncuentro(encuentro);
+            }
+        }
+    }
+
+    private void guardarPosicionesTorneo(ClubDeportivo club) throws IOException {
+        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_POSICIONES_TORNEO)) {
+            for (Torneo torneo : club.getTorneos()) {
+                List<InscripcionTorneo> inscripciones = torneo.getInscripciones();
+
+                for (PosicionTorneo posicion : torneo.getPosiciones()) {
+                    escritor.write(torneo.getId() + ";"
+                            + inscripciones.indexOf(posicion.getInscripcion()) + ";"
+                            + posicion.getPartidosJugados() + ";"
+                            + posicion.getVictorias() + ";"
+                            + posicion.getEmpates() + ";"
+                            + posicion.getDerrotas() + ";"
+                            + posicion.getPuntos() + ";"
+                            + posicion.getPosicion());
+                    escritor.newLine();
+                }
+            }
+        }
+    }
+
+    private void cargarPosicionesTorneo(ClubDeportivo club) throws IOException {
+        if (!Files.exists(ARCHIVO_POSICIONES_TORNEO)) {
+            return;
+        }
+
+        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_POSICIONES_TORNEO)) {
+            String linea;
+
+            while ((linea = lector.readLine()) != null) {
+                if (linea.trim().isEmpty()) {
+                    continue;
+                }
+
+                String[] partes = linea.split(";", -1);
+
+                if (partes.length != 8) {
+                    continue;
+                }
+
+                Torneo torneo = club.buscarTorneo(partes[0]);
+
+                if (torneo == null) {
+                    continue;
+                }
+
+                PosicionTorneo posicion = new PosicionTorneo(
+                        buscarInscripcionTorneo(torneo, Integer.parseInt(partes[1])),
+                        Integer.parseInt(partes[2]), Integer.parseInt(partes[3]),
+                        Integer.parseInt(partes[4]), Integer.parseInt(partes[5]),
+                        Integer.parseInt(partes[6]), Integer.parseInt(partes[7]));
+
+                torneo.cargarPosicion(posicion);
+            }
+        }
+    }
+
+    private void guardarPremiosTorneo(ClubDeportivo club) throws IOException {
+        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_PREMIOS_TORNEO)) {
+            for (Torneo torneo : club.getTorneos()) {
+                List<InscripcionTorneo> inscripciones = torneo.getInscripciones();
+
+                for (PremioTorneo premio : torneo.getPremiosOtorgados()) {
+                    int ganador = inscripciones.indexOf(premio.getGanador());
+
+                    if (premio instanceof PremioMonetario) {
+                        PremioMonetario monetario = (PremioMonetario) premio;
+                        escritor.write("MONETARIO;" + torneo.getId() + ";"
+                                + ganador + ";"
+                                + monetario.getValor() + ";"
+                                + monetario.getFecha() + ";"
+                                + monetario.fueEntregado());
+                    } else if (premio instanceof BonoDescuento) {
+                        BonoDescuento bono = (BonoDescuento) premio;
+                        escritor.write("BONO;" + torneo.getId() + ";"
+                                + ganador + ";"
+                                + bono.getPorcentaje() + ";"
+                                + bono.getSocio().getId() + ";"
+                                + bono.getFechaCreacion() + ";"
+                                + bono.getFechaVencimiento() + ";"
+                                + bono.getEstado());
+                    }
+
+                    escritor.newLine();
+                }
+            }
+        }
+    }
+
+    private void cargarPremiosTorneo(ClubDeportivo club) throws IOException {
+        if (!Files.exists(ARCHIVO_PREMIOS_TORNEO)) {
+            return;
+        }
+
+        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_PREMIOS_TORNEO)) {
+            String linea;
+
+            while ((linea = lector.readLine()) != null) {
+                if (linea.trim().isEmpty()) {
+                    continue;
+                }
+
+                String[] partes = linea.split(";", -1);
+                Torneo torneo = partes.length >= 6 ? club.buscarTorneo(partes[1]) : null;
+
+                if (torneo == null) {
+                    continue;
+                }
+
+                InscripcionTorneo ganador = buscarInscripcionTorneo(
+                        torneo, Integer.parseInt(partes[2]));
+
+                if (partes[0].equals("MONETARIO") && partes.length == 6) {
+                    PremioMonetario premio = new PremioMonetario(
+                            ganador, Double.parseDouble(partes[3]),
+                            LocalDate.parse(partes[4]), Boolean.parseBoolean(partes[5]));
+                    torneo.cargarPremio(premio);
+                } else if (partes[0].equals("BONO") && partes.length == 8) {
+                    Usuario usuario = club.buscarUsuario(partes[4]);
+
+                    if (!(usuario instanceof Socio)) {
+                        continue;
+                    }
+
+                    BonoDescuento bono = new BonoDescuento(
+                            (Socio) usuario, Double.parseDouble(partes[3]),
+                            LocalDate.parse(partes[5]), LocalDate.parse(partes[6]),
+                            EstadoBono.valueOf(partes[7]), ganador);
+
+                    ((Socio) usuario).agregarBono(bono);
+                    torneo.cargarPremio(bono);
+                }
+            }
+        }
+    }
+
+    private InscripcionTorneo buscarInscripcionTorneo(Torneo torneo, int indice) throws IOException {
+        List<InscripcionTorneo> inscripciones = torneo.getInscripciones();
+
+        if (indice < 0 || indice >= inscripciones.size()) {
+            throw new IOException("No existe la inscripción " + indice
+                    + " del torneo " + torneo.getId());
+        }
+
+        return inscripciones.get(indice);
+    }
+
 }

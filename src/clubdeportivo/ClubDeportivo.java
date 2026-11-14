@@ -45,6 +45,19 @@ import usuarios.tipos.empleados.Entrenador;
 import usuarios.tipos.empleados.Fisioterapeuta;
 import utilidades.excepciones.InventarioInsuficienteException;
 import utilidades.excepciones.ReservaNoDisponibleException;
+import clubdeportivo.torneos.Torneo;
+import tiendaclub.ventas.descuentos.DescuentoBonoTorneo;
+import clubdeportivo.torneos.EstadoTorneo;
+import clubdeportivo.torneos.TipoTorneo;
+import clubdeportivo.torneos.InscripcionEquipoTorneo;
+import clubdeportivo.torneos.InscripcionIndividualTorneo;
+import clubdeportivo.torneos.ParticipanteTorneo;
+import clubdeportivo.torneos.TipoCupo;
+import clubdeportivo.torneos.TorneoConjunto;
+import clubdeportivo.torneos.TorneoIndividual;
+import clubdeportivo.torneos.InscripcionTorneo;
+import clubdeportivo.torneos.EncuentroTorneo;
+import clubdeportivo.torneos.PremioTorneo;
 
 public class ClubDeportivo {
     private final String nombre;
@@ -68,6 +81,7 @@ public class ClubDeportivo {
     private final List<MovimientoInventario> movimientosInventario;
     private final List<SugerenciaProducto> sugerenciasProducto;
     private final List<Venta> ventas;
+    private final List<Torneo> torneos;
 
     public ClubDeportivo() {
         this("Club Deportivo Séneca", "Universidad de los Andes",
@@ -119,6 +133,150 @@ public class ClubDeportivo {
         movimientosInventario = new ArrayList<MovimientoInventario>();
         sugerenciasProducto = new ArrayList<SugerenciaProducto>();
         ventas = new ArrayList<Venta>();
+        torneos = new ArrayList<Torneo>();
+    }
+
+    // Torneos
+
+    public void registrarTorneo(Torneo torneo) {
+        if (torneo == null) {
+            throw new IllegalArgumentException("El torneo no puede ser nulo");
+        }
+
+        if (buscarTorneo(torneo.getId()) != null) {
+            throw new IllegalArgumentException("Ya existe un torneo con ese ID");
+        }
+
+        torneos.add(torneo);
+    }
+
+    public Torneo buscarTorneo(String id) {
+        if (id == null) {
+            return null;
+        }
+
+        for (Torneo torneo : torneos) {
+            if (torneo.getId().equalsIgnoreCase(id)) {
+                return torneo;
+            }
+        }
+
+        return null;
+    }
+
+    public List<Torneo> consultarTorneos(TipoTorneo tipo, EstadoTorneo estado) {
+        List<Torneo> resultado = new ArrayList<Torneo>();
+
+        for (Torneo torneo : torneos) {
+            boolean coincideTipo = tipo == null || torneo.getTipo() == tipo;
+            boolean coincideEstado = estado == null || torneo.getEstado() == estado;
+
+            if (coincideTipo && coincideEstado) {
+                resultado.add(torneo);
+            }
+        }
+
+        return resultado;
+    }
+
+    public InscripcionEquipoTorneo inscribirEquipoEnTorneo(TorneoConjunto torneo, Equipo equipo, TipoCupo tipoCupo) {
+        if (torneo == null || equipo == null || tipoCupo == null) {
+            throw new IllegalArgumentException("Los datos de la inscripción son obligatorios");
+        }
+
+        if (!torneos.contains(torneo)) {
+            throw new IllegalArgumentException("El torneo no está registrado en el club");
+        }
+
+        return torneo.inscribirEquipo(equipo, tipoCupo);
+    }
+
+    public InscripcionIndividualTorneo inscribirParticipantesEnTorneo(TorneoIndividual torneo,
+            List<ParticipanteTorneo> participantes, TipoCupo tipoCupo) {
+
+        if (torneo == null || participantes == null || tipoCupo == null) {
+            throw new IllegalArgumentException("Los datos de la inscripción son obligatorios");
+        }
+
+        if (!torneos.contains(torneo)) {
+            throw new IllegalArgumentException("El torneo no está registrado en el club");
+        }
+
+        return torneo.inscribirParticipantes(participantes, tipoCupo);
+    }
+
+    public List<Torneo> getTorneos() {
+        return new ArrayList<Torneo>(torneos);
+    }
+
+    public void retirarInscripcionTorneo(InscripcionTorneo inscripcion) {
+        if (inscripcion == null) {
+            throw new IllegalArgumentException("La inscripción es obligatoria");
+        }
+
+        Torneo torneo = inscripcion.getTorneo();
+
+        if (!torneos.contains(torneo)) {
+            throw new IllegalArgumentException("El torneo no está registrado en el club");
+        }
+
+        torneo.retirarInscripcion(inscripcion);
+    }
+
+    public void liberarCuposPreferenciales(Torneo torneo) {
+        validarTorneoRegistrado(torneo);
+        torneo.liberarCuposPreferenciales();
+    }
+
+    public void iniciarTorneo(Torneo torneo) {
+        validarTorneoRegistrado(torneo);
+        torneo.iniciar();
+    }
+
+    private void validarTorneoRegistrado(Torneo torneo) {
+        if (torneo == null) {
+            throw new IllegalArgumentException("El torneo es obligatorio");
+        }
+
+        if (!torneos.contains(torneo)) {
+            throw new IllegalArgumentException("El torneo no está registrado en el club");
+        }
+    }
+
+    public void registrarResultadoEncuentro(EncuentroTorneo encuentro, String marcador) {
+        if (encuentro == null) {
+            throw new IllegalArgumentException("El encuentro es obligatorio");
+        }
+
+        if (marcador == null || marcador.trim().isEmpty()) {
+            throw new IllegalArgumentException("El marcador es obligatorio");
+        }
+
+        Torneo torneo = buscarTorneoDelEncuentro(encuentro);
+
+        if (torneo == null) {
+            throw new IllegalArgumentException("El encuentro no pertenece a un torneo registrado");
+        }
+
+        encuentro.registrarResultado(marcador);
+        encuentro.finalizar();
+        torneo.actualizarPosiciones(encuentro);
+    }
+
+    public List<PremioTorneo> finalizarTorneo(Torneo torneo) {
+        validarTorneoRegistrado(torneo);
+        torneo.finalizar();
+        return torneo.getPremiosOtorgados();
+    }
+
+    private Torneo buscarTorneoDelEncuentro(EncuentroTorneo encuentro) {
+        for (Torneo torneo : torneos) {
+            if (torneo.getEncuentros().contains(encuentro)) {
+                return torneo;
+            }
+        }
+
+        return null;
     }
 
     // Usuarios
@@ -132,6 +290,15 @@ public class ClubDeportivo {
             throw new IllegalArgumentException("Ya existe un usuario con ese ID");
         }
 
+        for (Usuario existente : usuarios) {
+            if (existente.getLogin().equalsIgnoreCase(
+                    usuario.getLogin())) {
+
+                throw new IllegalArgumentException(
+                        "Ya existe un usuario con ese login");
+            }
+        }
+
         usuarios.add(usuario);
     }
 
@@ -142,6 +309,25 @@ public class ClubDeportivo {
 
         for (Usuario usuario : usuarios) {
             if (usuario.getId().equalsIgnoreCase(id)) {
+                return usuario;
+            }
+        }
+
+        return null;
+    }
+
+    public Usuario autenticar(String login, String contrasena) {
+        if (login == null || contrasena == null
+                || login.trim().isEmpty()
+                || contrasena.trim().isEmpty()) {
+
+            return null;
+        }
+
+        for (Usuario usuario : usuarios) {
+            if (usuario.getLogin().equalsIgnoreCase(login)
+                    && usuario.validarContrasena(contrasena)) {
+
                 return usuario;
             }
         }
@@ -521,6 +707,23 @@ public class ClubDeportivo {
         programarSesion(sesion);
     }
 
+    public List<SesionEntrenamiento> consultarSesiones(LocalDate fecha) {
+        if (fecha == null) {
+            throw new IllegalArgumentException(
+                    "La fecha es obligatoria");
+        }
+
+        List<SesionEntrenamiento> resultado = new ArrayList<SesionEntrenamiento>();
+
+        for (SesionEntrenamiento sesion : sesionesEntrenamiento) {
+            if (sesion.getFecha().equals(fecha)) {
+                resultado.add(sesion);
+            }
+        }
+
+        return resultado;
+    }
+
     public RegistroAsistencia registrarAsistencia(
             SesionEntrenamiento sesion,
             Socio socio) {
@@ -891,6 +1094,10 @@ public class ClubDeportivo {
         if (venta == null) {
             throw new IllegalArgumentException("La venta no puede ser nula");
         }
+        if (venta.getPoliticaDescuento() instanceof DescuentoBonoTorneo) {
+            DescuentoBonoTorneo descuentoBono = (DescuentoBonoTorneo) venta.getPoliticaDescuento();
+            descuentoBono.getBono().usar();
+        }
 
         ventas.add(venta);
     }
@@ -1233,6 +1440,38 @@ public class ClubDeportivo {
         }
 
         return conservaCobertura && dentroHorario;
+    }
+
+    public boolean empleadoDisponible(Empleado empleado, LocalDate fecha,
+            LocalTime horaInicio, LocalTime horaFin) {
+
+        if (empleado == null || fecha == null
+                || horaInicio == null || horaFin == null) {
+
+            throw new IllegalArgumentException(
+                    "Los datos para consultar la disponibilidad son obligatorios");
+        }
+
+        if (!horaFin.isAfter(horaInicio)) {
+            throw new IllegalArgumentException(
+                    "La hora final debe ser posterior a la inicial");
+        }
+
+        DiaSemana dia = DiaSemana.values()[fecha.getDayOfWeek().getValue() - 1];
+
+        for (Turno turno : empleado.getTurnos()) {
+            boolean mismoDia = turno.getDiaSemana() == dia;
+
+            boolean horariosSuperpuestos = horaInicio.isBefore(
+                    turno.getHoraFin())
+                    && turno.getHoraInicio().isBefore(horaFin);
+
+            if (mismoDia && horariosSuperpuestos) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     // Getters

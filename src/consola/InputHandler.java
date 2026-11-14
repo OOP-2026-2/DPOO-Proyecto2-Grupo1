@@ -1,5 +1,8 @@
 package consola;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class InputHandler {
@@ -17,6 +20,7 @@ public class InputHandler {
             if (!input.isEmpty()) {
                 return input;
             }
+
             System.out.println("El valor no puede estar vacío.");
         }
     }
@@ -38,6 +42,7 @@ public class InputHandler {
             if (cantidad >= 0) {
                 return cantidad;
             }
+
             System.out.println("La cantidad no puede ser negativa.");
         }
     }
@@ -47,7 +52,7 @@ public class InputHandler {
             try {
                 return Double.parseDouble(readString(prompt));
             } catch (NumberFormatException e) {
-                System.out.println("Debe escribir un número decimal válido.");
+                System.out.println("Debe escribir un número válido.");
             }
         }
     }
@@ -55,10 +60,43 @@ public class InputHandler {
     public static boolean readBoolean(String prompt) {
         while (true) {
             String input = readString(prompt).toLowerCase();
-            if (input.equals("s") || input.equals("si") || input.equals("sí")) return true;
-            if (input.equals("n") || input.equals("no")) return false;
 
-            System.out.println("Responda con 's' o 'n'.");
+            if (input.equals("s")
+                    || input.equals("si")
+                    || input.equals("sí")) {
+
+                return true;
+            }
+
+            if (input.equals("n")
+                    || input.equals("no")) {
+
+                return false;
+            }
+
+            System.out.println("Responda con s o n.");
+        }
+    }
+
+    public static LocalDate readDate(String prompt) {
+        while (true) {
+            try {
+                return LocalDate.parse(readString(prompt));
+            } catch (DateTimeParseException e) {
+                System.out.println(
+                        "Debe escribir la fecha en formato AAAA-MM-DD.");
+            }
+        }
+    }
+
+    public static LocalTime readTime(String prompt) {
+        while (true) {
+            try {
+                return LocalTime.parse(readString(prompt));
+            } catch (DateTimeParseException e) {
+                System.out.println(
+                        "Debe escribir la hora en formato HH:MM.");
+            }
         }
     }
 }
