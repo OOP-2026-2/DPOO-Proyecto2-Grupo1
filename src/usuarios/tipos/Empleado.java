@@ -74,6 +74,21 @@ public abstract class Empleado extends Usuario implements Comprador, Participant
         return solicitud;
     }
 
+    public void cargarSolicitudCambio(
+            SolicitudCambioTurno solicitud) {
+
+        if (solicitud == null
+                || solicitud.getEmpleadoSolicitante() != this) {
+
+            throw new IllegalArgumentException(
+                    "La solicitud no pertenece al empleado");
+        }
+
+        if (!solicitudesCambio.contains(solicitud)) {
+            solicitudesCambio.add(solicitud);
+        }
+    }
+
     public void aplicarCambioTurno(SolicitudCambioTurno solicitud) {
         if (solicitud == null) {
             throw new IllegalArgumentException("La solicitud es obligatoria");

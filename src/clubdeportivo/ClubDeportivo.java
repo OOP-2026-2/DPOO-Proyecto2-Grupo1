@@ -3,8 +3,8 @@ package clubdeportivo;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import clubdeportivo.competencias.Competencia;
 import clubdeportivo.competencias.Partidos.Partido;
@@ -25,6 +25,19 @@ import clubdeportivo.instalaciones.Instalacion;
 import clubdeportivo.instalaciones.Reserva;
 import clubdeportivo.instalaciones.TipoInstalacion;
 import clubdeportivo.membresias.PagoMensualidad;
+import clubdeportivo.torneos.BonoDescuento;
+import clubdeportivo.torneos.EncuentroTorneo;
+import clubdeportivo.torneos.EstadoTorneo;
+import clubdeportivo.torneos.InscripcionEquipoTorneo;
+import clubdeportivo.torneos.InscripcionIndividualTorneo;
+import clubdeportivo.torneos.InscripcionTorneo;
+import clubdeportivo.torneos.ParticipanteTorneo;
+import clubdeportivo.torneos.PremioTorneo;
+import clubdeportivo.torneos.TipoCupo;
+import clubdeportivo.torneos.TipoTorneo;
+import clubdeportivo.torneos.Torneo;
+import clubdeportivo.torneos.TorneoConjunto;
+import clubdeportivo.torneos.TorneoIndividual;
 import clubdeportivo.turnos.DiaSemana;
 import clubdeportivo.turnos.SolicitudCambioTurno;
 import clubdeportivo.turnos.Turno;
@@ -36,28 +49,19 @@ import tiendaclub.inventario.SugerenciaProducto;
 import tiendaclub.inventario.TipoMovimiento;
 import tiendaclub.inventario.UbicacionInventario;
 import tiendaclub.ventas.Venta;
+import tiendaclub.ventas.descuentos.DescuentoBonoTorneo;
+import tiendaclub.ventas.descuentos.DescuentoCodigoCompartido;
+import tiendaclub.ventas.descuentos.DescuentoPuntos;
 import tiendaclub.ventas.detalles.DetalleVenta;
 import usuarios.Usuario;
 import usuarios.tipos.Empleado;
+import usuarios.tipos.EstudianteUniversidad;
 import usuarios.tipos.Socio;
 import usuarios.tipos.empleados.Administrador;
 import usuarios.tipos.empleados.Entrenador;
 import usuarios.tipos.empleados.Fisioterapeuta;
 import utilidades.excepciones.InventarioInsuficienteException;
 import utilidades.excepciones.ReservaNoDisponibleException;
-import clubdeportivo.torneos.Torneo;
-import tiendaclub.ventas.descuentos.DescuentoBonoTorneo;
-import clubdeportivo.torneos.EstadoTorneo;
-import clubdeportivo.torneos.TipoTorneo;
-import clubdeportivo.torneos.InscripcionEquipoTorneo;
-import clubdeportivo.torneos.InscripcionIndividualTorneo;
-import clubdeportivo.torneos.ParticipanteTorneo;
-import clubdeportivo.torneos.TipoCupo;
-import clubdeportivo.torneos.TorneoConjunto;
-import clubdeportivo.torneos.TorneoIndividual;
-import clubdeportivo.torneos.InscripcionTorneo;
-import clubdeportivo.torneos.EncuentroTorneo;
-import clubdeportivo.torneos.PremioTorneo;
 
 public class ClubDeportivo {
     private final String nombre;
@@ -202,7 +206,34 @@ public class ClubDeportivo {
             throw new IllegalArgumentException("El torneo no está registrado en el club");
         }
 
+        for (ParticipanteTorneo participante : participantes) {
+            validarParticipanteRegistrado(participante);
+        }
+
         return torneo.inscribirParticipantes(participantes, tipoCupo);
+    }
+
+    private void validarParticipanteRegistrado(ParticipanteTorneo participante) {
+        if (!(participante instanceof Usuario)) {
+            throw new IllegalArgumentException(
+                    "El participante debe ser un usuario del club");
+        }
+
+        Usuario usuario = (Usuario) participante;
+
+        if (buscarUsuario(usuario.getId()) != usuario) {
+            throw new IllegalArgumentException(
+                    "El participante no está registrado en el club");
+        }
+
+        if (usuario instanceof EstudianteUniversidad) {
+            EstudianteUniversidad estudiante = (EstudianteUniversidad) usuario;
+
+            if (!estudiante.getUniversidad().equalsIgnoreCase(institucion)) {
+                throw new IllegalArgumentException(
+                        "El estudiante no pertenece a la institución del club");
+            }
+        }
     }
 
     public List<Torneo> getTorneos() {
@@ -258,9 +289,8 @@ public class ClubDeportivo {
             throw new IllegalArgumentException("El encuentro no pertenece a un torneo registrado");
         }
 
-        encuentro.registrarResultado(marcador);
-        encuentro.finalizar();
-        torneo.actualizarPosiciones(encuentro);
+        torneo.registrarResultadoEncuentro(
+                encuentro, marcador);
     }
 
     public List<PremioTorneo> finalizarTorneo(Torneo torneo) {
@@ -299,6 +329,17 @@ public class ClubDeportivo {
             }
         }
 
+        if (usuario instanceof Empleado) {
+            Empleado empleado = (Empleado) usuario;
+
+            if (buscarEmpleadoPorCodigoDescuento(
+                    empleado.getCodigoDescuento()) != null) {
+
+                throw new IllegalArgumentException(
+                        "Ya existe un empleado con ese código de descuento");
+            }
+        }
+
         usuarios.add(usuario);
     }
 
@@ -310,6 +351,26 @@ public class ClubDeportivo {
         for (Usuario usuario : usuarios) {
             if (usuario.getId().equalsIgnoreCase(id)) {
                 return usuario;
+            }
+        }
+
+        return null;
+    }
+
+    public Empleado buscarEmpleadoPorCodigoDescuento(String codigo) {
+        if (codigo == null || codigo.trim().isEmpty()) {
+            return null;
+        }
+
+        for (Usuario usuario : usuarios) {
+            if (usuario instanceof Empleado) {
+                Empleado empleado = (Empleado) usuario;
+
+                if (empleado.getCodigoDescuento()
+                        .equalsIgnoreCase(codigo.trim())) {
+
+                    return empleado;
+                }
             }
         }
 
@@ -1094,10 +1155,6 @@ public class ClubDeportivo {
         if (venta == null) {
             throw new IllegalArgumentException("La venta no puede ser nula");
         }
-        if (venta.getPoliticaDescuento() instanceof DescuentoBonoTorneo) {
-            DescuentoBonoTorneo descuentoBono = (DescuentoBonoTorneo) venta.getPoliticaDescuento();
-            descuentoBono.getBono().usar();
-        }
 
         ventas.add(venta);
     }
@@ -1114,6 +1171,10 @@ public class ClubDeportivo {
         if (venta.getDetalles().isEmpty()) {
             throw new IllegalArgumentException("La venta debe contener productos");
         }
+
+        BonoDescuento bono = validarBonoVenta(venta);
+        double puntosRedimidos = validarPuntosVenta(venta);
+        validarCodigoCompartido(venta);
 
         Map<Producto, Integer> cantidades = new HashMap<Producto, Integer>();
 
@@ -1153,12 +1214,100 @@ public class ClubDeportivo {
             registrarMovimiento(movimiento);
         }
 
+        if (bono != null) {
+            bono.usar();
+        }
+
         if (venta.getComprador() instanceof Socio) {
             Socio socio = (Socio) venta.getComprador();
+
+            if (puntosRedimidos > 0
+                    && !socio.redimirPuntos(puntosRedimidos)) {
+
+                throw new IllegalStateException(
+                        "No fue posible redimir los puntos");
+            }
+
             socio.agregarPuntos(venta.getPuntosGenerados());
         }
 
         ventas.add(venta);
+    }
+
+    private BonoDescuento validarBonoVenta(Venta venta) {
+        if (!(venta.getPoliticaDescuento() instanceof DescuentoBonoTorneo)) {
+            return null;
+        }
+
+        if (!(venta.getComprador() instanceof Socio)) {
+            throw new IllegalArgumentException(
+                    "Solo un socio puede utilizar un bono de torneo");
+        }
+
+        DescuentoBonoTorneo descuento = (DescuentoBonoTorneo) venta.getPoliticaDescuento();
+
+        BonoDescuento bono = descuento.getBono();
+        Socio comprador = (Socio) venta.getComprador();
+
+        if (bono.getSocio() != comprador) {
+            throw new IllegalArgumentException(
+                    "El bono no pertenece al comprador de la venta");
+        }
+
+        if (!comprador.getBonos().contains(bono)) {
+            throw new IllegalArgumentException(
+                    "El bono no está registrado para el socio");
+        }
+
+        if (!bono.estaDisponible()) {
+            throw new IllegalArgumentException(
+                    "El bono no está disponible");
+        }
+
+        return bono;
+    }
+
+    private double validarPuntosVenta(Venta venta) {
+        if (!(venta.getPoliticaDescuento() instanceof DescuentoPuntos)) {
+            return 0;
+        }
+
+        if (!(venta.getComprador() instanceof Socio)) {
+            throw new IllegalArgumentException(
+                    "Solo un socio puede redimir puntos");
+        }
+
+        DescuentoPuntos descuento = (DescuentoPuntos) venta.getPoliticaDescuento();
+        double puntos = descuento.getPuntosRedimidos();
+        Socio socio = (Socio) venta.getComprador();
+
+        if (puntos > socio.getPuntosFidelidad()) {
+            throw new IllegalArgumentException(
+                    "El socio no tiene suficientes puntos");
+        }
+
+        if (puntos > venta.calcularSubtotal()) {
+            throw new IllegalArgumentException(
+                    "No se pueden redimir más puntos que el subtotal");
+        }
+
+        return puntos;
+    }
+
+    private void validarCodigoCompartido(Venta venta) {
+        if (!(venta.getPoliticaDescuento() instanceof DescuentoCodigoCompartido)) {
+
+            return;
+        }
+
+        DescuentoCodigoCompartido descuento = (DescuentoCodigoCompartido) venta.getPoliticaDescuento();
+
+        if (buscarEmpleadoPorCodigoDescuento(
+                descuento.getCodigo()) == null) {
+
+            throw new IllegalArgumentException(
+                    "El código de descuento compartido no es válido");
+        }
     }
 
     // Sugerencias de productos
@@ -1180,6 +1329,18 @@ public class ClubDeportivo {
 
         if (!sugerenciasProducto.contains(sugerencia)) {
             throw new IllegalArgumentException("La sugerencia no está registrada");
+        }
+
+        if (!sugerencia.getNombre().equalsIgnoreCase(
+                producto.getNombre())) {
+
+            throw new IllegalArgumentException(
+                    "El producto debe corresponder a la sugerencia");
+        }
+
+        if (buscarProducto(producto.getNombre()) != null) {
+            throw new IllegalArgumentException(
+                    "Ya existe un producto con ese nombre");
         }
 
         sugerencia.aprobar(administrador, producto);
@@ -1302,6 +1463,28 @@ public class ClubDeportivo {
         }
     }
 
+    public void cargarSolicitudCambio(
+            SolicitudCambioTurno solicitud) {
+
+        if (solicitud == null) {
+            throw new IllegalArgumentException(
+                    "La solicitud no puede ser nula");
+        }
+
+        Empleado empleado = solicitud.getEmpleadoSolicitante();
+
+        if (buscarUsuario(empleado.getId()) != empleado) {
+            throw new IllegalArgumentException(
+                    "El empleado no está registrado en el club");
+        }
+
+        empleado.cargarSolicitudCambio(solicitud);
+
+        if (!solicitudesCambioTurno.contains(solicitud)) {
+            solicitudesCambioTurno.add(solicitud);
+        }
+    }
+
     public void aprobarCambioTurno(
             SolicitudCambioTurno solicitud,
             Administrador administrador) {
@@ -1374,7 +1557,7 @@ public class ClubDeportivo {
 
             Empleado empleado = (Empleado) usuario;
 
-            if (!empleado.getTurnos().contains(turno)) {
+            if (!trabajaDurante(empleado, turno)) {
                 continue;
             }
 
@@ -1387,6 +1570,20 @@ public class ClubDeportivo {
 
         return entrenadores >= minEntrenadoresEnTurno
                 && fisioterapeutas >= minFisioterapeutasEnTurno;
+    }
+
+    private boolean trabajaDurante(Empleado empleado, Turno horario) {
+        for (Turno turno : empleado.getTurnos()) {
+            if (turno.getDiaSemana() == horario.getDiaSemana()
+                    && turno.contieneHorario(
+                            horario.getHoraInicio(),
+                            horario.getHoraFin())) {
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public boolean validarCobertura(SolicitudCambioTurno solicitud) {
@@ -1411,7 +1608,7 @@ public class ClubDeportivo {
 
             Empleado empleado = (Empleado) usuario;
             boolean permanece = empleado != solicitante
-                    && empleado.getTurnos().contains(turnoOriginal);
+                    && trabajaDurante(empleado, turnoOriginal);
 
             if (!permanece) {
                 continue;

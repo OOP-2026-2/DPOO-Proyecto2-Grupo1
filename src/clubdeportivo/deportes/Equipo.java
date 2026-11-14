@@ -9,6 +9,7 @@ public class Equipo {
     private Categoria categoria;
     private int cupoMaximo;
     private boolean activo;
+    private double puntajeHistorico;
     private DeporteConjunto deporte;
     private List<InscripcionEquipo> inscripciones;
 
@@ -37,6 +38,7 @@ public class Equipo {
         this.categoria = categoria;
         this.cupoMaximo = cupoMaximo;
         this.activo = true;
+        this.puntajeHistorico = 0;
         this.deporte = deporte;
         this.inscripciones = new ArrayList<InscripcionEquipo>();
     }
@@ -152,6 +154,21 @@ public class Equipo {
 
     public void desactivar() {
         activo = false;
+    }
+
+    public void actualizarPuntajeHistorico(
+            double puntajeHistorico) {
+
+        if (puntajeHistorico < 0) {
+            throw new IllegalArgumentException(
+                    "El puntaje histórico no puede ser negativo");
+        }
+
+        this.puntajeHistorico = puntajeHistorico;
+    }
+
+    public double getPuntajeHistorico() {
+        return puntajeHistorico;
     }
 
     @Override

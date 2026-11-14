@@ -19,6 +19,15 @@ public class SolicitudCambioTurno {
             Turno turnoOriginal, DiaSemana nuevoDia,
             LocalTime nuevaHoraInicio, LocalTime nuevaHoraFin) {
 
+        this(empleadoSolicitante, turnoOriginal, nuevoDia,
+                nuevaHoraInicio, nuevaHoraFin, true);
+    }
+
+    private SolicitudCambioTurno(Empleado empleadoSolicitante,
+            Turno turnoOriginal, DiaSemana nuevoDia,
+            LocalTime nuevaHoraInicio, LocalTime nuevaHoraFin,
+            boolean validarPertenenciaTurno) {
+
         if (empleadoSolicitante == null) {
             throw new IllegalArgumentException(
                     "El empleado solicitante es obligatorio");
@@ -29,8 +38,9 @@ public class SolicitudCambioTurno {
                     "El turno original es obligatorio");
         }
 
-        if (!empleadoSolicitante.getTurnos()
-                .contains(turnoOriginal)) {
+        if (validarPertenenciaTurno
+                && !empleadoSolicitante.getTurnos()
+                        .contains(turnoOriginal)) {
 
             throw new IllegalArgumentException(
                     "El turno original no pertenece al empleado");
@@ -61,6 +71,40 @@ public class SolicitudCambioTurno {
         this.nuevaHoraFin = nuevaHoraFin;
         this.estado = EstadoSolicitud.PENDIENTE;
         this.administradorDecision = null;
+    }
+
+    public static SolicitudCambioTurno cargar(
+            Empleado empleadoSolicitante,
+            Turno turnoOriginal,
+            DiaSemana nuevoDia,
+            LocalTime nuevaHoraInicio,
+            LocalTime nuevaHoraFin,
+            EstadoSolicitud estado,
+            Administrador administradorDecision) {
+
+        if (estado == null) {
+            throw new IllegalArgumentException(
+                    "El estado de la solicitud es obligatorio");
+        }
+
+        if (estado != EstadoSolicitud.PENDIENTE
+                && administradorDecision == null) {
+
+            throw new IllegalArgumentException(
+                    "La decisión debe tener un administrador");
+        }
+
+        SolicitudCambioTurno solicitud = new SolicitudCambioTurno(
+                empleadoSolicitante,
+                turnoOriginal,
+                nuevoDia,
+                nuevaHoraInicio,
+                nuevaHoraFin,
+                false);
+
+        solicitud.estado = estado;
+        solicitud.administradorDecision = administradorDecision;
+        return solicitud;
     }
 
     public void aprobar(Administrador administrador) {

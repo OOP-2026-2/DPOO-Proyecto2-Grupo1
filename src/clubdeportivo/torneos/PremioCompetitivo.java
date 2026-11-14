@@ -22,15 +22,15 @@ public class PremioCompetitivo implements PoliticaPremio {
 
         List<PremioTorneo> premios = new ArrayList<PremioTorneo>();
 
-        if (!puedeRecibirPremio(ganador)) {
-            return premios;
-        }
-
         double valor = calcularValor(recaudo);
 
         if (valor > 0) {
             PremioMonetario premio = new PremioMonetario(ganador, valor);
-            premio.entregar();
+
+            if (puedeRecibirPremio(ganador)) {
+                premio.entregar();
+            }
+
             premios.add(premio);
         }
 
@@ -45,11 +45,17 @@ public class PremioCompetitivo implements PoliticaPremio {
         if (ganador instanceof InscripcionIndividualTorneo) {
             InscripcionIndividualTorneo inscripcion = (InscripcionIndividualTorneo) ganador;
 
+            if (inscripcion.getParticipantes().isEmpty()) {
+                return false;
+            }
+
             for (ParticipanteTorneo participante : inscripcion.getParticipantes()) {
-                if (participante.puedeRecibirPremioDinero()) {
-                    return true;
+                if (!participante.puedeRecibirPremioDinero()) {
+                    return false;
                 }
             }
+
+            return true;
         }
 
         return false;

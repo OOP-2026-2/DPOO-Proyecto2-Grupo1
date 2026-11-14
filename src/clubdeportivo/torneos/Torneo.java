@@ -320,18 +320,38 @@ public abstract class Torneo {
                 }
             }
         } else {
-            for (int i = 0; i + 1 < activas.size(); i += 2) {
+            generarRondaEliminacion(activas, 1);
+        }
+    }
 
-                EncuentroTorneo encuentro = new EncuentroTorneo(
-                        id + "-E" + numeroEncuentro,
-                        fechaInicio,
-                        horaInicio,
-                        activas.get(i),
-                        activas.get(i + 1));
+    private void generarRondaEliminacion(
+            List<InscripcionTorneo> participantes,
+            int ronda) {
 
-                agregarEncuentro(encuentro);
-                numeroEncuentro++;
-            }
+        if (participantes.size() < 2) {
+
+            throw new IllegalStateException(
+                    "La ronda de eliminación requiere al menos dos participantes");
+        }
+
+        int potenciaInferior = Integer.highestOneBit(
+                participantes.size());
+        int cantidadEncuentros = participantes.size() == potenciaInferior
+                ? participantes.size() / 2
+                : participantes.size() - potenciaInferior;
+        int numeroEncuentro = 1;
+
+        for (int i = 0; i < cantidadEncuentros * 2; i += 2) {
+            EncuentroTorneo encuentro = new EncuentroTorneo(
+                    id + "-R" + ronda + "-E" + numeroEncuentro,
+                    fechaInicio.plusDays(ronda - 1),
+                    horaInicio,
+                    participantes.get(i),
+                    participantes.get(i + 1),
+                    ronda);
+
+            agregarEncuentro(encuentro);
+            numeroEncuentro++;
         }
     }
 
@@ -414,23 +434,16 @@ public abstract class Torneo {
                     "El encuentro debe estar finalizado");
         }
 
-        String[] resultado = encuentro.getMarcador()
-                .trim().split("\\s*[-:]\\s*");
+        int[] resultado = interpretarMarcador(
+                encuentro.getMarcador());
+        int puntosLocal = resultado[0];
+        int puntosVisitante = resultado[1];
 
-        if (resultado.length != 2) {
+        if (formato == FormatoTorneo.ELIMINACION_DIRECTA
+                && puntosLocal == puntosVisitante) {
+
             throw new IllegalArgumentException(
-                    "El marcador debe tener el formato 2-1");
-        }
-
-        int puntosLocal;
-        int puntosVisitante;
-
-        try {
-            puntosLocal = Integer.parseInt(resultado[0]);
-            puntosVisitante = Integer.parseInt(resultado[1]);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(
-                    "El marcador debe contener números enteros");
+                    "Un encuentro de eliminación directa no puede terminar empatado");
         }
 
         PosicionTorneo posicionLocal = buscarPosicion(
@@ -458,6 +471,188 @@ public abstract class Torneo {
         for (int i = 0; i < posiciones.size(); i++) {
             posiciones.get(i).cambiarPosicion(i + 1);
         }
+
+        if (formato == FormatoTorneo.ELIMINACION_DIRECTA) {
+            generarSiguienteRondaSiCorresponde(
+                    encuentro.getRonda());
+        }
+    }
+
+    public void registrarResultadoEncuentro(
+            EncuentroTorneo encuentro,
+            String marcador) {
+
+        if (encuentro == null
+                || !encuentros.contains(encuentro)) {
+
+            throw new IllegalArgumentException(
+                    "El encuentro no pertenece al torneo");
+        }
+
+        int[] resultado = interpretarMarcador(marcador);
+
+        if (formato == FormatoTorneo.ELIMINACION_DIRECTA
+                && resultado[0] == resultado[1]) {
+
+            throw new IllegalArgumentException(
+                    "Un encuentro de eliminación directa no puede terminar empatado");
+        }
+
+        encuentro.registrarResultado(marcador);
+        encuentro.finalizar();
+        actualizarPosiciones(encuentro);
+    }
+
+    private int[] interpretarMarcador(String marcador) {
+        if (marcador == null || marcador.trim().isEmpty()) {
+            throw new IllegalArgumentException(
+                    "El marcador es obligatorio");
+        }
+
+        String[] partes = marcador.trim()
+                .split("\\s*[-:]\\s*");
+
+        if (partes.length != 2) {
+            throw new IllegalArgumentException(
+                    "El marcador debe tener el formato 2-1");
+        }
+
+        try {
+            int local = Integer.parseInt(partes[0]);
+            int visitante = Integer.parseInt(partes[1]);
+
+            if (local < 0 || visitante < 0) {
+                throw new IllegalArgumentException(
+                        "El marcador no puede contener valores negativos");
+            }
+
+            return new int[] { local, visitante };
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(
+                    "El marcador debe contener números enteros");
+        }
+    }
+
+    private void generarSiguienteRondaSiCorresponde(
+            int rondaFinalizada) {
+
+        List<EncuentroTorneo> encuentrosRonda = new ArrayList<EncuentroTorneo>();
+
+        for (EncuentroTorneo encuentro : encuentros) {
+            if (encuentro.getRonda() == rondaFinalizada) {
+                encuentrosRonda.add(encuentro);
+            }
+        }
+
+        for (EncuentroTorneo encuentro : encuentrosRonda) {
+            if (!encuentro.estaFinalizado()) {
+                return;
+            }
+        }
+
+        int siguienteRonda = rondaFinalizada + 1;
+
+        for (EncuentroTorneo encuentro : encuentros) {
+            if (encuentro.getRonda() == siguienteRonda) {
+                return;
+            }
+        }
+
+        List<InscripcionTorneo> clasificados = new ArrayList<InscripcionTorneo>();
+
+        List<InscripcionTorneo> participantesRonda = obtenerParticipantesAntesDeRonda(
+                rondaFinalizada);
+
+        if (participantesRonda.size() == 2) {
+            return;
+        }
+
+        for (EncuentroTorneo encuentro : encuentrosRonda) {
+            clasificados.add(obtenerGanador(encuentro));
+        }
+
+        for (InscripcionTorneo participante : participantesRonda) {
+            boolean jugoEnLaRonda = false;
+
+            for (EncuentroTorneo encuentro : encuentrosRonda) {
+                if (encuentro.getInscripcionLocal() == participante
+                        || encuentro.getInscripcionVisitante() == participante) {
+
+                    jugoEnLaRonda = true;
+                    break;
+                }
+            }
+
+            if (!jugoEnLaRonda) {
+                clasificados.add(participante);
+            }
+        }
+
+        generarRondaEliminacion(clasificados, siguienteRonda);
+    }
+
+    private List<InscripcionTorneo> obtenerParticipantesAntesDeRonda(
+            int ronda) {
+
+        List<InscripcionTorneo> participantes = getInscripcionesActivas();
+
+        for (int numeroRonda = 1; numeroRonda < ronda; numeroRonda++) {
+            List<EncuentroTorneo> encuentrosRonda = new ArrayList<EncuentroTorneo>();
+
+            for (EncuentroTorneo encuentro : encuentros) {
+                if (encuentro.getRonda() == numeroRonda) {
+                    encuentrosRonda.add(encuentro);
+                }
+            }
+
+            List<InscripcionTorneo> siguientes = new ArrayList<InscripcionTorneo>();
+
+            for (EncuentroTorneo encuentro : encuentrosRonda) {
+                siguientes.add(obtenerGanador(encuentro));
+            }
+
+            for (InscripcionTorneo participante : participantes) {
+                boolean jugoEnLaRonda = false;
+
+                for (EncuentroTorneo encuentro : encuentrosRonda) {
+                    if (encuentro.getInscripcionLocal() == participante
+                            || encuentro.getInscripcionVisitante() == participante) {
+
+                        jugoEnLaRonda = true;
+                        break;
+                    }
+                }
+
+                if (!jugoEnLaRonda) {
+                    siguientes.add(participante);
+                }
+            }
+
+            participantes = siguientes;
+        }
+
+        return participantes;
+    }
+
+    private InscripcionTorneo obtenerGanador(
+            EncuentroTorneo encuentro) {
+
+        if (!encuentro.estaFinalizado()) {
+            throw new IllegalStateException(
+                    "El encuentro todavía no tiene ganador");
+        }
+
+        int[] resultado = interpretarMarcador(
+                encuentro.getMarcador());
+
+        if (resultado[0] == resultado[1]) {
+            throw new IllegalStateException(
+                    "Un encuentro de eliminación no puede terminar empatado");
+        }
+
+        return resultado[0] > resultado[1]
+                ? encuentro.getInscripcionLocal()
+                : encuentro.getInscripcionVisitante();
     }
 
     private PosicionTorneo buscarPosicion(
@@ -480,7 +675,7 @@ public abstract class Torneo {
         }
 
         for (EncuentroTorneo encuentro : encuentros) {
-            if (encuentro.getEstado() == EstadoEncuentro.PROGRAMADO) {
+            if (encuentro.getEstado() != EstadoEncuentro.FINALIZADO) {
 
                 return false;
             }
@@ -490,6 +685,40 @@ public abstract class Torneo {
     }
 
     public InscripcionTorneo determinarGanador() {
+        if (formato == FormatoTorneo.ELIMINACION_DIRECTA) {
+            EncuentroTorneo finalTorneo = null;
+
+            for (EncuentroTorneo encuentro : encuentros) {
+                if (finalTorneo == null
+                        || encuentro.getRonda() > finalTorneo.getRonda()) {
+
+                    finalTorneo = encuentro;
+                }
+            }
+
+            if (finalTorneo == null
+                    || !finalTorneo.estaFinalizado()) {
+
+                throw new IllegalStateException(
+                        "El torneo todavía no tiene un ganador");
+            }
+
+            int encuentrosUltimaRonda = 0;
+
+            for (EncuentroTorneo encuentro : encuentros) {
+                if (encuentro.getRonda() == finalTorneo.getRonda()) {
+                    encuentrosUltimaRonda++;
+                }
+            }
+
+            if (encuentrosUltimaRonda != 1) {
+                throw new IllegalStateException(
+                        "La ronda final todavía no ha sido generada");
+            }
+
+            return obtenerGanador(finalTorneo);
+        }
+
         if (posiciones.isEmpty()) {
             throw new IllegalStateException(
                     "El torneo no tiene posiciones");

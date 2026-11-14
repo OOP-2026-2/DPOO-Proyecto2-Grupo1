@@ -82,7 +82,12 @@ import tiendaclub.inventario.SugerenciaProducto;
 import tiendaclub.inventario.TipoMovimiento;
 import tiendaclub.inventario.UbicacionInventario;
 import tiendaclub.ventas.Venta;
+import tiendaclub.ventas.descuentos.DescuentoBonoTorneo;
 import tiendaclub.ventas.descuentos.DescuentoCodigoCompartido;
+import tiendaclub.ventas.descuentos.DescuentoEmpleado;
+import tiendaclub.ventas.descuentos.DescuentoPuntos;
+import tiendaclub.ventas.descuentos.PoliticaDescuento;
+import tiendaclub.ventas.descuentos.SinDescuento;
 import tiendaclub.ventas.detalles.DetalleVenta;
 import tiendaclub.ventas.tipos.VentaCafeteria;
 import tiendaclub.ventas.tipos.VentaTienda;
@@ -198,12 +203,12 @@ public class PersistenciaClub {
         cargarSesiones(club);
         cargarAsistencias(club);
         cargarSugerencias(club);
-        cargarVentas(club);
         cargarTorneos(club);
         cargarInscripcionesTorneo(club);
         cargarEncuentrosTorneo(club);
         cargarPosicionesTorneo(club);
         cargarPremiosTorneo(club);
+        cargarVentas(club);
     }
 
     // Socios
@@ -377,7 +382,8 @@ public class PersistenciaClub {
                             + equipo.getNombre() + ";"
                             + equipo.getCategoria() + ";"
                             + equipo.getCupoMaximo() + ";"
-                            + equipo.isActivo());
+                            + equipo.isActivo() + ";"
+                            + equipo.getPuntajeHistorico());
 
                     escritor.newLine();
                 }
@@ -415,6 +421,11 @@ public class PersistenciaClub {
                         Categoria.valueOf(datos[2]),
                         Integer.parseInt(datos[3]),
                         deporte);
+
+                if (datos.length >= 6) {
+                    equipo.actualizarPuntajeHistorico(
+                            Double.parseDouble(datos[5]));
+                }
 
                 club.registrarEquipo(equipo);
             }
@@ -1024,7 +1035,28 @@ public class PersistenciaClub {
                     tipoVenta = "TIENDA";
                 }
 
-                boolean usaCodigoCompartido = venta.getPoliticaDescuento() instanceof DescuentoCodigoCompartido;
+                String tipoDescuento;
+                String datoDescuento = "";
+
+                if (venta.getPoliticaDescuento() instanceof DescuentoBonoTorneo) {
+                    tipoDescuento = "BONO_TORNEO";
+                    BonoDescuento bono = ((DescuentoBonoTorneo) venta.getPoliticaDescuento()).getBono();
+                    datoDescuento = String.valueOf(bono.getSocio().getBonos().indexOf(bono));
+                } else if (venta.getPoliticaDescuento() instanceof DescuentoPuntos) {
+                    tipoDescuento = "PUNTOS";
+                    datoDescuento = String.valueOf(
+                            ((DescuentoPuntos) venta.getPoliticaDescuento())
+                                    .getPuntosRedimidos());
+                } else if (venta.getPoliticaDescuento() instanceof DescuentoCodigoCompartido) {
+                    tipoDescuento = "CODIGO_COMPARTIDO";
+                    String codigo = ((DescuentoCodigoCompartido) venta.getPoliticaDescuento())
+                            .getCodigo();
+                    datoDescuento = codigo == null ? "" : codigo;
+                } else if (venta.getPoliticaDescuento() instanceof DescuentoEmpleado) {
+                    tipoDescuento = "EMPLEADO";
+                } else {
+                    tipoDescuento = "SIN_DESCUENTO";
+                }
 
                 boolean incluyePropina = venta instanceof VentaCafeteria
                         && ((VentaCafeteria) venta)
@@ -1049,7 +1081,8 @@ public class PersistenciaClub {
                 escritor.write(venta.getFecha() + ";"
                         + comprador.getId() + ";"
                         + tipoVenta + ";"
-                        + usaCodigoCompartido + ";"
+                        + tipoDescuento + ";"
+                        + datoDescuento + ";"
                         + incluyePropina + ";"
                         + detalles);
 
@@ -1077,6 +1110,8 @@ public class PersistenciaClub {
                     continue;
                 }
 
+                boolean formatoNuevo = datos.length >= 7;
+
                 Usuario usuario = club.buscarUsuario(datos[1]);
 
                 if (!(usuario instanceof Comprador)) {
@@ -1087,23 +1122,29 @@ public class PersistenciaClub {
 
                 Comprador comprador = (Comprador) usuario;
 
-                boolean usaCodigoCompartido = Boolean.parseBoolean(datos[3]);
+                boolean usaCodigoCompartido = !formatoNuevo
+                        && Boolean.parseBoolean(datos[3]);
 
-                boolean incluyePropina = Boolean.parseBoolean(datos[4]);
+                boolean incluyePropina = Boolean.parseBoolean(
+                        formatoNuevo ? datos[5] : datos[4]);
+
+                PoliticaDescuento politica = formatoNuevo
+                        ? cargarPoliticaDescuento(datos[3], datos[4], usuario)
+                        : new SinDescuento();
 
                 Venta venta;
 
                 if (datos[2].equals("CAFETERIA")) {
-                    venta = new VentaCafeteria(
-                            fecha,
-                            comprador);
+                    venta = formatoNuevo
+                            ? new VentaCafeteria(fecha, comprador, politica)
+                            : new VentaCafeteria(fecha, comprador);
                 } else {
-                    venta = new VentaTienda(
-                            fecha,
-                            comprador);
+                    venta = formatoNuevo
+                            ? new VentaTienda(fecha, comprador, politica)
+                            : new VentaTienda(fecha, comprador);
                 }
 
-                String[] detallesGuardados = datos[5].split("\\|");
+                String[] detallesGuardados = datos[formatoNuevo ? 6 : 5].split("\\|");
 
                 for (String detalleGuardado : detallesGuardados) {
 
@@ -1137,19 +1178,58 @@ public class PersistenciaClub {
                 }
 
                 if (venta instanceof VentaCafeteria) {
-                    ((VentaCafeteria) venta)
-                            .finalizarVenta(
-                                    usaCodigoCompartido,
-                                    incluyePropina);
+                    if (formatoNuevo) {
+                        ((VentaCafeteria) venta).finalizarVenta(incluyePropina);
+                    } else {
+                        ((VentaCafeteria) venta).finalizarVenta(
+                                usaCodigoCompartido, incluyePropina);
+                    }
                 } else {
-                    ((VentaTienda) venta)
-                            .finalizarVenta(
-                                    usaCodigoCompartido);
+                    if (formatoNuevo) {
+                        ((VentaTienda) venta).finalizarVenta();
+                    } else {
+                        ((VentaTienda) venta).finalizarVenta(usaCodigoCompartido);
+                    }
                 }
 
                 club.registrarVenta(venta);
             }
         }
+    }
+
+    private PoliticaDescuento cargarPoliticaDescuento(
+            String tipo, String dato, Usuario comprador) throws IOException {
+
+        if (tipo.equals("CODIGO_COMPARTIDO")) {
+            return dato.trim().isEmpty()
+                    ? new DescuentoCodigoCompartido()
+                    : new DescuentoCodigoCompartido(dato);
+        }
+
+        if (tipo.equals("EMPLEADO")) {
+            return new DescuentoEmpleado();
+        }
+
+        if (tipo.equals("BONO_TORNEO")) {
+            if (!(comprador instanceof Socio)) {
+                throw new IOException("La venta con bono no pertenece a un socio");
+            }
+
+            List<BonoDescuento> bonos = ((Socio) comprador).getBonos();
+            int indice = Integer.parseInt(dato);
+
+            if (indice < 0 || indice >= bonos.size()) {
+                throw new IOException("No existe el bono utilizado por la venta");
+            }
+
+            return new DescuentoBonoTorneo(bonos.get(indice), true);
+        }
+
+        if (tipo.equals("PUNTOS")) {
+            return new DescuentoPuntos(Double.parseDouble(dato));
+        }
+
+        return new SinDescuento();
     }
 
     // Estadísticas de jugadores
@@ -2027,22 +2107,8 @@ public class PersistenciaClub {
                 DiaSemana diaOriginal = DiaSemana.valueOf(datos[1]);
                 LocalTime inicioOriginal = LocalTime.parse(datos[2]);
                 LocalTime finOriginal = LocalTime.parse(datos[3]);
-                Turno turnoOriginal = buscarTurno(empleado, diaOriginal,
-                        inicioOriginal, finOriginal);
-
-                if (turnoOriginal == null) {
-                    turnoOriginal = new Turno(diaOriginal, inicioOriginal, finOriginal);
-                    empleado.agregarTurno(turnoOriginal);
-                }
-
-                SolicitudCambioTurno solicitud = club.solicitarCambioTurno(
-                        empleado,
-                        turnoOriginal,
-                        DiaSemana.valueOf(datos[4]),
-                        LocalTime.parse(datos[5]),
-                        LocalTime.parse(datos[6]));
-
                 EstadoSolicitud estado = EstadoSolicitud.valueOf(datos[7]);
+                Administrador administrador = null;
 
                 if (estado != EstadoSolicitud.PENDIENTE) {
                     Usuario usuarioAdministrador = club.buscarUsuario(datos[8]);
@@ -2051,15 +2117,21 @@ public class PersistenciaClub {
                         continue;
                     }
 
-                    Administrador administrador = (Administrador) usuarioAdministrador;
-
-                    if (estado == EstadoSolicitud.APROBADA) {
-                        administrador.aprobarSolicitud(solicitud);
-                        empleado.aplicarCambioTurno(solicitud);
-                    } else {
-                        administrador.rechazarSolicitud(solicitud);
-                    }
+                    administrador = (Administrador) usuarioAdministrador;
                 }
+
+                Turno turnoOriginal = new Turno(
+                        diaOriginal, inicioOriginal, finOriginal);
+                SolicitudCambioTurno solicitud = SolicitudCambioTurno.cargar(
+                        empleado,
+                        turnoOriginal,
+                        DiaSemana.valueOf(datos[4]),
+                        LocalTime.parse(datos[5]),
+                        LocalTime.parse(datos[6]),
+                        estado,
+                        administrador);
+
+                club.cargarSolicitudCambio(solicitud);
             }
         }
     }
@@ -2443,6 +2515,7 @@ public class PersistenciaClub {
                             + encuentro.getHoraInicio() + ";"
                             + inscripciones.indexOf(encuentro.getInscripcionLocal()) + ";"
                             + inscripciones.indexOf(encuentro.getInscripcionVisitante()) + ";"
+                            + encuentro.getRonda() + ";"
                             + encuentro.getEstado() + ";"
                             + (encuentro.getMarcador() == null ? "" : encuentro.getMarcador()));
                     escritor.newLine();
@@ -2466,7 +2539,7 @@ public class PersistenciaClub {
 
                 String[] partes = linea.split(";", -1);
 
-                if (partes.length != 8) {
+                if (partes.length != 8 && partes.length != 9) {
                     continue;
                 }
 
@@ -2481,14 +2554,19 @@ public class PersistenciaClub {
                 InscripcionTorneo visitante = buscarInscripcionTorneo(
                         torneo, Integer.parseInt(partes[5]));
 
+                int desplazamiento = partes.length == 9 ? 1 : 0;
+                int ronda = partes.length == 9
+                        ? Integer.parseInt(partes[6])
+                        : 1;
+
                 EncuentroTorneo encuentro = new EncuentroTorneo(
                         partes[1], LocalDate.parse(partes[2]), LocalTime.parse(partes[3]),
-                        local, visitante);
+                        local, visitante, ronda);
 
-                EstadoEncuentro estado = EstadoEncuentro.valueOf(partes[6]);
+                EstadoEncuentro estado = EstadoEncuentro.valueOf(partes[6 + desplazamiento]);
 
                 if (estado == EstadoEncuentro.FINALIZADO) {
-                    encuentro.registrarResultado(partes[7]);
+                    encuentro.registrarResultado(partes[7 + desplazamiento]);
                     encuentro.finalizar();
                 } else if (estado == EstadoEncuentro.CANCELADO) {
                     encuentro.cancelar();

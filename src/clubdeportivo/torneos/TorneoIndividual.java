@@ -74,9 +74,13 @@ public class TorneoIndividual extends Torneo {
     private boolean estaDeTurno(Empleado empleado) {
         int numeroDia = getFechaInicio().getDayOfWeek().getValue();
         DiaSemana diaTorneo = DiaSemana.values()[numeroDia - 1];
+        Turno horarioTorneo = new Turno(
+                diaTorneo,
+                getHoraInicio(),
+                getHoraFin());
 
         for (Turno turno : empleado.getTurnos()) {
-            if (turno.getDiaSemana() == diaTorneo) {
+            if (turno.seCruzaCon(horarioTorneo)) {
                 return true;
             }
         }
@@ -98,6 +102,13 @@ public class TorneoIndividual extends Torneo {
 
         if (tipoCupo == null) {
             throw new IllegalArgumentException("El tipo de cupo es obligatorio");
+        }
+
+        if (tipoCupo == TipoCupo.PREFERENCIAL
+                && !cumpleCriterioPreferencial(participantes)) {
+
+            throw new IllegalArgumentException(
+                    "El cupo preferencial requiere ranking deportivo registrado para todos los participantes");
         }
 
         double valorPagado = 0;
@@ -123,6 +134,63 @@ public class TorneoIndividual extends Torneo {
         inscripcion = crearInscripcionConValor(participantes, tipoCupo, valorPagado);
         agregarInscripcion(inscripcion);
         return inscripcion;
+    }
+
+    public boolean cumpleCriterioPreferencial(
+            List<ParticipanteTorneo> participantes) {
+
+        if (participantes == null || participantes.isEmpty()) {
+            return false;
+        }
+
+        for (ParticipanteTorneo participante : participantes) {
+            if (!(participante instanceof Socio)) {
+                return false;
+            }
+
+            InscripcionAcademia inscripcion = buscarInscripcionAcademia(
+                    (Socio) participante);
+
+            if (inscripcion == null
+                    || inscripcion.getPuntajeRanking() <= 0) {
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public double calcularRankingPreferencial(
+            List<ParticipanteTorneo> participantes) {
+
+        if (!cumpleCriterioPreferencial(participantes)) {
+            return 0;
+        }
+
+        double total = 0;
+
+        for (ParticipanteTorneo participante : participantes) {
+            total += buscarInscripcionAcademia(
+                    (Socio) participante).getPuntajeRanking();
+        }
+
+        return total / participantes.size();
+    }
+
+    private InscripcionAcademia buscarInscripcionAcademia(
+            Socio socio) {
+
+        for (InscripcionAcademia inscripcion : deporte.getInscripciones()) {
+            if (inscripcion.getSocio() == socio
+                    && inscripcion.estaActiva()
+                    && inscripcion.getNivel() == nivel) {
+
+                return inscripcion;
+            }
+        }
+
+        return null;
     }
 
     private InscripcionIndividualTorneo crearInscripcionConValor(List<ParticipanteTorneo> participantes,

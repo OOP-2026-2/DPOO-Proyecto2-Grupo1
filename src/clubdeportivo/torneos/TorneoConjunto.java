@@ -50,6 +50,13 @@ public class TorneoConjunto extends Torneo {
             throw new IllegalArgumentException("El tipo de cupo es obligatorio");
         }
 
+        if (tipoCupo == TipoCupo.PREFERENCIAL
+                && !cumpleCriterioPreferencial(equipo)) {
+
+            throw new IllegalArgumentException(
+                    "El cupo preferencial requiere un puntaje histórico del equipo mayor que cero");
+        }
+
         for (InscripcionTorneo inscripcion : getInscripcionesActivas()) {
             if (inscripcion instanceof InscripcionEquipoTorneo) {
                 InscripcionEquipoTorneo existente = (InscripcionEquipoTorneo) inscripcion;
@@ -64,6 +71,13 @@ public class TorneoConjunto extends Torneo {
         InscripcionEquipoTorneo inscripcion = new InscripcionEquipoTorneo(this, tipoCupo, valorPagado, equipo);
         agregarInscripcion(inscripcion);
         return inscripcion;
+    }
+
+    public boolean cumpleCriterioPreferencial(
+            Equipo equipo) {
+
+        return validarEquipo(equipo)
+                && equipo.getPuntajeHistorico() > 0;
     }
 
     public DeporteConjunto getDeporte() {

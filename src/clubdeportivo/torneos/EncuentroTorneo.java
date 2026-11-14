@@ -9,11 +9,17 @@ public class EncuentroTorneo {
     private final LocalTime horaInicio;
     private final InscripcionTorneo inscripcionLocal;
     private final InscripcionTorneo inscripcionVisitante;
+    private final int ronda;
     private EstadoEncuentro estado;
     private String marcador;
 
     public EncuentroTorneo(String id, LocalDate fecha, LocalTime horaInicio,
             InscripcionTorneo inscripcionLocal, InscripcionTorneo inscripcionVisitante) {
+        this(id, fecha, horaInicio, inscripcionLocal, inscripcionVisitante, 1);
+    }
+
+    public EncuentroTorneo(String id, LocalDate fecha, LocalTime horaInicio,
+            InscripcionTorneo inscripcionLocal, InscripcionTorneo inscripcionVisitante, int ronda) {
         if (id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("El ID del encuentro es obligatorio");
         }
@@ -34,11 +40,16 @@ public class EncuentroTorneo {
             throw new IllegalArgumentException("Las inscripciones pertenecen a torneos diferentes");
         }
 
+        if (ronda <= 0) {
+            throw new IllegalArgumentException("La ronda debe ser mayor que cero");
+        }
+
         this.id = id;
         this.fecha = fecha;
         this.horaInicio = horaInicio;
         this.inscripcionLocal = inscripcionLocal;
         this.inscripcionVisitante = inscripcionVisitante;
+        this.ronda = ronda;
         this.estado = EstadoEncuentro.PROGRAMADO;
         this.marcador = null;
     }
@@ -101,6 +112,10 @@ public class EncuentroTorneo {
 
     public InscripcionTorneo getInscripcionVisitante() {
         return inscripcionVisitante;
+    }
+
+    public int getRonda() {
+        return ronda;
     }
 
     public EstadoEncuentro getEstado() {

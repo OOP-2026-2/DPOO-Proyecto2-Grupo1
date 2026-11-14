@@ -1,10 +1,13 @@
 package consola;
 
 import static consola.InputHandler.readInt;
+import static consola.InputHandler.readBoolean;
+import static consola.InputHandler.readDouble;
 import static consola.InputHandler.readString;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 
 import clubdeportivo.ClubDeportivo;
 import clubdeportivo.deportes.Equipo;
@@ -17,8 +20,26 @@ import clubdeportivo.torneos.TipoCupo;
 import clubdeportivo.torneos.Torneo;
 import clubdeportivo.torneos.TorneoConjunto;
 import clubdeportivo.torneos.TorneoIndividual;
+import tiendaclub.inventario.ArticuloTienda;
+import tiendaclub.inventario.Bebida;
+import tiendaclub.inventario.ExistenciaInventario;
+import tiendaclub.inventario.Producto;
+import tiendaclub.inventario.Snack;
+import tiendaclub.inventario.UbicacionInventario;
+import tiendaclub.ventas.Venta;
+import tiendaclub.ventas.descuentos.DescuentoBonoTorneo;
+import tiendaclub.ventas.descuentos.DescuentoCodigoCompartido;
+import tiendaclub.ventas.descuentos.DescuentoEmpleado;
+import tiendaclub.ventas.descuentos.DescuentoPuntos;
+import tiendaclub.ventas.descuentos.PoliticaDescuento;
+import tiendaclub.ventas.descuentos.SinDescuento;
+import tiendaclub.ventas.tipos.VentaCafeteria;
+import tiendaclub.ventas.tipos.VentaTienda;
+import usuarios.Comprador;
 import usuarios.Usuario;
 import usuarios.tipos.Socio;
+import usuarios.tipos.Empleado;
+import utilidades.excepciones.InventarioInsuficienteException;
 
 public class ConsolaParticipante implements Subconsola {
     private final ClubDeportivo club;
@@ -61,13 +82,29 @@ public class ConsolaParticipante implements Subconsola {
                     case 6:
                         consultarBonos();
                         break;
+                    case 7:
+                        comprarConBono();
+                        break;
+                    case 8:
+                        comprarEnTienda();
+                        break;
+                    case 9:
+                        comprarEnCafeteria();
+                        break;
+                    case 10:
+                        comprarConPuntos();
+                        break;
+                    case 11:
+                        comprarConCodigoCompartido();
+                        break;
                     case 0:
                         ejecutando = false;
                         break;
                     default:
                         System.out.println("Opción inválida.");
                 }
-            } catch (IllegalArgumentException | IllegalStateException e) {
+            } catch (IllegalArgumentException | IllegalStateException
+                    | InventarioInsuficienteException e) {
                 System.out.println("No fue posible realizar la operación: " + e.getMessage());
             }
         }
@@ -83,6 +120,11 @@ public class ConsolaParticipante implements Subconsola {
         System.out.println("4. Consultar mis inscripciones");
         System.out.println("5. Retirar inscripción");
         System.out.println("6. Consultar bonos");
+        System.out.println("7. Comprar con bono");
+        System.out.println("8. Comprar en tienda");
+        System.out.println("9. Comprar en cafetería");
+        System.out.println("10. Comprar redimiendo puntos");
+        System.out.println("11. Comprar con código compartido");
         System.out.println("0. Salir");
     }
 
@@ -260,6 +302,281 @@ public class ConsolaParticipante implements Subconsola {
 
             numero++;
         }
+    }
+
+    private void comprarConBono() {
+        if (!(participante instanceof Socio)) {
+            System.out.println("Solo los socios pueden utilizar bonos de torneo.");
+            return;
+        }
+
+        Socio socio = (Socio) participante;
+        List<BonoDescuento> bonos = socio.getBonosDisponibles();
+
+        if (bonos.isEmpty()) {
+            System.out.println("No tienes bonos disponibles.");
+            return;
+        }
+
+        System.out.println();
+        System.out.println("Bonos disponibles:");
+
+        for (int i = 0; i < bonos.size(); i++) {
+            BonoDescuento bono = bonos.get(i);
+
+            System.out.println((i + 1)
+                    + ". Descuento: "
+                    + (bono.getPorcentaje() * 100)
+                    + "% | Vencimiento: "
+                    + bono.getFechaVencimiento());
+        }
+
+        int numeroBono = readInt("Número del bono: ");
+
+        if (numeroBono < 1 || numeroBono > bonos.size()) {
+            System.out.println("El bono seleccionado no es válido.");
+            return;
+        }
+
+        System.out.println("Tipos de compra:");
+        System.out.println("1. Tienda");
+        System.out.println("2. Cafetería");
+
+        int tipoCompra = readInt("Tipo de compra: ");
+
+        if (tipoCompra != 1 && tipoCompra != 2) {
+            System.out.println("El tipo de compra no es válido.");
+            return;
+        }
+
+        registrarCompra(socio, tipoCompra == 2,
+                new DescuentoBonoTorneo(bonos.get(numeroBono - 1)));
+    }
+
+    private void comprarEnTienda() {
+        Comprador comprador = obtenerComprador();
+
+        if (comprador != null) {
+            registrarCompra(comprador, false,
+                    crearPoliticaNormal(comprador));
+        }
+    }
+
+    private void comprarEnCafeteria() {
+        Comprador comprador = obtenerComprador();
+
+        if (comprador != null) {
+            registrarCompra(comprador, true,
+                    crearPoliticaNormal(comprador));
+        }
+    }
+
+    private PoliticaDescuento crearPoliticaNormal(
+            Comprador comprador) {
+
+        if (comprador instanceof Empleado) {
+            return new DescuentoEmpleado();
+        }
+
+        return new SinDescuento();
+    }
+
+    private void comprarConPuntos() {
+        if (!(participante instanceof Socio)) {
+            System.out.println("Solo los socios pueden redimir puntos.");
+            return;
+        }
+
+        Socio socio = (Socio) participante;
+
+        if (socio.getPuntosFidelidad() <= 0) {
+            System.out.println("No tienes puntos disponibles.");
+            return;
+        }
+
+        System.out.println("Puntos disponibles: "
+                + socio.getPuntosFidelidad());
+
+        double puntos = readDouble("Puntos que desea redimir: ");
+
+        if (puntos <= 0 || puntos > socio.getPuntosFidelidad()) {
+            System.out.println("La cantidad de puntos no es válida.");
+            return;
+        }
+
+        System.out.println("Tipos de compra:");
+        System.out.println("1. Tienda");
+        System.out.println("2. Cafetería");
+
+        int tipoCompra = readInt("Tipo de compra: ");
+
+        if (tipoCompra != 1 && tipoCompra != 2) {
+            System.out.println("El tipo de compra no es válido.");
+            return;
+        }
+
+        registrarCompra(socio, tipoCompra == 2,
+                new DescuentoPuntos(puntos));
+    }
+
+    private void comprarConCodigoCompartido() {
+        Comprador comprador = obtenerComprador();
+
+        if (comprador == null) {
+            return;
+        }
+
+        String codigo = readString("Código compartido: ");
+
+        if (club.buscarEmpleadoPorCodigoDescuento(codigo) == null) {
+            System.out.println("El código compartido no es válido.");
+            return;
+        }
+
+        System.out.println("Tipos de compra:");
+        System.out.println("1. Tienda");
+        System.out.println("2. Cafetería");
+
+        int tipoCompra = readInt("Tipo de compra: ");
+
+        if (tipoCompra != 1 && tipoCompra != 2) {
+            System.out.println("El tipo de compra no es válido.");
+            return;
+        }
+
+        registrarCompra(comprador, tipoCompra == 2,
+                new DescuentoCodigoCompartido(codigo));
+    }
+
+    private Comprador obtenerComprador() {
+        if (!(participante instanceof Comprador)) {
+            System.out.println("Este tipo de participante no puede realizar compras.");
+            return null;
+        }
+
+        return (Comprador) participante;
+    }
+
+    private void registrarCompra(Comprador comprador, boolean cafeteria,
+            PoliticaDescuento politica) {
+
+        if (!mostrarInventario(cafeteria)) {
+            System.out.println("No hay productos disponibles para este tipo de compra.");
+            return;
+        }
+
+        String nombreProducto = readString("Nombre del producto: ");
+        Producto producto = club.buscarProducto(nombreProducto);
+
+        if (producto == null) {
+            System.out.println("No existe un producto con ese nombre.");
+            return;
+        }
+
+        if (!correspondeAlTipoDeCompra(producto, cafeteria)) {
+            System.out.println("El producto no corresponde al tipo de compra seleccionado.");
+            return;
+        }
+
+        String nombreUbicacion = readString("Nombre de la ubicación: ");
+        UbicacionInventario ubicacion = club.buscarUbicacionInventario(
+                nombreUbicacion);
+
+        if (ubicacion == null) {
+            System.out.println("No existe una ubicación con ese nombre.");
+            return;
+        }
+
+        int cantidad = readInt("Cantidad: ");
+        Venta venta;
+
+        if (cafeteria) {
+            VentaCafeteria ventaCafeteria = new VentaCafeteria(
+                    LocalDate.now(), comprador, politica);
+
+            ventaCafeteria.agregarDetalle(producto, cantidad);
+            boolean incluirPropina = readBoolean(
+                    "¿Desea incluir la propina sugerida del 10 %? (s/n): ");
+            ventaCafeteria.finalizarVenta(incluirPropina);
+            venta = ventaCafeteria;
+        } else {
+            VentaTienda ventaTienda = new VentaTienda(
+                    LocalDate.now(), comprador, politica);
+
+            ventaTienda.agregarDetalle(producto, cantidad);
+            ventaTienda.finalizarVenta();
+            venta = ventaTienda;
+        }
+
+        club.procesarVenta(venta, ubicacion);
+
+        System.out.println("Compra registrada correctamente.");
+        System.out.println("Subtotal: " + venta.getSubtotal());
+        System.out.println("Descuento: " + venta.getDescuento());
+        System.out.println("Impuesto: " + venta.getImpuesto());
+
+        if (venta instanceof VentaCafeteria) {
+            System.out.println("Propina: "
+                    + ((VentaCafeteria) venta).getPropina());
+        }
+
+        System.out.println("Total: " + venta.getTotal());
+        System.out.println("Puntos generados: " + venta.getPuntosGenerados());
+
+        if (comprador instanceof Socio) {
+            System.out.println("Puntos acumulados: "
+                    + ((Socio) comprador).getPuntosFidelidad());
+        }
+
+        if (politica instanceof DescuentoBonoTorneo) {
+            System.out.println("El bono quedó utilizado.");
+        }
+
+        if (politica instanceof DescuentoPuntos) {
+            System.out.println("Puntos redimidos: "
+                    + ((DescuentoPuntos) politica).getPuntosRedimidos());
+        }
+
+        if (politica instanceof DescuentoCodigoCompartido) {
+            System.out.println("Código compartido aplicado correctamente.");
+        }
+    }
+
+    private boolean mostrarInventario(boolean cafeteria) {
+        boolean hayInventario = false;
+
+        System.out.println();
+        System.out.println(cafeteria
+                ? "--- PRODUCTOS DE CAFETERÍA ---"
+                : "--- ARTÍCULOS DE TIENDA ---");
+
+        for (UbicacionInventario ubicacion : club.getUbicacionesInventario()) {
+            for (ExistenciaInventario existencia : ubicacion.getExistencias()) {
+                Producto producto = existencia.getProducto();
+
+                if (existencia.getCantidad() > 0
+                        && correspondeAlTipoDeCompra(producto, cafeteria)) {
+
+                    hayInventario = true;
+                    System.out.println("Producto: " + producto.getNombre()
+                            + " | Precio: " + producto.getPrecio()
+                            + " | Ubicación: " + ubicacion.getNombre()
+                            + " | Cantidad: " + existencia.getCantidad());
+                }
+            }
+        }
+
+        return hayInventario;
+    }
+
+    private boolean correspondeAlTipoDeCompra(
+            Producto producto, boolean cafeteria) {
+
+        if (cafeteria) {
+            return producto instanceof Bebida || producto instanceof Snack;
+        }
+
+        return producto instanceof ArticuloTienda;
     }
 
     private TorneoIndividual seleccionarTorneoIndividual() {
