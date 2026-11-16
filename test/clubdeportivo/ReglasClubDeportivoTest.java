@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import clubdeportivo.deportes.Categoria;
 import clubdeportivo.deportes.DeporteConjunto;
@@ -23,8 +24,10 @@ import clubdeportivo.turnos.Turno;
 import usuarios.tipos.Socio;
 import usuarios.tipos.empleados.Entrenador;
 
+@DisplayName("Reglas del club: categorías, sesiones y evaluaciones")
 public class ReglasClubDeportivoTest {
     @Test
+    @DisplayName("Las categorías respetan sus límites de edad")
     void categoriasRespetanLimitesDeEdad() {
         assertTrue(Categoria.SUB_13.admiteEdad(12));
         assertFalse(Categoria.SUB_13.admiteEdad(13));
@@ -38,6 +41,7 @@ public class ReglasClubDeportivoTest {
     }
 
     @Test
+    @DisplayName("El club rechaza un socio cuya edad no corresponde a la categoría del equipo")
     void clubRechazaSocioDeEdadIncorrectaParaEquipo() {
         ClubDeportivo club = new ClubDeportivo();
         DeporteConjunto futbol = new DeporteConjunto(
@@ -56,6 +60,7 @@ public class ReglasClubDeportivoTest {
     }
 
     @Test
+    @DisplayName("El club acepta un socio con la edad de la categoría")
     void clubAceptaSocioDeEdadCorrectaParaEquipo() {
         ClubDeportivo club = new ClubDeportivo();
         DeporteConjunto futbol = new DeporteConjunto(
@@ -73,6 +78,7 @@ public class ReglasClubDeportivoTest {
     }
 
     @Test
+    @DisplayName("No se programa una sesión si el entrenador no tiene turno")
     void noProgramaSesionSiEntrenadorNoTieneTurno() {
         DatosSesion datos = prepararSesion();
         assertThrows(IllegalStateException.class,
@@ -80,6 +86,7 @@ public class ReglasClubDeportivoTest {
     }
 
     @Test
+    @DisplayName("No se programa una sesión si el turno no cubre la hora final")
     void noProgramaSesionSiTurnoNoCubreHoraFinal() {
         DatosSesion datos = prepararSesion();
         datos.club.asignarTurno(datos.entrenador,
@@ -90,6 +97,7 @@ public class ReglasClubDeportivoTest {
     }
 
     @Test
+    @DisplayName("Se programa la sesión cuando el turno cubre todo el horario")
     void programaSesionCuandoTurnoCubreTodoElHorario() {
         DatosSesion datos = prepararSesion();
         datos.club.asignarTurno(datos.entrenador,
@@ -100,6 +108,7 @@ public class ReglasClubDeportivoTest {
     }
 
     @Test
+    @DisplayName("Se rechaza el cruce de sesiones del mismo entrenador")
     void rechazaCruceDeSesionesDelMismoEntrenador() {
         DatosSesion datos = prepararSesion();
         datos.club.asignarTurno(datos.entrenador,
@@ -119,6 +128,7 @@ public class ReglasClubDeportivoTest {
     }
 
     @Test
+    @DisplayName("Solo se evalúa al socio que asistió o llegó tarde")
     void soloEvaluaSocioQueAsistioOLlegoTarde() {
         DatosSesion datos = prepararSesion();
         Socio socio = socio("S1", 20);
@@ -132,6 +142,7 @@ public class ReglasClubDeportivoTest {
     }
 
     @Test
+    @DisplayName("La evaluación debe estar entre 1 y 5")
     void evaluacionDebeEstarEntreUnoYCinco() {
         DatosSesion datos = prepararSesion();
         RegistroAsistencia registro = new RegistroAsistencia(

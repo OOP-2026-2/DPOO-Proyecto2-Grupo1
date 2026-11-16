@@ -67,6 +67,12 @@ public abstract class Venta {
                     "El detalle no puede ser nulo");
         }
 
+        if (!admiteProducto(detalle.getProducto())) {
+            throw new IllegalArgumentException(
+                    "El producto " + detalle.getProducto().getNombre()
+                            + " no se vende en " + getRubro());
+        }
+
         detalles.add(detalle);
         recalcularTotales();
     }
@@ -92,6 +98,17 @@ public abstract class Venta {
     }
 
     public abstract double calcularImpuesto();
+
+    // Cada tipo de venta define qué productos vende (tienda o cafetería)
+    public abstract boolean admiteProducto(Producto producto);
+
+    // Nombre del rubro para los reportes de ventas
+    public abstract String getRubro();
+
+    // Propina u otros cargos que suman al total; por defecto no hay
+    public double getCargosAdicionales() {
+        return 0;
+    }
 
     public double calcularTotal() {
 

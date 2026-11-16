@@ -265,6 +265,31 @@ public class SesionEntrenamiento {
         return false;
     }
 
+    // Socios que pueden asistir: los del equipo o los de la academia del deporte
+    public List<Socio> getSociosHabilitados() {
+        if (equipo != null) {
+            return equipo.isActivo()
+                    ? equipo.getJugadoresHabilitados()
+                    : new ArrayList<Socio>();
+        }
+
+        if (deporteIndividual != null) {
+            return deporteIndividual.getSociosActivos();
+        }
+
+        return new ArrayList<Socio>();
+    }
+
+    public RegistroAsistencia buscarRegistro(Socio socio) {
+        for (RegistroAsistencia registro : registros) {
+            if (registro.getSocio() == socio) {
+                return registro;
+            }
+        }
+
+        return null;
+    }
+
     public boolean cumpleCoberturaMinima() {
         int registrosActivos = 0;
 

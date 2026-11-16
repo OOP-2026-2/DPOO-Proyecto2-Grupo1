@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import clubdeportivo.deportes.Categoria;
 import clubdeportivo.deportes.DeporteConjunto;
@@ -20,6 +21,7 @@ import clubdeportivo.torneos.TipoTorneo;
 import clubdeportivo.torneos.TorneoConjunto;
 import usuarios.tipos.Socio;
 
+@DisplayName("Inscripción de equipos en torneos de conjunto")
 public class TorneoConjuntoTest {
     private DeporteConjunto futbol;
     private Posicion delantero;
@@ -41,6 +43,7 @@ public class TorneoConjuntoTest {
     }
 
     @Test
+    @DisplayName("Un equipo dado de baja no es válido")
     void equipoInactivoNoEsValido() {
         Equipo equipo = equipoCompleto("Inactivo", Categoria.MAYORES);
         equipo.desactivar();
@@ -48,12 +51,14 @@ public class TorneoConjuntoTest {
     }
 
     @Test
+    @DisplayName("Un equipo de otra categoría no es válido")
     void equipoDeOtraCategoriaNoEsValido() {
         Equipo equipo = equipoCompleto("Sub 17", Categoria.SUB_17);
         assertFalse(torneo.validarEquipo(equipo));
     }
 
     @Test
+    @DisplayName("Un equipo sin el mínimo de jugadores no es válido")
     void equipoSinMinimoDeJugadoresNoEsValido() {
         Equipo equipo = new Equipo(
                 "Incompleto", Categoria.MAYORES, 10, futbol);
@@ -62,12 +67,14 @@ public class TorneoConjuntoTest {
     }
 
     @Test
+    @DisplayName("Un equipo completo es válido")
     void equipoCompletoEsValido() {
         assertTrue(torneo.validarEquipo(
                 equipoCompleto("Completo", Categoria.MAYORES)));
     }
 
     @Test
+    @DisplayName("No se inscribe el mismo equipo dos veces")
     void noPermiteInscribirElMismoEquipoDosVeces() {
         Equipo equipo = equipoCompleto("Duplicado", Categoria.MAYORES);
         torneo.inscribirEquipo(equipo, TipoCupo.REGULAR);
@@ -76,6 +83,7 @@ public class TorneoConjuntoTest {
     }
 
     @Test
+    @DisplayName("El cupo preferencial exige puntaje histórico")
     void cupoPreferencialExigePuntajeHistorico() {
         Equipo equipo = equipoCompleto("Preferencial", Categoria.MAYORES);
         assertThrows(IllegalArgumentException.class,

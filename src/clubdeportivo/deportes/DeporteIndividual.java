@@ -3,6 +3,7 @@ package clubdeportivo.deportes;
 import java.util.ArrayList;
 import java.util.List;
 import clubdeportivo.instalaciones.Instalacion;
+import usuarios.tipos.Socio;
 
 public class DeporteIndividual {
     private String nombre;
@@ -48,6 +49,29 @@ public class DeporteIndividual {
         }
 
         inscripciones.add(inscripcion);
+    }
+
+    public InscripcionAcademia buscarInscripcionActiva(Socio socio) {
+        for (InscripcionAcademia inscripcion : inscripciones) {
+            if (inscripcion.getSocio() == socio
+                    && inscripcion.estaActiva()) {
+                return inscripcion;
+            }
+        }
+
+        return null;
+    }
+
+    public List<Socio> getSociosActivos() {
+        List<Socio> socios = new ArrayList<Socio>();
+
+        for (InscripcionAcademia inscripcion : inscripciones) {
+            if (inscripcion.estaActiva()) {
+                socios.add(inscripcion.getSocio());
+            }
+        }
+
+        return socios;
     }
 
     public void agregarInstalacion(Instalacion instalacion) {

@@ -156,4 +156,11 @@ public class BonoDescuento
         estaDisponible();
         return estado;
     }
+
+    @Override
+    public String getDescripcion() {
+        return "Bono de " + Math.round(porcentaje * 100) + "% para "
+                + socio.getNombre() + ", vence el " + fechaVencimiento
+                + " (" + getEstado() + ")";
+    }
 }

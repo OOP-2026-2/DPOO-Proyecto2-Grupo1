@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import clubdeportivo.deportes.Modalidad;
 import clubdeportivo.torneos.BonoDescuento;
@@ -16,8 +17,10 @@ import clubdeportivo.torneos.TipoTorneo;
 import clubdeportivo.torneos.TorneoIndividual;
 import usuarios.tipos.Socio;
 
+@DisplayName("Reglas de encuentros de torneo y bonos de descuento")
 public class EncuentroBonoTest {
     @Test
+    @DisplayName("Un encuentro no puede enfrentar una inscripción consigo misma")
     void encuentroRechazaLaMismaInscripcionComoRival() {
         TorneoIndividual torneo = torneoConDosInscripciones();
         InscripcionIndividualTorneo inscripcion =
@@ -28,12 +31,14 @@ public class EncuentroBonoTest {
     }
 
     @Test
+    @DisplayName("Un encuentro no finaliza si no tiene marcador")
     void encuentroNoFinalizaSinMarcador() {
         EncuentroTorneo encuentro = encuentroProgramado();
         assertThrows(IllegalStateException.class, encuentro::finalizar);
     }
 
     @Test
+    @DisplayName("Un encuentro cancelado no acepta resultado")
     void encuentroCanceladoNoAceptaResultado() {
         EncuentroTorneo encuentro = encuentroProgramado();
         encuentro.cancelar();
@@ -42,6 +47,7 @@ public class EncuentroBonoTest {
     }
 
     @Test
+    @DisplayName("Un encuentro finalizado no puede cancelarse")
     void encuentroFinalizadoNoPuedeCancelarse() {
         EncuentroTorneo encuentro = encuentroProgramado();
         encuentro.registrarResultado("2-1");
@@ -50,6 +56,7 @@ public class EncuentroBonoTest {
     }
 
     @Test
+    @DisplayName("Un bono vencido no aplica descuento")
     void bonoVencidoNoAplicaDescuento() {
         BonoDescuento bono = bono(
                 LocalDate.now().minusDays(10),
@@ -60,6 +67,7 @@ public class EncuentroBonoTest {
     }
 
     @Test
+    @DisplayName("Un bono disponible descuenta su porcentaje del subtotal")
     void bonoDisponibleCalculaPorcentaje() {
         BonoDescuento bono = bono(
                 LocalDate.now(), LocalDate.now().plusDays(30));
@@ -67,6 +75,7 @@ public class EncuentroBonoTest {
     }
 
     @Test
+    @DisplayName("Un bono no puede usarse dos veces")
     void bonoNoPuedeUsarseDosVeces() {
         BonoDescuento bono = bono(
                 LocalDate.now(), LocalDate.now().plusDays(30));
@@ -76,6 +85,7 @@ public class EncuentroBonoTest {
     }
 
     @Test
+    @DisplayName("El bono rechaza un subtotal negativo")
     void bonoRechazaSubtotalNegativo() {
         BonoDescuento bono = bono(
                 LocalDate.now(), LocalDate.now().plusDays(30));

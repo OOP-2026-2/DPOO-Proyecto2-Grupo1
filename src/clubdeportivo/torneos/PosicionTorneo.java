@@ -8,6 +8,8 @@ public class PosicionTorneo {
     private int derrotas;
     private int puntos;
     private int posicion;
+    private int puntosAFavor;
+    private int puntosEnContra;
 
     public PosicionTorneo(
             InscripcionTorneo inscripcion) {
@@ -23,6 +25,29 @@ public class PosicionTorneo {
             int derrotas,
             int puntos,
             int posicion) {
+
+        this(inscripcion, partidosJugados, victorias, empates,
+                derrotas, puntos, posicion, 0, 0);
+    }
+
+    public PosicionTorneo(
+            InscripcionTorneo inscripcion,
+            int partidosJugados,
+            int victorias,
+            int empates,
+            int derrotas,
+            int puntos,
+            int posicion,
+            int puntosAFavor,
+            int puntosEnContra) {
+
+        if (puntosAFavor < 0 || puntosEnContra < 0) {
+            throw new IllegalArgumentException(
+                    "Los puntos a favor y en contra no pueden ser negativos");
+        }
+
+        this.puntosAFavor = puntosAFavor;
+        this.puntosEnContra = puntosEnContra;
 
         if (inscripcion == null) {
             throw new IllegalArgumentException(
@@ -112,5 +137,28 @@ public class PosicionTorneo {
 
     public int getPosicion() {
         return posicion;
+    }
+
+    // Guarda el marcador del encuentro para los criterios de desempate
+    public void acumularMarcador(int aFavor, int enContra) {
+        if (aFavor < 0 || enContra < 0) {
+            throw new IllegalArgumentException(
+                    "El marcador no puede tener valores negativos");
+        }
+
+        puntosAFavor += aFavor;
+        puntosEnContra += enContra;
+    }
+
+    public int getPuntosAFavor() {
+        return puntosAFavor;
+    }
+
+    public int getPuntosEnContra() {
+        return puntosEnContra;
+    }
+
+    public int getDiferencia() {
+        return puntosAFavor - puntosEnContra;
     }
 }

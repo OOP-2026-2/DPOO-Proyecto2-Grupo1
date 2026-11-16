@@ -42,6 +42,11 @@ public class Snack extends Producto {
     }
 
     @Override
+    public String getTipoProducto() {
+        return "Snack";
+    }
+
+    @Override
     public String toString() {
 
         if (alergenos.isEmpty()) {

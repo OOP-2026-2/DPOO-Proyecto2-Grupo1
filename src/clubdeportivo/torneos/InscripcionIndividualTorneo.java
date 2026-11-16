@@ -91,4 +91,24 @@ public class InscripcionIndividualTorneo
         return new ArrayList<ParticipanteTorneo>(
                 participantes);
     }
+
+    @Override
+    public String getDescripcion() {
+        StringBuilder nombres = new StringBuilder();
+
+        for (ParticipanteTorneo participante : participantes) {
+            if (nombres.length() > 0) {
+                nombres.append(" / ");
+            }
+
+            nombres.append(participante.getNombre());
+        }
+
+        return nombres.toString();
+    }
+
+    @Override
+    public boolean perteneceA(ParticipanteTorneo participante) {
+        return contieneParticipante(participante);
+    }
 }

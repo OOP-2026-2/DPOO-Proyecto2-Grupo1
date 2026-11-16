@@ -38,7 +38,7 @@ public class ExistenciaInventario {
         this.cantidad += cantidad;
     }
 
-    public void disminuirCantidad(int cantidad) {
+    public void disminuirCantidad(int cantidad) throws InventarioInsuficienteException {
 
         if (cantidad <= 0) {
             throw new IllegalArgumentException(
@@ -67,7 +67,7 @@ public class ExistenciaInventario {
         aumentarCantidad(unidades);
     }
 
-    public void retirarUnidades(int unidades) {
+    public void retirarUnidades(int unidades) throws InventarioInsuficienteException {
         disminuirCantidad(unidades);
     }
 

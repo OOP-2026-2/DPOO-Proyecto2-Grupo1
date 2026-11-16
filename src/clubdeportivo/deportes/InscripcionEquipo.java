@@ -4,12 +4,15 @@ import java.time.LocalDate;
 import usuarios.tipos.Socio;
 
 public class InscripcionEquipo {
+    public static final int PARTIDOS_SUSPENSION_POR_TARJETAS = 1;
+
     private Socio socio;
     private Equipo equipo;
     private Posicion posicion;
     private int numeroCamiseta;
     private LocalDate fechaInscripcion;
     private EstadoInscripcion estado;
+    private int partidosSuspension;
 
     public InscripcionEquipo(Socio socio, Equipo equipo, Posicion posicion, int numeroCamiseta) {
         if (socio == null) {
@@ -44,8 +47,9 @@ public class InscripcionEquipo {
 
             boolean mismoNumero = existente.getNumeroCamiseta() == numeroCamiseta;
 
+            // Un jugador suspendido sigue en el equipo y conserva su número
             if (mismoNumero
-                    && existente.estaActiva()) {
+                    && existente.getEstado() != EstadoInscripcion.RETIRADA) {
 
                 throw new IllegalArgumentException(
                         "El número de camiseta ya está "
@@ -66,13 +70,47 @@ public class InscripcionEquipo {
     }
 
     public void suspender() {
+        suspender(PARTIDOS_SUSPENSION_POR_TARJETAS);
+    }
+
+    // El jugador queda inhabilitado durante la cantidad de partidos oficiales indicada
+    public void suspender(int partidos) {
 
         if (estado == EstadoInscripcion.RETIRADA) {
             throw new IllegalStateException(
                     "No se puede suspender una inscripción retirada");
         }
 
+        if (partidos <= 0) {
+            throw new IllegalArgumentException(
+                    "La suspensión debe ser de al menos un partido");
+        }
+
         estado = EstadoInscripcion.SUSPENDIDA;
+        partidosSuspension = Math.max(partidosSuspension, partidos);
+    }
+
+    public boolean estaSuspendida() {
+        return estado == EstadoInscripcion.SUSPENDIDA;
+    }
+
+    // Se llama cuando el equipo juega un partido oficial sin este jugador
+    public void cumplirPartidoSuspension() {
+        if (estado != EstadoInscripcion.SUSPENDIDA) {
+            return;
+        }
+
+        if (partidosSuspension > 0) {
+            partidosSuspension--;
+        }
+
+        if (partidosSuspension == 0) {
+            estado = EstadoInscripcion.ACTIVA;
+        }
+    }
+
+    public int getPartidosSuspension() {
+        return partidosSuspension;
     }
 
     public void reactivar() {
@@ -90,11 +128,7 @@ public class InscripcionEquipo {
                     "No se puede reactivar la inscripción porque el equipo está inactivo");
         }
 
-        if (!equipo.tieneCupo()) {
-            throw new IllegalStateException(
-                    "No se puede reactivar la inscripción porque el equipo no tiene cupo");
-        }
-
+        // El jugador suspendido nunca dejó su cupo, por eso no se vuelve a verificar
         for (InscripcionEquipo existente : equipo.getInscripciones()) {
             boolean otraInscripcion = existente != this;
             boolean mismoNumero = existente.getNumeroCamiseta() == numeroCamiseta;
@@ -106,6 +140,7 @@ public class InscripcionEquipo {
         }
 
         estado = EstadoInscripcion.ACTIVA;
+        partidosSuspension = 0;
     }
 
     public void retirar() {

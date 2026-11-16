@@ -70,6 +70,18 @@ public class InscripcionCompetencia {
         nomina.add(socio);
     }
 
+    // Nómina leída del archivo: el jugador pudo ser suspendido después de entrar en ella
+    public void cargarJugadorNomina(Socio socio) {
+        if (socio == null) {
+            throw new IllegalArgumentException(
+                    "El socio no puede ser nulo");
+        }
+
+        if (!estaEnNomina(socio)) {
+            nomina.add(socio);
+        }
+    }
+
     public boolean estaEnNomina(Socio socio) {
         return nomina.contains(socio);
     }

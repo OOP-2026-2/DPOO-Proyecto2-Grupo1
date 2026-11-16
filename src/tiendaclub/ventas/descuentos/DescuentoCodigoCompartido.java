@@ -15,6 +15,8 @@ public class DescuentoCodigoCompartido
         this.codigo = codigo.trim();
     }
 
+    // Solo para ventas antiguas guardadas sin el código: una venta nueva con este
+    // descuento se rechaza al procesarla, porque no hay código que validar
     public DescuentoCodigoCompartido() {
         this.codigo = null;
     }

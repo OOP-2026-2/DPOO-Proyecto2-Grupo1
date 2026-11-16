@@ -16,18 +16,18 @@ import clubdeportivo.competencias.Competencia;
 import clubdeportivo.competencias.FormatoCompetencia;
 import clubdeportivo.competencias.InscripcionCompetencia;
 import clubdeportivo.competencias.TipoCompetencia;
-import clubdeportivo.competencias.Estadisticas.EstadisticaBaloncesto;
-import clubdeportivo.competencias.Estadisticas.EstadisticaFutbol;
-import clubdeportivo.competencias.Estadisticas.EstadisticaJugador;
-import clubdeportivo.competencias.Estadisticas.EstadisticaTenisMesa;
-import clubdeportivo.competencias.Estadisticas.EstadisticaTenisPadel;
-import clubdeportivo.competencias.Estadisticas.EstadisticaVoleibol;
-import clubdeportivo.competencias.Partidos.EstadoPartido;
-import clubdeportivo.competencias.Partidos.Partido;
-import clubdeportivo.competencias.Partidos.PartidoInterno;
-import clubdeportivo.competencias.Partidos.PartidoOficial;
-import clubdeportivo.competencias.Partidos.PartidoPractica;
-import clubdeportivo.competencias.Partidos.PropositoPartido;
+import clubdeportivo.partidos.estadisticas.EstadisticaBaloncesto;
+import clubdeportivo.partidos.estadisticas.EstadisticaFutbol;
+import clubdeportivo.partidos.estadisticas.EstadisticaJugador;
+import clubdeportivo.partidos.estadisticas.EstadisticaTenisMesa;
+import clubdeportivo.partidos.estadisticas.EstadisticaTenisPadel;
+import clubdeportivo.partidos.estadisticas.EstadisticaVoleibol;
+import clubdeportivo.partidos.EstadoPartido;
+import clubdeportivo.partidos.Partido;
+import clubdeportivo.partidos.PartidoInterno;
+import clubdeportivo.partidos.PartidoOficial;
+import clubdeportivo.partidos.PartidoPractica;
+import clubdeportivo.partidos.PropositoPartido;
 import clubdeportivo.deportes.Categoria;
 import clubdeportivo.deportes.DeporteConjunto;
 import clubdeportivo.deportes.DeporteIndividual;
@@ -102,37 +102,37 @@ import usuarios.tipos.empleados.Entrenador;
 import usuarios.tipos.empleados.Fisioterapeuta;
 
 public class PersistenciaClub {
-    private final Path CARPETA;
-    private final Path ARCHIVO_SOCIOS;
-    private final Path ARCHIVO_DEPORTES_CONJUNTO;
-    private final Path ARCHIVO_DEPORTES_INDIVIDUALES;
-    private final Path ARCHIVO_EQUIPOS;
-    private final Path ARCHIVO_INSCRIPCIONES_EQUIPO;
-    private final Path ARCHIVO_INSCRIPCIONES_ACADEMIA;
-    private final Path ARCHIVO_PRODUCTOS;
-    private final Path ARCHIVO_INVENTARIO;
-    private final Path ARCHIVO_MOVIMIENTOS;
-    private final Path ARCHIVO_PAGOS;
-    private final Path ARCHIVO_INSTALACIONES;
-    private final Path ARCHIVO_RESERVAS;
-    private final Path ARCHIVO_VENTAS;
-    private final Path ARCHIVO_EMPLEADOS;
-    private final Path ARCHIVO_SOLICITUDES_TURNO;
-    private final Path ARCHIVO_TURNOS;
-    private final Path ARCHIVO_COMPETENCIAS;
-    private final Path ARCHIVO_INSCRIPCIONES_COMPETENCIA;
-    private final Path ARCHIVO_PARTIDOS;
-    private final Path ARCHIVO_ESTADISTICAS;
-    private final Path ARCHIVO_SESIONES;
-    private final Path ARCHIVO_ASISTENCIAS;
-    private final Path ARCHIVO_SUGERENCIAS;
-    private final Path ARCHIVO_ESTUDIANTES;
-    private final Path ARCHIVO_PARTICIPANTES_EXTERNOS;
-    private final Path ARCHIVO_TORNEOS;
-    private final Path ARCHIVO_INSCRIPCIONES_TORNEO;
-    private final Path ARCHIVO_ENCUENTROS_TORNEO;
-    private final Path ARCHIVO_POSICIONES_TORNEO;
-    private final Path ARCHIVO_PREMIOS_TORNEO;
+    private final Path carpeta;
+    private final Path archivoSocios;
+    private final Path archivoDeportesConjunto;
+    private final Path archivoDeportesIndividuales;
+    private final Path archivoEquipos;
+    private final Path archivoInscripcionesEquipo;
+    private final Path archivoInscripcionesAcademia;
+    private final Path archivoProductos;
+    private final Path archivoInventario;
+    private final Path archivoMovimientos;
+    private final Path archivoPagos;
+    private final Path archivoInstalaciones;
+    private final Path archivoReservas;
+    private final Path archivoVentas;
+    private final Path archivoEmpleados;
+    private final Path archivoSolicitudesTurno;
+    private final Path archivoTurnos;
+    private final Path archivoCompetencias;
+    private final Path archivoInscripcionesCompetencia;
+    private final Path archivoPartidos;
+    private final Path archivoEstadisticas;
+    private final Path archivoSesiones;
+    private final Path archivoAsistencias;
+    private final Path archivoSugerencias;
+    private final Path archivoEstudiantes;
+    private final Path archivoParticipantesExternos;
+    private final Path archivoTorneos;
+    private final Path archivoInscripcionesTorneo;
+    private final Path archivoEncuentrosTorneo;
+    private final Path archivoPosicionesTorneo;
+    private final Path archivoPremiosTorneo;
 
     public PersistenciaClub() {
         this(Paths.get("datos"));
@@ -144,37 +144,37 @@ public class PersistenciaClub {
                     "La carpeta de persistencia es obligatoria");
         }
 
-        CARPETA = carpeta;
-        ARCHIVO_SOCIOS = CARPETA.resolve("socios.txt");
-        ARCHIVO_DEPORTES_CONJUNTO = CARPETA.resolve("deportes_conjunto.txt");
-        ARCHIVO_DEPORTES_INDIVIDUALES = CARPETA.resolve("deportes_individuales.txt");
-        ARCHIVO_EQUIPOS = CARPETA.resolve("equipos.txt");
-        ARCHIVO_INSCRIPCIONES_EQUIPO = CARPETA.resolve("inscripciones_equipo.txt");
-        ARCHIVO_INSCRIPCIONES_ACADEMIA = CARPETA.resolve("inscripciones_academia.txt");
-        ARCHIVO_PRODUCTOS = CARPETA.resolve("productos.txt");
-        ARCHIVO_INVENTARIO = CARPETA.resolve("inventario.txt");
-        ARCHIVO_MOVIMIENTOS = CARPETA.resolve("movimientos.txt");
-        ARCHIVO_PAGOS = CARPETA.resolve("pagos.txt");
-        ARCHIVO_INSTALACIONES = CARPETA.resolve("instalaciones.txt");
-        ARCHIVO_RESERVAS = CARPETA.resolve("reservas.txt");
-        ARCHIVO_VENTAS = CARPETA.resolve("ventas.txt");
-        ARCHIVO_EMPLEADOS = CARPETA.resolve("empleados.txt");
-        ARCHIVO_SOLICITUDES_TURNO = CARPETA.resolve("solicitudes_turno.txt");
-        ARCHIVO_TURNOS = CARPETA.resolve("turnos.txt");
-        ARCHIVO_COMPETENCIAS = CARPETA.resolve("competencias.txt");
-        ARCHIVO_INSCRIPCIONES_COMPETENCIA = CARPETA.resolve("inscripciones_competencia.txt");
-        ARCHIVO_PARTIDOS = CARPETA.resolve("partidos.txt");
-        ARCHIVO_ESTADISTICAS = CARPETA.resolve("estadisticas.txt");
-        ARCHIVO_SESIONES = CARPETA.resolve("sesiones.txt");
-        ARCHIVO_ASISTENCIAS = CARPETA.resolve("asistencias.txt");
-        ARCHIVO_SUGERENCIAS = CARPETA.resolve("sugerencias.txt");
-        ARCHIVO_ESTUDIANTES = CARPETA.resolve("estudiantes.txt");
-        ARCHIVO_PARTICIPANTES_EXTERNOS = CARPETA.resolve("participantes_externos.txt");
-        ARCHIVO_TORNEOS = CARPETA.resolve("torneos.txt");
-        ARCHIVO_INSCRIPCIONES_TORNEO = CARPETA.resolve("inscripciones_torneo.txt");
-        ARCHIVO_ENCUENTROS_TORNEO = CARPETA.resolve("encuentros_torneo.txt");
-        ARCHIVO_POSICIONES_TORNEO = CARPETA.resolve("posiciones_torneo.txt");
-        ARCHIVO_PREMIOS_TORNEO = CARPETA.resolve("premios_torneo.txt");
+        this.carpeta = carpeta;
+        archivoSocios = carpeta.resolve("socios.txt");
+        archivoDeportesConjunto = carpeta.resolve("deportes_conjunto.txt");
+        archivoDeportesIndividuales = carpeta.resolve("deportes_individuales.txt");
+        archivoEquipos = carpeta.resolve("equipos.txt");
+        archivoInscripcionesEquipo = carpeta.resolve("inscripciones_equipo.txt");
+        archivoInscripcionesAcademia = carpeta.resolve("inscripciones_academia.txt");
+        archivoProductos = carpeta.resolve("productos.txt");
+        archivoInventario = carpeta.resolve("inventario.txt");
+        archivoMovimientos = carpeta.resolve("movimientos.txt");
+        archivoPagos = carpeta.resolve("pagos.txt");
+        archivoInstalaciones = carpeta.resolve("instalaciones.txt");
+        archivoReservas = carpeta.resolve("reservas.txt");
+        archivoVentas = carpeta.resolve("ventas.txt");
+        archivoEmpleados = carpeta.resolve("empleados.txt");
+        archivoSolicitudesTurno = carpeta.resolve("solicitudes_turno.txt");
+        archivoTurnos = carpeta.resolve("turnos.txt");
+        archivoCompetencias = carpeta.resolve("competencias.txt");
+        archivoInscripcionesCompetencia = carpeta.resolve("inscripciones_competencia.txt");
+        archivoPartidos = carpeta.resolve("partidos.txt");
+        archivoEstadisticas = carpeta.resolve("estadisticas.txt");
+        archivoSesiones = carpeta.resolve("sesiones.txt");
+        archivoAsistencias = carpeta.resolve("asistencias.txt");
+        archivoSugerencias = carpeta.resolve("sugerencias.txt");
+        archivoEstudiantes = carpeta.resolve("estudiantes.txt");
+        archivoParticipantesExternos = carpeta.resolve("participantes_externos.txt");
+        archivoTorneos = carpeta.resolve("torneos.txt");
+        archivoInscripcionesTorneo = carpeta.resolve("inscripciones_torneo.txt");
+        archivoEncuentrosTorneo = carpeta.resolve("encuentros_torneo.txt");
+        archivoPosicionesTorneo = carpeta.resolve("posiciones_torneo.txt");
+        archivoPremiosTorneo = carpeta.resolve("premios_torneo.txt");
     }
 
     public void guardar(ClubDeportivo club) throws IOException {
@@ -182,7 +182,7 @@ public class PersistenciaClub {
             throw new IllegalArgumentException("El club es obligatorio");
         }
 
-        Files.createDirectories(CARPETA);
+        Files.createDirectories(carpeta);
         guardarSocios(club);
         guardarEmpleados(club);
         guardarEstudiantes(club);
@@ -220,44 +220,57 @@ public class PersistenciaClub {
             throw new IllegalArgumentException("El club es obligatorio");
         }
 
-        Files.createDirectories(CARPETA);
-        cargarSocios(club);
-        cargarEmpleados(club);
-        cargarEstudiantes(club);
-        cargarParticipantesExternos(club);
-        cargarTurnos(club);
-        cargarSolicitudesTurno(club);
-        cargarDeportesConjunto(club);
-        cargarDeportesIndividuales(club);
-        cargarEquipos(club);
-        cargarInscripcionesEquipo(club);
-        cargarInscripcionesAcademia(club);
-        cargarEstadosEquipos(club);
-        cargarCompetencias(club);
-        cargarInscripcionesCompetencia(club);
-        cargarPartidos(club);
-        cargarEstadisticas(club);
-        cargarProductos(club);
-        cargarInventario(club);
-        cargarInstalaciones(club);
-        cargarMovimientos(club);
-        cargarPagos(club);
-        cargarReservas(club);
-        cargarSesiones(club);
-        cargarAsistencias(club);
-        cargarSugerencias(club);
-        cargarTorneos(club);
-        cargarInscripcionesTorneo(club);
-        cargarEncuentrosTorneo(club);
-        cargarPosicionesTorneo(club);
-        cargarPremiosTorneo(club);
-        cargarVentas(club);
+        Files.createDirectories(carpeta);
+
+        // Un dato inválido no debe cerrar el programa: se informa como error de lectura
+        // conservando la causa original (guía 4.4, capturar y re-lanzar)
+        try {
+            cargarSocios(club);
+            cargarEmpleados(club);
+            cargarEstudiantes(club);
+            cargarParticipantesExternos(club);
+            cargarTurnos(club);
+            cargarSolicitudesTurno(club);
+            cargarDeportesConjunto(club);
+            cargarDeportesIndividuales(club);
+            cargarEquipos(club);
+            cargarInscripcionesEquipo(club);
+            cargarInscripcionesAcademia(club);
+            cargarCompetencias(club);
+            cargarInscripcionesCompetencia(club);
+            cargarPartidos(club);
+            cargarEstadisticas(club);
+            cargarProductos(club);
+            cargarInventario(club);
+            cargarInstalaciones(club);
+            cargarMovimientos(club);
+            cargarPagos(club);
+            cargarReservas(club);
+            cargarSesiones(club);
+            cargarAsistencias(club);
+            cargarSugerencias(club);
+            cargarTorneos(club);
+            cargarInscripcionesTorneo(club);
+            cargarEncuentrosTorneo(club);
+            cargarPosicionesTorneo(club);
+            cargarPremiosTorneo(club);
+            cargarVentas(club);
+
+            // Los partidos solo se pueden reconstruir con equipos e inscripciones activas;
+            // por eso las bajas y retiros se aplican al final
+            cargarEstadosInscripcionesCompetencia(club);
+            cargarEstadosEquipos(club);
+        } catch (RuntimeException e) {
+            throw new IOException(
+                    "Los archivos de datos tienen información inválida: "
+                            + e.getMessage(), e);
+        }
     }
 
     // Socios
 
     private void guardarSocios(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_SOCIOS)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoSocios)) {
             for (Usuario usuario : club.getUsuarios()) {
                 if (usuario instanceof Socio) {
                     Socio socio = (Socio) usuario;
@@ -276,11 +289,11 @@ public class PersistenciaClub {
     }
 
     private void cargarSocios(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_SOCIOS)) {
+        if (!Files.exists(archivoSocios)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_SOCIOS)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoSocios)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -310,7 +323,7 @@ public class PersistenciaClub {
     // Deportes de conjunto
 
     private void guardarDeportesConjunto(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_DEPORTES_CONJUNTO)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoDeportesConjunto)) {
             for (DeporteConjunto deporte : club.getDeportesConjunto()) {
                 StringBuilder posiciones = new StringBuilder();
 
@@ -335,11 +348,11 @@ public class PersistenciaClub {
     }
 
     private void cargarDeportesConjunto(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_DEPORTES_CONJUNTO)) {
+        if (!Files.exists(archivoDeportesConjunto)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_DEPORTES_CONJUNTO)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoDeportesConjunto)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -377,7 +390,7 @@ public class PersistenciaClub {
     // Deportes individuales
 
     private void guardarDeportesIndividuales(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_DEPORTES_INDIVIDUALES)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoDeportesIndividuales)) {
             for (DeporteIndividual deporte : club.getDeportesIndividuales()) {
                 escritor.write(deporte.getNombre() + ";"
                         + deporte.getMaximoInstalaciones());
@@ -388,11 +401,11 @@ public class PersistenciaClub {
     }
 
     private void cargarDeportesIndividuales(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_DEPORTES_INDIVIDUALES)) {
+        if (!Files.exists(archivoDeportesIndividuales)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_DEPORTES_INDIVIDUALES)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoDeportesIndividuales)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -418,7 +431,7 @@ public class PersistenciaClub {
     // Equipos
 
     private void guardarEquipos(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_EQUIPOS)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoEquipos)) {
             for (DeporteConjunto deporte : club.getDeportesConjunto()) {
                 for (Equipo equipo : deporte.getEquipos()) {
                     escritor.write(deporte.getNombre() + ";"
@@ -435,11 +448,11 @@ public class PersistenciaClub {
     }
 
     private void cargarEquipos(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_EQUIPOS)) {
+        if (!Files.exists(archivoEquipos)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_EQUIPOS)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoEquipos)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -476,11 +489,11 @@ public class PersistenciaClub {
     }
 
     private void cargarEstadosEquipos(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_EQUIPOS)) {
+        if (!Files.exists(archivoEquipos)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_EQUIPOS)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoEquipos)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -513,7 +526,7 @@ public class PersistenciaClub {
     // Inscripciones en equipos
 
     private void guardarInscripcionesEquipo(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_INSCRIPCIONES_EQUIPO)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoInscripcionesEquipo)) {
             for (DeporteConjunto deporte : club.getDeportesConjunto()) {
                 for (Equipo equipo : deporte.getEquipos()) {
                     for (InscripcionEquipo inscripcion : equipo.getInscripciones()) {
@@ -522,7 +535,8 @@ public class PersistenciaClub {
                                 + equipo.getNombre() + ";"
                                 + inscripcion.getPosicion().getNombre() + ";"
                                 + inscripcion.getNumeroCamiseta() + ";"
-                                + inscripcion.getEstado());
+                                + inscripcion.getEstado() + ";"
+                                + inscripcion.getPartidosSuspension());
 
                         escritor.newLine();
                     }
@@ -532,11 +546,11 @@ public class PersistenciaClub {
     }
 
     private void cargarInscripcionesEquipo(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_INSCRIPCIONES_EQUIPO)) {
+        if (!Files.exists(archivoInscripcionesEquipo)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_INSCRIPCIONES_EQUIPO)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoInscripcionesEquipo)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -577,7 +591,7 @@ public class PersistenciaClub {
                     continue;
                 }
 
-                InscripcionEquipo inscripcion = club.inscribirSocioEnEquipo(
+                InscripcionEquipo inscripcion = club.cargarInscripcionEquipo(
                         (Socio) usuario,
                         equipo,
                         posicion,
@@ -586,7 +600,11 @@ public class PersistenciaClub {
                 EstadoInscripcion estado = EstadoInscripcion.valueOf(datos[5]);
 
                 if (estado == EstadoInscripcion.SUSPENDIDA) {
-                    inscripcion.suspender();
+                    int partidos = datos.length >= 7
+                            ? Integer.parseInt(datos[6])
+                            : InscripcionEquipo.PARTIDOS_SUSPENSION_POR_TARJETAS;
+
+                    inscripcion.suspender(Math.max(1, partidos));
                 } else if (estado == EstadoInscripcion.RETIRADA) {
                     inscripcion.retirar();
                 }
@@ -597,7 +615,7 @@ public class PersistenciaClub {
     // Inscripciones en academias
 
     private void guardarInscripcionesAcademia(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_INSCRIPCIONES_ACADEMIA)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoInscripcionesAcademia)) {
             for (DeporteIndividual deporte : club.getDeportesIndividuales()) {
                 for (InscripcionAcademia inscripcion : deporte.getInscripciones()) {
                     escritor.write(inscripcion.getSocio().getId() + ";"
@@ -613,11 +631,11 @@ public class PersistenciaClub {
     }
 
     private void cargarInscripcionesAcademia(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_INSCRIPCIONES_ACADEMIA)) {
+        if (!Files.exists(archivoInscripcionesAcademia)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_INSCRIPCIONES_ACADEMIA)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoInscripcionesAcademia)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -662,7 +680,7 @@ public class PersistenciaClub {
     // Productos
 
     private void guardarProductos(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_PRODUCTOS)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoProductos)) {
             for (Producto producto : club.getProductos()) {
                 if (producto instanceof ArticuloTienda) {
                     ArticuloTienda articulo = (ArticuloTienda) producto;
@@ -703,11 +721,11 @@ public class PersistenciaClub {
     }
 
     private void cargarProductos(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_PRODUCTOS)) {
+        if (!Files.exists(archivoProductos)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_PRODUCTOS)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoProductos)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -756,7 +774,7 @@ public class PersistenciaClub {
     // Inventario
 
     private void guardarInventario(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_INVENTARIO)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoInventario)) {
             for (UbicacionInventario ubicacion : club.getUbicacionesInventario()) {
 
                 for (ExistenciaInventario existencia : ubicacion.getExistencias()) {
@@ -773,11 +791,11 @@ public class PersistenciaClub {
     }
 
     private void cargarInventario(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_INVENTARIO)) {
+        if (!Files.exists(archivoInventario)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_INVENTARIO)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoInventario)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -818,7 +836,7 @@ public class PersistenciaClub {
     // Movimientos
 
     private void guardarMovimientos(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_MOVIMIENTOS)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoMovimientos)) {
             for (MovimientoInventario movimiento : club.getMovimientosInventario()) {
 
                 String origen = "";
@@ -845,11 +863,11 @@ public class PersistenciaClub {
     }
 
     private void cargarMovimientos(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_MOVIMIENTOS)) {
+        if (!Files.exists(archivoMovimientos)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_MOVIMIENTOS)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoMovimientos)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -896,7 +914,7 @@ public class PersistenciaClub {
     // Pagos
 
     private void guardarPagos(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_PAGOS)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoPagos)) {
             for (PagoMensualidad pago : club.getPagosMensualidad()) {
 
                 escritor.write(pago.getFecha() + ";"
@@ -910,11 +928,11 @@ public class PersistenciaClub {
     }
 
     private void cargarPagos(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_PAGOS)) {
+        if (!Files.exists(archivoPagos)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_PAGOS)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoPagos)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -948,7 +966,7 @@ public class PersistenciaClub {
     // Instalaciones
 
     private void guardarInstalaciones(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_INSTALACIONES)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoInstalaciones)) {
             for (Instalacion instalacion : club.getInstalaciones()) {
 
                 escritor.write(instalacion.getTipo() + ";"
@@ -963,11 +981,11 @@ public class PersistenciaClub {
     }
 
     private void cargarInstalaciones(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_INSTALACIONES)) {
+        if (!Files.exists(archivoInstalaciones)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_INSTALACIONES)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoInstalaciones)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -1002,7 +1020,7 @@ public class PersistenciaClub {
     // Reservas
 
     private void guardarReservas(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_RESERVAS)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoReservas)) {
             for (Reserva reserva : club.getReservas()) {
                 escritor.write(reserva.getSocio().getId() + ";"
                         + reserva.getInstalacion().getId() + ";"
@@ -1010,7 +1028,10 @@ public class PersistenciaClub {
                         + reserva.getHoraInicio() + ";"
                         + reserva.getDuracionMinutos() + ";"
                         + reserva.getNumeroJugadores() + ";"
-                        + reserva.getModalidad());
+                        + (reserva.getModalidad() == null ? "" : reserva.getModalidad().name()) + ";"
+                        + (reserva.getDeporteConjunto() == null
+                                ? ""
+                                : reserva.getDeporteConjunto().getNombre()));
 
                 escritor.newLine();
             }
@@ -1018,11 +1039,11 @@ public class PersistenciaClub {
     }
 
     private void cargarReservas(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_RESERVAS)) {
+        if (!Files.exists(archivoReservas)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_RESERVAS)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoReservas)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -1047,6 +1068,15 @@ public class PersistenciaClub {
                     continue;
                 }
 
+                Modalidad modalidad = datos[6].trim().isEmpty()
+                        || datos[6].equals("null")
+                                ? null
+                                : Modalidad.valueOf(datos[6]);
+
+                DeporteConjunto deporte = datos.length >= 8 && !datos[7].trim().isEmpty()
+                        ? club.buscarDeporteConjunto(datos[7])
+                        : null;
+
                 Reserva reserva = new Reserva(
                         (Socio) usuario,
                         instalacion,
@@ -1054,7 +1084,8 @@ public class PersistenciaClub {
                         LocalTime.parse(datos[3]),
                         Integer.parseInt(datos[4]),
                         Integer.parseInt(datos[5]),
-                        Modalidad.valueOf(datos[6]));
+                        modalidad,
+                        deporte);
 
                 club.cargarReserva(reserva);
             }
@@ -1064,7 +1095,7 @@ public class PersistenciaClub {
     // Ventas
 
     private void guardarVentas(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_VENTAS)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoVentas)) {
             for (Venta venta : club.getVentas()) {
                 if (!(venta.getComprador() instanceof Usuario)) {
                     continue;
@@ -1116,7 +1147,9 @@ public class PersistenciaClub {
                     detalles.append(
                             detalle.getProducto().getNombre())
                             .append(",")
-                            .append(detalle.getCantidad());
+                            .append(detalle.getCantidad())
+                            .append(",")
+                            .append(detalle.getPrecioUnitario());
                 }
 
                 Usuario comprador = (Usuario) venta.getComprador();
@@ -1135,11 +1168,11 @@ public class PersistenciaClub {
     }
 
     private void cargarVentas(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_VENTAS)) {
+        if (!Files.exists(archivoVentas)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_VENTAS)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoVentas)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -1173,18 +1206,14 @@ public class PersistenciaClub {
 
                 PoliticaDescuento politica = formatoNuevo
                         ? cargarPoliticaDescuento(datos[3], datos[4], usuario)
-                        : new SinDescuento();
+                        : politicaFormatoAnterior(usaCodigoCompartido, comprador);
 
                 Venta venta;
 
                 if (datos[2].equals("CAFETERIA")) {
-                    venta = formatoNuevo
-                            ? new VentaCafeteria(fecha, comprador, politica)
-                            : new VentaCafeteria(fecha, comprador);
+                    venta = new VentaCafeteria(fecha, comprador, politica);
                 } else {
-                    venta = formatoNuevo
-                            ? new VentaTienda(fecha, comprador, politica)
-                            : new VentaTienda(fecha, comprador);
+                    venta = new VentaTienda(fecha, comprador, politica);
                 }
 
                 String[] detallesGuardados = datos[formatoNuevo ? 6 : 5].split("\\|");
@@ -1208,10 +1237,14 @@ public class PersistenciaClub {
                         continue;
                     }
 
-                    DetalleVenta detalle = new DetalleVenta(
-                            producto,
-                            Integer.parseInt(
-                                    datosDetalle[1]));
+                    DetalleVenta detalle = datosDetalle.length >= 3
+                            ? new DetalleVenta(
+                                    producto,
+                                    Integer.parseInt(datosDetalle[1]),
+                                    Double.parseDouble(datosDetalle[2]))
+                            : new DetalleVenta(
+                                    producto,
+                                    Integer.parseInt(datosDetalle[1]));
 
                     venta.agregarDetalle(detalle);
                 }
@@ -1221,23 +1254,30 @@ public class PersistenciaClub {
                 }
 
                 if (venta instanceof VentaCafeteria) {
-                    if (formatoNuevo) {
-                        ((VentaCafeteria) venta).finalizarVenta(incluyePropina);
-                    } else {
-                        ((VentaCafeteria) venta).finalizarVenta(
-                                usaCodigoCompartido, incluyePropina);
-                    }
+                    ((VentaCafeteria) venta).finalizarVenta(incluyePropina);
                 } else {
-                    if (formatoNuevo) {
-                        ((VentaTienda) venta).finalizarVenta();
-                    } else {
-                        ((VentaTienda) venta).finalizarVenta(usaCodigoCompartido);
-                    }
+                    ((VentaTienda) venta).finalizarVenta();
                 }
 
                 club.registrarVenta(venta);
             }
         }
+    }
+
+    // Ventas guardadas con el formato del Proyecto 1: solo se sabía si se usó un código
+    // compartido (sin el código) o si el comprador tenía descuento de empleado
+    private PoliticaDescuento politicaFormatoAnterior(boolean usaCodigoCompartido,
+            Comprador comprador) {
+
+        if (usaCodigoCompartido) {
+            return new DescuentoCodigoCompartido();
+        }
+
+        if (comprador.getPorcentajeDescuento() > 0) {
+            return new DescuentoEmpleado();
+        }
+
+        return new SinDescuento();
     }
 
     private PoliticaDescuento cargarPoliticaDescuento(
@@ -1278,7 +1318,7 @@ public class PersistenciaClub {
     // Estadísticas de jugadores
 
     private void guardarEstadisticas(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_ESTADISTICAS)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoEstadisticas)) {
             int numeroPartido = 1;
 
             for (Partido partido : club.getPartidos()) {
@@ -1330,11 +1370,11 @@ public class PersistenciaClub {
     }
 
     private void cargarEstadisticas(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_ESTADISTICAS)) {
+        if (!Files.exists(archivoEstadisticas)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_ESTADISTICAS)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoEstadisticas)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -1431,7 +1471,7 @@ public class PersistenciaClub {
                     continue;
                 }
 
-                partido.agregarEstadistica(estadistica);
+                partido.cargarEstadistica(estadistica);
             }
         }
     }
@@ -1439,7 +1479,7 @@ public class PersistenciaClub {
     // Sesiones de entrenamiento
 
     private void guardarSesiones(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_SESIONES)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoSesiones)) {
             int numero = 1;
 
             for (SesionEntrenamiento sesion : club.getSesionesEntrenamiento()) {
@@ -1466,11 +1506,11 @@ public class PersistenciaClub {
     }
 
     private void cargarSesiones(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_SESIONES)) {
+        if (!Files.exists(archivoSesiones)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_SESIONES)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoSesiones)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -1523,7 +1563,7 @@ public class PersistenciaClub {
     }
 
     private void guardarAsistencias(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_ASISTENCIAS)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoAsistencias)) {
             int numeroSesion = 1;
 
             for (SesionEntrenamiento sesion : club.getSesionesEntrenamiento()) {
@@ -1549,11 +1589,11 @@ public class PersistenciaClub {
     }
 
     private void cargarAsistencias(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_ASISTENCIAS)) {
+        if (!Files.exists(archivoAsistencias)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_ASISTENCIAS)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoAsistencias)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -1606,7 +1646,7 @@ public class PersistenciaClub {
     // Sugerencias de productos
 
     private void guardarSugerencias(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_SUGERENCIAS)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoSugerencias)) {
             for (SugerenciaProducto sugerencia : club.getSugerenciasProducto()) {
                 String idAdministrador = sugerencia.getAdministrador() == null
                         ? ""
@@ -1627,11 +1667,11 @@ public class PersistenciaClub {
     }
 
     private void cargarSugerencias(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_SUGERENCIAS)) {
+        if (!Files.exists(archivoSugerencias)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_SUGERENCIAS)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoSugerencias)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -1682,7 +1722,7 @@ public class PersistenciaClub {
     // Competencias
 
     private void guardarCompetencias(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_COMPETENCIAS)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoCompetencias)) {
             for (Competencia competencia : club.getCompetencias()) {
                 escritor.write(competencia.getNombre() + ";"
                         + competencia.getOrganizador() + ";"
@@ -1697,11 +1737,11 @@ public class PersistenciaClub {
     }
 
     private void cargarCompetencias(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_COMPETENCIAS)) {
+        if (!Files.exists(archivoCompetencias)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_COMPETENCIAS)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoCompetencias)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -1736,14 +1776,15 @@ public class PersistenciaClub {
     }
 
     private void guardarInscripcionesCompetencia(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_INSCRIPCIONES_COMPETENCIA)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoInscripcionesCompetencia)) {
             for (Competencia competencia : club.getCompetencias()) {
                 for (InscripcionCompetencia inscripcion : competencia.getInscripciones()) {
                     escritor.write(competencia.getNombre() + ";"
                             + competencia.getAnio() + ";"
                             + inscripcion.getEquipo().getNombre() + ";"
                             + inscripcion.getEstado() + ";"
-                            + nominaEnTexto(inscripcion));
+                            + nominaEnTexto(inscripcion) + ";"
+                            + inscripcion.getFechaInscripcion());
                     escritor.newLine();
                 }
             }
@@ -1765,11 +1806,11 @@ public class PersistenciaClub {
     }
 
     private void cargarInscripcionesCompetencia(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_INSCRIPCIONES_COMPETENCIA)) {
+        if (!Files.exists(archivoInscripcionesCompetencia)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_INSCRIPCIONES_COMPETENCIA)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoInscripcionesCompetencia)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -1791,19 +1832,55 @@ public class PersistenciaClub {
                     continue;
                 }
 
-                competencia.inscribirEquipo(equipo);
-                InscripcionCompetencia inscripcion = competencia.buscarInscripcion(equipo);
-                EstadoInscripcion estado = EstadoInscripcion.valueOf(datos[3]);
+                LocalDate fechaInscripcion = datos.length >= 6 && !datos[5].trim().isEmpty()
+                        ? LocalDate.parse(datos[5])
+                        : LocalDate.now();
+
+                InscripcionCompetencia inscripcion = competencia.cargarInscripcion(
+                        equipo, fechaInscripcion);
 
                 if (datos.length > 4 && !datos[4].trim().isEmpty()) {
                     for (String idJugador : datos[4].split(",")) {
                         Usuario jugador = club.buscarUsuario(idJugador);
 
                         if (jugador instanceof Socio) {
-                            inscripcion.agregarJugadorNomina((Socio) jugador);
+                            inscripcion.cargarJugadorNomina((Socio) jugador);
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private void cargarEstadosInscripcionesCompetencia(ClubDeportivo club) throws IOException {
+        if (!Files.exists(archivoInscripcionesCompetencia)) {
+            return;
+        }
+
+        try (BufferedReader lector = Files.newBufferedReader(archivoInscripcionesCompetencia)) {
+            String linea;
+
+            while ((linea = lector.readLine()) != null) {
+                if (linea.trim().isEmpty()) {
+                    continue;
+                }
+
+                String[] datos = linea.split(";", -1);
+
+                if (datos.length < 4) {
+                    continue;
+                }
+
+                Competencia competencia = club.buscarCompetencia(
+                        datos[0], Integer.parseInt(datos[1]));
+                Equipo equipo = club.buscarEquipo(datos[2]);
+
+                if (competencia == null || equipo == null) {
+                    continue;
+                }
+
+                InscripcionCompetencia inscripcion = competencia.buscarInscripcion(equipo);
+                EstadoInscripcion estado = EstadoInscripcion.valueOf(datos[3]);
 
                 if (estado == EstadoInscripcion.SUSPENDIDA) {
                     inscripcion.suspender();
@@ -1817,7 +1894,7 @@ public class PersistenciaClub {
     // Partidos
 
     private void guardarPartidos(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_PARTIDOS)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoPartidos)) {
             for (Partido partido : club.getPartidos()) {
                 String tipo;
                 String datosEspecificos;
@@ -1870,11 +1947,11 @@ public class PersistenciaClub {
     }
 
     private void cargarPartidos(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_PARTIDOS)) {
+        if (!Files.exists(archivoPartidos)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_PARTIDOS)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoPartidos)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -1927,7 +2004,7 @@ public class PersistenciaClub {
                         Usuario usuario = club.buscarUsuario(especificos[i]);
 
                         if (usuario != null) {
-                            practica.agregarParticipante(usuario);
+                            practica.cargarParticipante(usuario);
                         }
                     }
 
@@ -1936,7 +2013,7 @@ public class PersistenciaClub {
                     continue;
                 }
 
-                club.registrarPartido(partido);
+                club.cargarPartido(partido);
 
                 if (!datos[3].trim().isEmpty()) {
                     partido.registrarResultado(datos[3]);
@@ -1956,7 +2033,7 @@ public class PersistenciaClub {
     // Empleados
 
     private void guardarEmpleados(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_EMPLEADOS)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoEmpleados)) {
             for (Usuario usuario : club.getUsuarios()) {
                 String tipo;
                 String codigoDescuento = "";
@@ -1986,11 +2063,11 @@ public class PersistenciaClub {
     }
 
     private void cargarEmpleados(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_EMPLEADOS)) {
+        if (!Files.exists(archivoEmpleados)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_EMPLEADOS)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoEmpleados)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -2028,7 +2105,7 @@ public class PersistenciaClub {
     // Turnos
 
     private void guardarTurnos(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_TURNOS)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoTurnos)) {
             for (Usuario usuario : club.getUsuarios()) {
                 if (!(usuario instanceof Empleado)) {
                     continue;
@@ -2048,11 +2125,11 @@ public class PersistenciaClub {
     }
 
     private void cargarTurnos(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_TURNOS)) {
+        if (!Files.exists(archivoTurnos)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_TURNOS)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoTurnos)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -2101,7 +2178,7 @@ public class PersistenciaClub {
     // Solicitudes de cambio de turno
 
     private void guardarSolicitudesTurno(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_SOLICITUDES_TURNO)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoSolicitudesTurno)) {
             for (SolicitudCambioTurno solicitud : club.getSolicitudesCambioTurno()) {
                 String idAdministrador = solicitud.getAdministradorDecision() == null
                         ? ""
@@ -2123,11 +2200,11 @@ public class PersistenciaClub {
     }
 
     private void cargarSolicitudesTurno(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_SOLICITUDES_TURNO)) {
+        if (!Files.exists(archivoSolicitudesTurno)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_SOLICITUDES_TURNO)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoSolicitudesTurno)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -2185,7 +2262,7 @@ public class PersistenciaClub {
     }
 
     private void guardarEstudiantes(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_ESTUDIANTES)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoEstudiantes)) {
             for (Usuario usuario : club.getUsuarios()) {
                 if (usuario instanceof EstudianteUniversidad) {
                     EstudianteUniversidad estudiante = (EstudianteUniversidad) usuario;
@@ -2205,11 +2282,11 @@ public class PersistenciaClub {
     }
 
     private void cargarEstudiantes(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_ESTUDIANTES)) {
+        if (!Files.exists(archivoEstudiantes)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_ESTUDIANTES)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoEstudiantes)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -2243,7 +2320,7 @@ public class PersistenciaClub {
 
     private void guardarParticipantesExternos(ClubDeportivo club) throws IOException {
         try (BufferedWriter escritor = Files.newBufferedWriter(
-                ARCHIVO_PARTICIPANTES_EXTERNOS)) {
+                archivoParticipantesExternos)) {
 
             for (Usuario usuario : club.getUsuarios()) {
                 if (usuario instanceof ParticipanteExterno) {
@@ -2263,12 +2340,12 @@ public class PersistenciaClub {
     }
 
     private void cargarParticipantesExternos(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_PARTICIPANTES_EXTERNOS)) {
+        if (!Files.exists(archivoParticipantesExternos)) {
             return;
         }
 
         try (BufferedReader lector = Files.newBufferedReader(
-                ARCHIVO_PARTICIPANTES_EXTERNOS)) {
+                archivoParticipantesExternos)) {
 
             String linea;
 
@@ -2303,7 +2380,7 @@ public class PersistenciaClub {
     // Torneos
 
     private void guardarTorneos(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_TORNEOS)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoTorneos)) {
             for (Torneo torneo : club.getTorneos()) {
                 String clase;
                 String deporte;
@@ -2366,11 +2443,11 @@ public class PersistenciaClub {
     }
 
     private void cargarTorneos(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_TORNEOS)) {
+        if (!Files.exists(archivoTorneos)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_TORNEOS)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoTorneos)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -2427,7 +2504,7 @@ public class PersistenciaClub {
                             Nivel.valueOf(partes[17]), Modalidad.valueOf(partes[18]));
                 }
 
-                club.registrarTorneo(torneo);
+                club.cargarTorneo(torneo);
                 torneo.cargarEstado(
                         EstadoTorneo.valueOf(partes[9]),
                         Boolean.parseBoolean(partes[15]));
@@ -2436,7 +2513,7 @@ public class PersistenciaClub {
     }
 
     private void guardarInscripcionesTorneo(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_INSCRIPCIONES_TORNEO)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoInscripcionesTorneo)) {
             for (Torneo torneo : club.getTorneos()) {
                 List<InscripcionTorneo> inscripciones = torneo.getInscripciones();
 
@@ -2484,11 +2561,11 @@ public class PersistenciaClub {
     }
 
     private void cargarInscripcionesTorneo(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_INSCRIPCIONES_TORNEO)) {
+        if (!Files.exists(archivoInscripcionesTorneo)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_INSCRIPCIONES_TORNEO)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoInscripcionesTorneo)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -2552,7 +2629,7 @@ public class PersistenciaClub {
     }
 
     private void guardarEncuentrosTorneo(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_ENCUENTROS_TORNEO)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoEncuentrosTorneo)) {
             for (Torneo torneo : club.getTorneos()) {
                 List<InscripcionTorneo> inscripciones = torneo.getInscripciones();
 
@@ -2573,11 +2650,11 @@ public class PersistenciaClub {
     }
 
     private void cargarEncuentrosTorneo(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_ENCUENTROS_TORNEO)) {
+        if (!Files.exists(archivoEncuentrosTorneo)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_ENCUENTROS_TORNEO)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoEncuentrosTorneo)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -2626,7 +2703,7 @@ public class PersistenciaClub {
     }
 
     private void guardarPosicionesTorneo(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_POSICIONES_TORNEO)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoPosicionesTorneo)) {
             for (Torneo torneo : club.getTorneos()) {
                 List<InscripcionTorneo> inscripciones = torneo.getInscripciones();
 
@@ -2638,7 +2715,9 @@ public class PersistenciaClub {
                             + posicion.getEmpates() + ";"
                             + posicion.getDerrotas() + ";"
                             + posicion.getPuntos() + ";"
-                            + posicion.getPosicion());
+                            + posicion.getPosicion() + ";"
+                            + posicion.getPuntosAFavor() + ";"
+                            + posicion.getPuntosEnContra());
                     escritor.newLine();
                 }
             }
@@ -2646,11 +2725,11 @@ public class PersistenciaClub {
     }
 
     private void cargarPosicionesTorneo(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_POSICIONES_TORNEO)) {
+        if (!Files.exists(archivoPosicionesTorneo)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_POSICIONES_TORNEO)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoPosicionesTorneo)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {
@@ -2660,7 +2739,7 @@ public class PersistenciaClub {
 
                 String[] partes = linea.split(";", -1);
 
-                if (partes.length != 8) {
+                if (partes.length != 8 && partes.length != 10) {
                     continue;
                 }
 
@@ -2670,11 +2749,15 @@ public class PersistenciaClub {
                     continue;
                 }
 
+                int aFavor = partes.length == 10 ? Integer.parseInt(partes[8]) : 0;
+                int enContra = partes.length == 10 ? Integer.parseInt(partes[9]) : 0;
+
                 PosicionTorneo posicion = new PosicionTorneo(
                         buscarInscripcionTorneo(torneo, Integer.parseInt(partes[1])),
                         Integer.parseInt(partes[2]), Integer.parseInt(partes[3]),
                         Integer.parseInt(partes[4]), Integer.parseInt(partes[5]),
-                        Integer.parseInt(partes[6]), Integer.parseInt(partes[7]));
+                        Integer.parseInt(partes[6]), Integer.parseInt(partes[7]),
+                        aFavor, enContra);
 
                 torneo.cargarPosicion(posicion);
             }
@@ -2682,7 +2765,7 @@ public class PersistenciaClub {
     }
 
     private void guardarPremiosTorneo(ClubDeportivo club) throws IOException {
-        try (BufferedWriter escritor = Files.newBufferedWriter(ARCHIVO_PREMIOS_TORNEO)) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivoPremiosTorneo)) {
             for (Torneo torneo : club.getTorneos()) {
                 List<InscripcionTorneo> inscripciones = torneo.getInscripciones();
 
@@ -2714,11 +2797,11 @@ public class PersistenciaClub {
     }
 
     private void cargarPremiosTorneo(ClubDeportivo club) throws IOException {
-        if (!Files.exists(ARCHIVO_PREMIOS_TORNEO)) {
+        if (!Files.exists(archivoPremiosTorneo)) {
             return;
         }
 
-        try (BufferedReader lector = Files.newBufferedReader(ARCHIVO_PREMIOS_TORNEO)) {
+        try (BufferedReader lector = Files.newBufferedReader(archivoPremiosTorneo)) {
             String linea;
 
             while ((linea = lector.readLine()) != null) {

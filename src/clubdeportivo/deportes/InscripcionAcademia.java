@@ -32,12 +32,13 @@ public class InscripcionAcademia {
 
             boolean mismoSocio = existente.getSocio() == socio;
 
+            // Un socio suspendido sigue inscrito; solo el retiro libera la academia
             if (mismoSocio
-                    && existente.estaActiva()) {
+                    && existente.getEstado() != EstadoInscripcion.RETIRADA) {
 
                 throw new IllegalArgumentException(
-                        "El socio ya tiene una inscripción "
-                                + "activa en este deporte");
+                        "El socio ya está inscrito "
+                                + "en la academia de " + deporte.getNombre());
             }
         }
 
@@ -62,6 +63,16 @@ public class InscripcionAcademia {
         }
 
         this.puntajeRanking = nuevoPuntaje;
+    }
+
+    // Los resultados del socio en torneos individuales suman a su ranking
+    public void sumarPuntaje(double puntos) {
+        if (puntos < 0) {
+            throw new IllegalArgumentException(
+                    "Los puntos a sumar no pueden ser negativos");
+        }
+
+        this.puntajeRanking += puntos;
     }
 
     public void cambiarNivel(Nivel nuevoNivel) {

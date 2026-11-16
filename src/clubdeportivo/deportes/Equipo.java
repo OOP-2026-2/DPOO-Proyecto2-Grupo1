@@ -61,9 +61,7 @@ public class Equipo {
                     "La inscripción pertenece a otro equipo");
         }
 
-        if (buscarInscripcion(
-                inscripcion.getSocio()) != null) {
-
+        if (esIntegrante(inscripcion.getSocio())) {
             throw new IllegalArgumentException(
                     "El socio ya está inscrito en el equipo");
         }
@@ -76,18 +74,62 @@ public class Equipo {
         inscripciones.add(inscripcion);
     }
 
-    public boolean tieneCupo() {
+    // Inscripciones leídas del archivo: el estado del equipo y el cupo ya se validaron al crearlas
+    public void cargarInscripcion(
+            InscripcionEquipo inscripcion) {
 
-        int cantidadActivas = 0;
+        if (inscripcion == null
+                || inscripcion.getEquipo() != this) {
+
+            throw new IllegalArgumentException(
+                    "La inscripción pertenece a otro equipo");
+        }
+
+        if (esIntegrante(inscripcion.getSocio())) {
+            throw new IllegalArgumentException(
+                    "El socio ya está inscrito en el equipo");
+        }
+
+        inscripciones.add(inscripcion);
+    }
+
+    // Un socio retirado deja de ser integrante y puede volver a inscribirse
+    public boolean esIntegrante(Socio socio) {
+        InscripcionEquipo existente = buscarInscripcion(socio);
+
+        return existente != null
+                && existente.getEstado() != EstadoInscripcion.RETIRADA;
+    }
+
+    public boolean tieneCupo() {
+        return contarMiembros() < cupoMaximo;
+    }
+
+    // Los suspendidos siguen ocupando su cupo; solo los retirados lo liberan
+    public int contarMiembros() {
+
+        int miembros = 0;
 
         for (InscripcionEquipo inscripcion : inscripciones) {
 
-            if (inscripcion.estaActiva()) {
-                cantidadActivas++;
+            if (inscripcion.getEstado() != EstadoInscripcion.RETIRADA) {
+                miembros++;
             }
         }
 
-        return cantidadActivas < cupoMaximo;
+        return miembros;
+    }
+
+    public boolean cumpleMinimoJugadores() {
+        return deporte.cumpleMinimoJugadores(
+                getJugadoresHabilitados().size());
+    }
+
+    public int calcularJugadoresFaltantes() {
+        int faltantes = deporte.getMinimoJugadores()
+                - getJugadoresHabilitados().size();
+
+        return Math.max(0, faltantes);
     }
 
     public InscripcionEquipo buscarInscripcion(
@@ -97,14 +139,21 @@ public class Equipo {
             return null;
         }
 
+        InscripcionEquipo encontrada = null;
+
+        // Si el socio se retiró y volvió a entrar, cuenta la inscripción vigente
         for (InscripcionEquipo inscripcion : inscripciones) {
 
             if (inscripcion.getSocio() == socio) {
-                return inscripcion;
+                encontrada = inscripcion;
+
+                if (inscripcion.getEstado() != EstadoInscripcion.RETIRADA) {
+                    return inscripcion;
+                }
             }
         }
 
-        return null;
+        return encontrada;
     }
 
     public List<Socio> getJugadoresHabilitados() {
@@ -165,6 +214,16 @@ public class Equipo {
         }
 
         this.puntajeHistorico = puntajeHistorico;
+    }
+
+    // Los resultados del equipo (partidos de competencia y torneos) suman al histórico
+    public void sumarPuntajeHistorico(double puntos) {
+        if (puntos < 0) {
+            throw new IllegalArgumentException(
+                    "Los puntos a sumar no pueden ser negativos");
+        }
+
+        this.puntajeHistorico += puntos;
     }
 
     public double getPuntajeHistorico() {

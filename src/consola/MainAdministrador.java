@@ -2,50 +2,30 @@ package consola;
 
 import static consola.InputHandler.readDate;
 import static consola.InputHandler.readString;
-import java.io.IOException;
+
 import java.time.LocalDate;
 import java.util.Scanner;
-import clubdeportivo.ClubDeportivo;
 import usuarios.Usuario;
 import usuarios.tipos.empleados.Administrador;
-import utilidades.persistencia.PersistenciaClub;
 
-public class MainAdministrador {
-    private final ClubDeportivo club;
-    private final PersistenciaClub persistencia;
+public class MainAdministrador extends MainBase {
 
-    public MainAdministrador() {
-        club = new ClubDeportivo();
-        persistencia = new PersistenciaClub();
-    }
-
-    public void ejecutar() {
-        cargarDatos();
-
+    @Override
+    protected boolean prepararAcceso() {
         if (!existeAdministrador()) {
             registrarAdministradorInicial();
             guardarDatos();
         }
 
-        System.out.println("================================");
-        System.out.println("   ACCESO DEL ADMINISTRADOR");
-        System.out.println("================================");
-
-        String login = readString("Login: ");
-        String contrasena = readString("Contraseña: ");
-        Usuario usuario = club.autenticar(login, contrasena);
+        Usuario usuario = iniciarSesion("ACCESO DEL ADMINISTRADOR");
 
         if (!(usuario instanceof Administrador)) {
             System.out.println("Las credenciales no corresponden a un administrador.");
-            return;
+            return false;
         }
 
-        Administrador administrador = (Administrador) usuario;
-        ConsolaAdministrador consola = new ConsolaAdministrador(
-                club, administrador);
-
-        consola.ejecutar();
-        guardarDatos();
+        new ConsolaAdministrador(club, (Administrador) usuario).ejecutar();
+        return true;
     }
 
     private boolean existeAdministrador() {
@@ -65,41 +45,12 @@ public class MainAdministrador {
 
         String id = readString("ID: ");
         String nombre = readString("Nombre: ");
-        LocalDate fechaNacimiento = readDate(
-                "Fecha de nacimiento (AAAA-MM-DD): ");
+        LocalDate fechaNacimiento = readDate("Fecha de nacimiento (AAAA-MM-DD): ");
         String login = readString("Login: ");
         String contrasena = readString("Contraseña: ");
 
-        Administrador administrador = new Administrador(
-                id,
-                nombre,
-                fechaNacimiento,
-                login,
-                contrasena);
-
-        club.registrarUsuario(administrador);
-        System.out.println(
-                "Administrador inicial registrado correctamente.");
-    }
-
-    private void cargarDatos() {
-        try {
-            persistencia.cargar(club);
-            System.out.println("Datos cargados correctamente.");
-        } catch (IOException | RuntimeException e) {
-            System.out.println("No fue posible cargar los datos: "
-                    + e.getMessage());
-        }
-    }
-
-    private void guardarDatos() {
-        try {
-            persistencia.guardar(club);
-            System.out.println("Datos guardados correctamente.");
-        } catch (IOException e) {
-            System.out.println("No fue posible guardar los datos: "
-                    + e.getMessage());
-        }
+        club.registrarUsuario(new Administrador(id, nombre, fechaNacimiento, login, contrasena));
+        System.out.println("Administrador inicial registrado correctamente.");
     }
 
     public static void main(String[] args) {

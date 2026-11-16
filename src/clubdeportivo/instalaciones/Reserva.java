@@ -2,6 +2,7 @@ package clubdeportivo.instalaciones;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import clubdeportivo.deportes.DeporteConjunto;
 import clubdeportivo.deportes.DeporteIndividual;
 import clubdeportivo.deportes.Modalidad;
 import usuarios.tipos.Socio;
@@ -15,9 +16,23 @@ public class Reserva {
     private final int duracionMinutos;
     private final int numeroJugadores;
     private final Modalidad modalidad;
+    private final DeporteConjunto deporteConjunto;
 
     public Reserva(Socio socio, Instalacion instalacion, LocalDate fecha, LocalTime horaInicio, int duracionMinutos,
             int numeroJugadores, Modalidad modalidad) {
+        this(socio, instalacion, fecha, horaInicio, duracionMinutos,
+                numeroJugadores, modalidad, null);
+    }
+
+    // Canchas de conjunto: el deporte define el mínimo de jugadores de la reserva
+    public Reserva(Socio socio, Instalacion instalacion, LocalDate fecha, LocalTime horaInicio, int duracionMinutos,
+            int numeroJugadores, DeporteConjunto deporteConjunto) {
+        this(socio, instalacion, fecha, horaInicio, duracionMinutos,
+                numeroJugadores, null, deporteConjunto);
+    }
+
+    public Reserva(Socio socio, Instalacion instalacion, LocalDate fecha, LocalTime horaInicio, int duracionMinutos,
+            int numeroJugadores, Modalidad modalidad, DeporteConjunto deporteConjunto) {
         if (socio == null) {
             throw new IllegalArgumentException(
                     "El socio es obligatorio");
@@ -38,9 +53,16 @@ public class Reserva {
                     "La duración debe ser mayor que cero");
         }
 
-        if (modalidad == null) {
+        boolean canchaConjunto = instalacion.getTipo() == TipoInstalacion.CANCHA_CONJUNTO;
+
+        if (!canchaConjunto && modalidad == null) {
             throw new IllegalArgumentException(
                     "La modalidad es obligatoria");
+        }
+
+        if (canchaConjunto && modalidad == null && deporteConjunto == null) {
+            throw new IllegalArgumentException(
+                    "Para una cancha de conjunto se debe indicar el deporte");
         }
 
         this.socio = socio;
@@ -51,13 +73,14 @@ public class Reserva {
         this.duracionMinutos = duracionMinutos;
         this.numeroJugadores = numeroJugadores;
         this.modalidad = modalidad;
+        this.deporteConjunto = deporteConjunto;
 
         // La fecha pasada se rechaza al registrar la reserva en el club, no aquí,
         // para poder cargar el historial guardado
-        if (!cantidadJugadoresValida()) {
-            throw new IllegalArgumentException(
-                    "La cantidad de jugadores no corresponde "
-                            + "al tipo de instalación y modalidad");
+        String motivo = motivoCantidadJugadoresInvalida();
+
+        if (motivo != null) {
+            throw new IllegalArgumentException(motivo);
         }
     }
 
@@ -70,11 +93,33 @@ public class Reserva {
     }
 
     public boolean cantidadJugadoresValida() {
+        return motivoCantidadJugadoresInvalida() == null;
+    }
 
+    // Devuelve por qué la cantidad de jugadores no sirve, o null si es válida
+    public String motivoCantidadJugadoresInvalida() {
         if (!instalacion.admiteJugadores(numeroJugadores)) {
-            return false;
+            return "La instalación admite entre 1 y "
+                    + instalacion.getCapacidadMaxima() + " jugadores";
         }
 
+        if (instalacion.getTipo() == TipoInstalacion.CANCHA_CONJUNTO
+                && deporteConjunto != null
+                && !deporteConjunto.cumpleMinimoJugadores(numeroJugadores)) {
+            return "El deporte " + deporteConjunto.getNombre()
+                    + " exige al menos " + deporteConjunto.getMinimoJugadores()
+                    + " jugadores para reservar la cancha";
+        }
+
+        if (!cantidadSegunModalidadValida()) {
+            return "La cantidad de jugadores no corresponde "
+                    + "al tipo de instalación y modalidad";
+        }
+
+        return null;
+    }
+
+    private boolean cantidadSegunModalidadValida() {
         switch (instalacion.getTipo()) {
 
             case CANCHA_TENIS:
@@ -155,12 +200,18 @@ public class Reserva {
         return modalidad;
     }
 
+    public DeporteConjunto getDeporteConjunto() {
+        return deporteConjunto;
+    }
+
     @Override
     public String toString() {
         return fecha
                 + " " + horaInicio
                 + " - " + calcularHoraFin()
                 + " - " + instalacion.getId()
-                + " - " + modalidad;
+                + " - " + (deporteConjunto != null
+                        ? deporteConjunto.getNombre()
+                        : String.valueOf(modalidad));
     }
 }

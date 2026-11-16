@@ -44,48 +44,105 @@ public class TorneoIndividual extends Torneo {
     }
 
     public boolean validarParticipante(ParticipanteTorneo participante) {
-        if (participante == null || participante instanceof Administrador) {
-            return false;
+        return motivoRechazo(participante) == null;
+    }
+
+    /*
+     * Devuelve por qué el participante no puede inscribirse
+     * o null si cumple las condiciones del torneo.
+     */
+    public String motivoRechazo(ParticipanteTorneo participante) {
+        if (participante == null) {
+            return "El participante es obligatorio";
+        }
+
+        if (participante instanceof Administrador) {
+            return "Los administradores no pueden participar en torneos";
         }
 
         if (participante instanceof Socio) {
-            return socioHabilitado((Socio) participante);
+            return motivoRechazoSocio((Socio) participante);
         }
 
         if (participante instanceof Empleado) {
             Empleado empleado = (Empleado) participante;
-            boolean tipoPermitido = empleado instanceof Entrenador || empleado instanceof Fisioterapeuta;
-            return tipoPermitido && !estaDeTurno(empleado);
-        }
 
-        return participante instanceof EstudianteUniversidad || participante instanceof ParticipanteExterno;
-    }
-
-    private boolean socioHabilitado(Socio socio) {
-        for (InscripcionAcademia inscripcion : deporte.getInscripciones()) {
-            if (inscripcion.getSocio() == socio && inscripcion.estaActiva() && inscripcion.getNivel() == nivel) {
-                return true;
+            if (!(empleado instanceof Entrenador || empleado instanceof Fisioterapeuta)) {
+                return "Solo los entrenadores y fisioterapeutas pueden participar";
             }
+
+            if (estaDeTurno(empleado)) {
+                return empleado.getNombre() + " tiene turno el "
+                        + obtenerDiaTorneo() + ", día del torneo";
+            }
+
+            return null;
         }
 
-        return false;
+        if (participante instanceof EstudianteUniversidad
+                || participante instanceof ParticipanteExterno) {
+            return null;
+        }
+
+        return "Este tipo de usuario no puede participar en torneos individuales";
     }
 
+    private String motivoRechazoSocio(Socio socio) {
+        InscripcionAcademia inscripcion = deporte.buscarInscripcionActiva(socio);
+
+        if (inscripcion == null) {
+            return "El socio " + socio.getNombre()
+                    + " no tiene una inscripción activa en la academia de "
+                    + deporte.getNombre();
+        }
+
+        if (inscripcion.getNivel() != nivel) {
+            return "El socio " + socio.getNombre() + " está en el nivel "
+                    + inscripcion.getNivel() + " y el torneo es de nivel " + nivel;
+        }
+
+        return null;
+    }
+
+    // Regla del documento (HU-T07): el empleado no puede tener turno el día del torneo
     private boolean estaDeTurno(Empleado empleado) {
-        int numeroDia = getFechaInicio().getDayOfWeek().getValue();
-        DiaSemana diaTorneo = DiaSemana.values()[numeroDia - 1];
-        Turno horarioTorneo = new Turno(
-                diaTorneo,
-                getHoraInicio(),
-                getHoraFin());
+        DiaSemana diaTorneo = obtenerDiaTorneo();
 
         for (Turno turno : empleado.getTurnos()) {
-            if (turno.seCruzaCon(horarioTorneo)) {
+            if (turno.getDiaSemana() == diaTorneo) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    private DiaSemana obtenerDiaTorneo() {
+        int numeroDia = getFechaInicio().getDayOfWeek().getValue();
+        return DiaSemana.values()[numeroDia - 1];
+    }
+
+    @Override
+    protected void actualizarDesempenoParticipantes() {
+        for (PosicionTorneo posicion : getPosiciones()) {
+            if (posicion.getPuntos() <= 0) {
+                continue;
+            }
+
+            InscripcionIndividualTorneo inscripcion =
+                    (InscripcionIndividualTorneo) posicion.getInscripcion();
+
+            for (ParticipanteTorneo participante : inscripcion.getParticipantes()) {
+                if (participante instanceof Socio) {
+                    InscripcionAcademia academia = deporte.buscarInscripcionActiva(
+                            (Socio) participante);
+
+                    if (academia != null) {
+                        academia.sumarPuntaje(posicion.getPuntos());
+                    }
+                }
+            }
+        }
     }
 
     public InscripcionIndividualTorneo inscribirParticipantes(List<ParticipanteTorneo> participantes,
@@ -115,12 +172,15 @@ public class TorneoIndividual extends Torneo {
         InscripcionIndividualTorneo inscripcion = new InscripcionIndividualTorneo(this, tipoCupo, 0);
 
         for (ParticipanteTorneo participante : participantes) {
-            if (!validarParticipante(participante)) {
-                throw new IllegalArgumentException("Uno de los participantes no cumple las condiciones del torneo");
+            String motivo = motivoRechazo(participante);
+
+            if (motivo != null) {
+                throw new IllegalArgumentException(motivo);
             }
 
             if (estaInscrito(participante)) {
-                throw new IllegalArgumentException("Uno de los participantes ya está inscrito en el torneo");
+                throw new IllegalArgumentException(participante.getNombre()
+                        + " ya está inscrito en el torneo");
             }
 
             inscripcion.agregarParticipante(participante);

@@ -9,6 +9,11 @@ public class DetalleVenta {
     private final double subtotal;
 
     public DetalleVenta(Producto producto, int cantidad) {
+        this(producto, cantidad, producto == null ? 0 : producto.getPrecio());
+    }
+
+    // Ventas leídas del archivo: conservan el precio que tenía el producto ese día
+    public DetalleVenta(Producto producto, int cantidad, double precioUnitario) {
         if (producto == null) {
             throw new IllegalArgumentException("El producto es obligatorio");
         }
@@ -18,9 +23,14 @@ public class DetalleVenta {
                     "La cantidad debe ser mayor que cero");
         }
 
+        if (precioUnitario < 0) {
+            throw new IllegalArgumentException(
+                    "El precio unitario no puede ser negativo");
+        }
+
         this.producto = producto;
         this.cantidad = cantidad;
-        this.precioUnitario = producto.getPrecio();
+        this.precioUnitario = precioUnitario;
         this.subtotal = calcularSubtotal();
     }
 

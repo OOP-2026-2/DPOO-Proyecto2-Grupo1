@@ -74,4 +74,14 @@ public class PremioMonetario implements PremioTorneo {
     public boolean fueEntregado() {
         return entregado;
     }
+
+    @Override
+    public String getDescripcion() {
+        String estadoEntrega = entregado
+                ? "entregado"
+                : "no entregado (el ganador no puede recibir dinero)";
+
+        return "Premio en dinero de $" + String.format("%,.0f", valor)
+                + " para " + ganador.getDescripcion() + " - " + estadoEntrega;
+    }
 }

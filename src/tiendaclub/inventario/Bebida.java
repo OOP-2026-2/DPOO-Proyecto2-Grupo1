@@ -13,6 +13,11 @@ public class Bebida extends Producto {
     }
 
     @Override
+    public String getTipoProducto() {
+        return "Bebida";
+    }
+
+    @Override
     public String toString() {
         return super.toString()
                 + (caliente

@@ -1,0 +1,200 @@
+package clubdeportivo.partidos;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import clubdeportivo.partidos.estadisticas.EstadisticaJugador;
+import usuarios.tipos.Socio;
+
+public abstract class Partido {
+    private LocalDate fecha;
+    private EstadoPartido estado;
+    private String marcadorFinal;
+    private List<EstadisticaJugador> estadisticas;
+
+    public Partido(LocalDate fecha) {
+        if (fecha == null) {
+            throw new IllegalArgumentException(
+                    "La fecha del partido es obligatoria");
+        }
+
+        this.fecha = fecha;
+        this.estado = EstadoPartido.PROGRAMADO;
+        this.marcadorFinal = null;
+        this.estadisticas = new ArrayList<EstadisticaJugador>();
+    }
+
+    public void registrarResultado(String marcador) {
+        if (estado == EstadoPartido.CANCELADO) {
+            throw new IllegalStateException(
+                    "No se puede registrar el resultado "
+                            + "de un partido cancelado");
+        }
+
+        if (estado == EstadoPartido.FINALIZADO) {
+            throw new IllegalStateException(
+                    "El partido ya está finalizado");
+        }
+
+        if (marcador == null
+                || marcador.trim().isEmpty()) {
+
+            throw new IllegalArgumentException(
+                    "El marcador es obligatorio");
+        }
+
+        this.marcadorFinal = marcador;
+    }
+
+    public void finalizar() {
+        if (estado == EstadoPartido.CANCELADO) {
+            throw new IllegalStateException(
+                    "No se puede finalizar un partido cancelado");
+        }
+
+        if (estado == EstadoPartido.FINALIZADO) {
+            throw new IllegalStateException(
+                    "El partido ya está finalizado");
+        }
+
+        if (marcadorFinal == null) {
+            throw new IllegalStateException(
+                    "Debe registrarse el resultado "
+                            + "antes de finalizar");
+        }
+
+        estado = EstadoPartido.FINALIZADO;
+    }
+
+    public void cancelar() {
+        if (estado == EstadoPartido.FINALIZADO) {
+            throw new IllegalStateException(
+                    "No se puede cancelar un partido finalizado");
+        }
+
+        if (estado == EstadoPartido.CANCELADO) {
+            throw new IllegalStateException(
+                    "El partido ya está cancelado");
+        }
+
+        estado = EstadoPartido.CANCELADO;
+    }
+
+    public boolean estaFinalizado() {
+        return estado == EstadoPartido.FINALIZADO;
+    }
+
+    public void agregarEstadistica(
+            EstadisticaJugador estadistica) {
+
+        if (estadistica == null) {
+            throw new IllegalArgumentException(
+                    "La estadística no puede ser nula");
+        }
+
+        if (!estaFinalizado()) {
+            throw new IllegalStateException(
+                    "Las estadísticas solo pueden registrarse "
+                            + "cuando el partido esté finalizado");
+        }
+
+        validarEstadistica(estadistica);
+        estadisticas.add(estadistica);
+    }
+
+    // Estadísticas leídas del archivo: el jugador pudo retirarse o ser suspendido
+    // después del partido, por eso no se vuelve a revisar si está habilitado
+    public void cargarEstadistica(
+            EstadisticaJugador estadistica) {
+
+        if (estadistica == null
+                || estadistica.getPartido() != this) {
+
+            throw new IllegalArgumentException(
+                    "La estadística pertenece a otro partido");
+        }
+
+        if (buscarEstadistica(estadistica.getJugador()) != null) {
+            throw new IllegalArgumentException(
+                    "El jugador ya tiene estadísticas "
+                            + "registradas en este partido");
+        }
+
+        estadisticas.add(estadistica);
+    }
+
+    // Revisa que la estadística corresponda a este partido, sin agregarla
+    public void validarEstadistica(
+            EstadisticaJugador estadistica) {
+
+        if (estadistica == null) {
+            throw new IllegalArgumentException(
+                    "La estadística no puede ser nula");
+        }
+
+        if (estadistica.getPartido() != this) {
+            throw new IllegalArgumentException(
+                    "La estadística pertenece a otro partido");
+        }
+
+        Socio jugador = estadistica.getJugador();
+
+        if (!participo(jugador)) {
+            throw new IllegalArgumentException(
+                    jugador.getNombre() + " no es un jugador habilitado de este partido");
+        }
+
+        if (estadistica.esDeDeporteIndividual() != esDeporteIndividual()) {
+            throw new IllegalArgumentException(
+                    "La estadística no corresponde al deporte del partido");
+        }
+
+        if (buscarEstadistica(jugador) != null) {
+            throw new IllegalArgumentException(
+                    "El jugador ya tiene estadísticas "
+                            + "registradas en este partido");
+        }
+    }
+
+    // Cada tipo de partido indica quiénes jugaron
+    protected abstract boolean participo(Socio jugador);
+
+    // Solo los partidos de práctica son de deportes individuales
+    protected boolean esDeporteIndividual() {
+        return false;
+    }
+
+    public EstadisticaJugador buscarEstadistica(
+            Socio jugador) {
+
+        if (jugador == null) {
+            return null;
+        }
+
+        for (EstadisticaJugador estadistica : estadisticas) {
+            if (estadistica.correspondeA(jugador)) {
+                return estadistica;
+            }
+        }
+
+        return null;
+    }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public EstadoPartido getEstado() {
+        return estado;
+    }
+
+    public String getMarcadorFinal() {
+        return marcadorFinal;
+    }
+
+    public List<EstadisticaJugador> getEstadisticas() {
+        return new ArrayList<EstadisticaJugador>(
+                estadisticas);
+    }
+}

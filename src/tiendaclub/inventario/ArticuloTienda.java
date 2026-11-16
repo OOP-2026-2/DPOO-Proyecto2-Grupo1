@@ -18,6 +18,11 @@ public class ArticuloTienda extends Producto {
     }
 
     @Override
+    public String getTipoProducto() {
+        return "Artículo de tienda";
+    }
+
+    @Override
     public String toString() {
         return super.toString()
                 + " - categoría: " + categoria;

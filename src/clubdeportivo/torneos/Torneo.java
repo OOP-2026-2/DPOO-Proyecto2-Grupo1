@@ -1,14 +1,19 @@
 package clubdeportivo.torneos;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import usuarios.tipos.Empleado;
 
 public abstract class Torneo {
+    public static final int PUNTOS_VICTORIA_POR_DEFECTO = 3;
+    public static final int PUNTOS_EMPATE_POR_DEFECTO = 1;
+
     private final String id;
     private final String nombre;
     private final LocalDate fechaInicio;
@@ -277,13 +282,15 @@ public abstract class Torneo {
         return cantidadInscripcionesActivas() >= 2;
     }
 
+    // Un torneo se inicia desde el día de su fecha de inicio, no antes
     public boolean puedeIniciar() {
         return estado == EstadoTorneo.ABIERTO
                 && tieneParticipantesSuficientes()
-                && horarioValido();
+                && horarioValido()
+                && !LocalDate.now().isBefore(fechaInicio);
     }
 
-    public void generarEncuentros() {
+    private void generarEncuentros() {
         if (!encuentros.isEmpty()) {
             throw new IllegalStateException(
                     "Los encuentros ya fueron generados");
@@ -302,26 +309,89 @@ public abstract class Torneo {
                     new PosicionTorneo(inscripcion));
         }
 
-        int numeroEncuentro = 1;
-
         if (formato == FormatoTorneo.TODOS_CONTRA_TODOS) {
-            for (int i = 0; i < activas.size(); i++) {
-                for (int j = i + 1; j < activas.size(); j++) {
-
-                    EncuentroTorneo encuentro = new EncuentroTorneo(
-                            id + "-E" + numeroEncuentro,
-                            fechaInicio,
-                            horaInicio,
-                            activas.get(i),
-                            activas.get(j));
-
-                    agregarEncuentro(encuentro);
-                    numeroEncuentro++;
-                }
-            }
+            generarTodosContraTodos(activas);
         } else {
             generarRondaEliminacion(activas, 1);
         }
+    }
+
+    /*
+     * Todos contra todos por rondas (método del círculo): en cada ronda
+     * cada participante juega a lo sumo un encuentro y, si son impares,
+     * uno descansa. Al final cada pareja se enfrentó una sola vez.
+     */
+    private void generarTodosContraTodos(List<InscripcionTorneo> activas) {
+        List<InscripcionTorneo> orden = new ArrayList<InscripcionTorneo>(activas);
+
+        if (orden.size() % 2 != 0) {
+            orden.add(null);
+        }
+
+        int cantidad = orden.size();
+        int numeroEncuentro = 1;
+
+        for (int ronda = 1; ronda < cantidad; ronda++) {
+            for (int i = 0; i < cantidad / 2; i++) {
+                InscripcionTorneo local = orden.get(i);
+                InscripcionTorneo visitante = orden.get(cantidad - 1 - i);
+
+                // null representa el descanso de la ronda
+                if (local != null && visitante != null) {
+                    agregarEncuentro(new EncuentroTorneo(
+                            id + "-E" + numeroEncuentro,
+                            fechaInicio,
+                            calcularHoraRonda(ronda),
+                            local,
+                            visitante,
+                            ronda));
+                    numeroEncuentro++;
+                }
+            }
+
+            // El primero queda fijo y los demás giran una posición
+            orden.add(1, orden.remove(cantidad - 1));
+        }
+    }
+
+    // Rondas que tendrá el torneo según su formato y sus inscripciones activas
+    public int calcularTotalRondas() {
+        int participantes = cantidadInscripcionesActivas();
+
+        if (participantes < 2) {
+            return 0;
+        }
+
+        if (formato == FormatoTorneo.TODOS_CONTRA_TODOS) {
+            return participantes % 2 == 0 ? participantes - 1 : participantes;
+        }
+
+        int rondas = 0;
+
+        // En eliminación cada ronda deja la mitad (redondeada hacia arriba)
+        for (int restantes = participantes; restantes > 1; restantes = (restantes + 1) / 2) {
+            rondas++;
+        }
+
+        return rondas;
+    }
+
+    /*
+     * Todo el torneo se juega el día de inicio: el horario del torneo
+     * se reparte en franjas iguales, una por ronda. Así nadie tiene dos
+     * encuentros a la misma hora.
+     */
+    public LocalTime calcularHoraRonda(int ronda) {
+        int rondas = calcularTotalRondas();
+
+        if (ronda < 1 || ronda > rondas) {
+            throw new IllegalArgumentException(
+                    "El torneo tiene " + rondas + " rondas");
+        }
+
+        long minutosPorRonda = Duration.between(horaInicio, horaFin).toMinutes() / rondas;
+
+        return horaInicio.plusMinutes(minutosPorRonda * (ronda - 1));
     }
 
     private void generarRondaEliminacion(
@@ -344,8 +414,8 @@ public abstract class Torneo {
         for (int i = 0; i < cantidadEncuentros * 2; i += 2) {
             EncuentroTorneo encuentro = new EncuentroTorneo(
                     id + "-R" + ronda + "-E" + numeroEncuentro,
-                    fechaInicio.plusDays(ronda - 1),
-                    horaInicio,
+                    fechaInicio,
+                    calcularHoraRonda(ronda),
                     participantes.get(i),
                     participantes.get(i + 1),
                     ronda);
@@ -356,6 +426,22 @@ public abstract class Torneo {
     }
 
     public void iniciar() {
+        if (estado != EstadoTorneo.ABIERTO) {
+            throw new IllegalStateException(
+                    "Solo se puede iniciar un torneo ABIERTO; este está " + estado);
+        }
+
+        if (LocalDate.now().isBefore(fechaInicio)) {
+            throw new IllegalStateException(
+                    "El torneo se puede iniciar a partir del " + fechaInicio);
+        }
+
+        if (!tieneParticipantesSuficientes()) {
+            throw new IllegalStateException(
+                    "Se necesitan al menos 2 inscripciones activas para iniciar (hay "
+                            + cantidadInscripcionesActivas() + ")");
+        }
+
         if (!puedeIniciar()) {
             throw new IllegalStateException(
                     "El torneo no cumple las condiciones para iniciar");
@@ -368,7 +454,7 @@ public abstract class Torneo {
         estado = EstadoTorneo.EN_CURSO;
     }
 
-    public void agregarEncuentro(
+    private void agregarEncuentro(
             EncuentroTorneo encuentro) {
 
         if (encuentro == null) {
@@ -397,7 +483,7 @@ public abstract class Torneo {
         encuentros.add(encuentro);
     }
 
-    public void agregarPosicion(
+    private void agregarPosicion(
             PosicionTorneo posicion) {
 
         if (posicion == null
@@ -419,7 +505,8 @@ public abstract class Torneo {
         posiciones.add(posicion);
     }
 
-    public void actualizarPosiciones(
+    // Solo la llama registrarResultadoEncuentro: así un resultado se cuenta una sola vez
+    private void actualizarPosiciones(
             EncuentroTorneo encuentro) {
 
         if (encuentro == null
@@ -439,12 +526,7 @@ public abstract class Torneo {
         int puntosLocal = resultado[0];
         int puntosVisitante = resultado[1];
 
-        if (formato == FormatoTorneo.ELIMINACION_DIRECTA
-                && puntosLocal == puntosVisitante) {
-
-            throw new IllegalArgumentException(
-                    "Un encuentro de eliminación directa no puede terminar empatado");
-        }
+        validarResultadoPermitido(puntosLocal, puntosVisitante);
 
         PosicionTorneo posicionLocal = buscarPosicion(
                 encuentro.getInscripcionLocal());
@@ -453,24 +535,20 @@ public abstract class Torneo {
                 encuentro.getInscripcionVisitante());
 
         if (puntosLocal > puntosVisitante) {
-            posicionLocal.registrarVictoria(3);
+            posicionLocal.registrarVictoria(puntosPorVictoria());
             posicionVisitante.registrarDerrota();
         } else if (puntosVisitante > puntosLocal) {
-            posicionVisitante.registrarVictoria(3);
+            posicionVisitante.registrarVictoria(puntosPorVictoria());
             posicionLocal.registrarDerrota();
         } else {
-            posicionLocal.registrarEmpate(1);
-            posicionVisitante.registrarEmpate(1);
+            posicionLocal.registrarEmpate(puntosPorEmpate());
+            posicionVisitante.registrarEmpate(puntosPorEmpate());
         }
 
-        posiciones.sort(
-                Comparator.comparingInt(
-                        PosicionTorneo::getPuntos)
-                        .reversed());
+        posicionLocal.acumularMarcador(puntosLocal, puntosVisitante);
+        posicionVisitante.acumularMarcador(puntosVisitante, puntosLocal);
 
-        for (int i = 0; i < posiciones.size(); i++) {
-            posiciones.get(i).cambiarPosicion(i + 1);
-        }
+        ordenarPosiciones();
 
         if (formato == FormatoTorneo.ELIMINACION_DIRECTA) {
             generarSiguienteRondaSiCorresponde(
@@ -489,18 +567,95 @@ public abstract class Torneo {
                     "El encuentro no pertenece al torneo");
         }
 
-        int[] resultado = interpretarMarcador(marcador);
-
-        if (formato == FormatoTorneo.ELIMINACION_DIRECTA
-                && resultado[0] == resultado[1]) {
-
-            throw new IllegalArgumentException(
-                    "Un encuentro de eliminación directa no puede terminar empatado");
+        if (estado != EstadoTorneo.EN_CURSO) {
+            throw new IllegalStateException(
+                    "El torneo no se encuentra en curso");
         }
+
+        int[] resultado = interpretarMarcador(marcador);
+        validarResultadoPermitido(resultado[0], resultado[1]);
 
         encuentro.registrarResultado(marcador);
         encuentro.finalizar();
         actualizarPosiciones(encuentro);
+    }
+
+    private void validarResultadoPermitido(int puntosLocal, int puntosVisitante) {
+        if (puntosLocal != puntosVisitante) {
+            return;
+        }
+
+        if (formato == FormatoTorneo.ELIMINACION_DIRECTA) {
+            throw new IllegalArgumentException(
+                    "Un encuentro de eliminación directa no puede terminar empatado");
+        }
+
+        if (!admiteEmpate()) {
+            throw new IllegalArgumentException(
+                    "El deporte de este torneo no admite empates");
+        }
+    }
+
+    /*
+     * Criterios de orden de la tabla: más puntos, mejor diferencia
+     * (a favor menos en contra), más puntos a favor y, si todo es igual,
+     * la inscripción más antigua. El orden es estable, así que el último
+     * criterio se cumple con el orden en que se agregaron las posiciones.
+     */
+    private void ordenarPosiciones() {
+        // Clase interna anónima de uso único (guía 4.3)
+        Collections.sort(posiciones, new Comparator<PosicionTorneo>() {
+            @Override
+            public int compare(PosicionTorneo una, PosicionTorneo otra) {
+                if (una.getPuntos() != otra.getPuntos()) {
+                    return Integer.compare(otra.getPuntos(), una.getPuntos());
+                }
+
+                if (una.getDiferencia() != otra.getDiferencia()) {
+                    return Integer.compare(otra.getDiferencia(), una.getDiferencia());
+                }
+
+                return Integer.compare(otra.getPuntosAFavor(), una.getPuntosAFavor());
+            }
+        });
+
+        for (int i = 0; i < posiciones.size(); i++) {
+            posiciones.get(i).cambiarPosicion(i + 1);
+        }
+    }
+
+    // Cada tipo de torneo puede usar las reglas de puntos de su deporte
+    protected int puntosPorVictoria() {
+        return PUNTOS_VICTORIA_POR_DEFECTO;
+    }
+
+    protected int puntosPorEmpate() {
+        return PUNTOS_EMPATE_POR_DEFECTO;
+    }
+
+    protected boolean admiteEmpate() {
+        return true;
+    }
+
+    // Al finalizar, los puntos obtenidos se suman al ranking o puntaje histórico
+    protected abstract void actualizarDesempenoParticipantes();
+
+    public PosicionTorneo buscarPosicionDe(InscripcionTorneo inscripcion) {
+        for (PosicionTorneo posicion : posiciones) {
+            if (posicion.getInscripcion() == inscripcion) {
+                return posicion;
+            }
+        }
+
+        return null;
+    }
+
+    public int cantidadInscripcionesRetiradas() {
+        return inscripciones.size() - cantidadInscripcionesActivas();
+    }
+
+    public double calcularPorcentajeOcupacion() {
+        return cantidadInscripcionesActivas() * 100.0 / capacidad;
     }
 
     private int[] interpretarMarcador(String marcador) {
@@ -724,10 +879,7 @@ public abstract class Torneo {
                     "El torneo no tiene posiciones");
         }
 
-        posiciones.sort(
-                Comparator.comparingInt(
-                        PosicionTorneo::getPuntos)
-                        .reversed());
+        ordenarPosiciones();
 
         return posiciones.get(0).getInscripcion();
     }
@@ -744,11 +896,29 @@ public abstract class Torneo {
         }
 
         otorgarPremios(determinarGanador());
+        actualizarDesempenoParticipantes();
         estado = EstadoTorneo.FINALIZADO;
     }
 
-    public List<PremioTorneo> otorgarPremios(
+    // Solo la llama finalizar(), una vez y con el ganador que determina el propio torneo
+    private List<PremioTorneo> otorgarPremios(
             InscripcionTorneo ganador) {
+
+        if (estado != EstadoTorneo.EN_CURSO || !todosLosEncuentrosFinalizados()) {
+            throw new IllegalStateException(
+                    "Los premios se otorgan al finalizar el torneo, con todos sus encuentros terminados");
+        }
+
+        if (!premiosOtorgados.isEmpty()) {
+            throw new IllegalStateException(
+                    "Los premios de este torneo ya fueron otorgados");
+        }
+
+        if (ganador == null || ganador.getTorneo() != this
+                || !inscripciones.contains(ganador) || !ganador.estaActiva()) {
+            throw new IllegalArgumentException(
+                    "El ganador debe ser una inscripción activa de este torneo");
+        }
 
         List<PremioTorneo> premios = politicaPremio.generarPremios(
                 ganador,

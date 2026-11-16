@@ -68,4 +68,10 @@ public abstract class InscripcionTorneo {
     public double getValorPagado() {
         return valorPagado;
     }
+
+    // Nombre de quien juega: el equipo o los participantes
+    public abstract String getDescripcion();
+
+    // Indica si el participante puede consultar o retirar esta inscripción
+    public abstract boolean perteneceA(ParticipanteTorneo participante);
 }

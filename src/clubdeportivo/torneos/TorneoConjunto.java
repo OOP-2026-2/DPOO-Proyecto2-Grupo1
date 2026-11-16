@@ -30,20 +30,49 @@ public class TorneoConjunto extends Torneo {
     }
 
     public boolean validarEquipo(Equipo equipo) {
-        if (equipo == null || !equipo.isActivo()) {
-            return false;
+        return motivoRechazo(equipo) == null;
+    }
+
+    /*
+     * Devuelve por qué el equipo no puede inscribirse
+     * o null si cumple las condiciones del torneo.
+     */
+    public String motivoRechazo(Equipo equipo) {
+        if (equipo == null) {
+            return "El equipo es obligatorio";
         }
 
-        if (equipo.getDeporte() != deporte || equipo.getCategoria() != categoria) {
-            return false;
+        if (!equipo.isActivo()) {
+            return "El equipo " + equipo.getNombre() + " está dado de baja";
         }
 
-        return deporte.cumpleMinimoJugadores(equipo.getJugadoresHabilitados().size());
+        if (equipo.getDeporte() != deporte) {
+            return "El equipo " + equipo.getNombre() + " es de "
+                    + equipo.getDeporte().getNombre() + " y el torneo es de "
+                    + deporte.getNombre();
+        }
+
+        if (equipo.getCategoria() != categoria) {
+            return "El equipo " + equipo.getNombre() + " es de la categoría "
+                    + equipo.getCategoria() + " y el torneo es de la categoría "
+                    + categoria;
+        }
+
+        if (!equipo.cumpleMinimoJugadores()) {
+            return "El equipo " + equipo.getNombre() + " tiene "
+                    + equipo.getJugadoresHabilitados().size()
+                    + " jugadores habilitados y el deporte exige "
+                    + deporte.getMinimoJugadores();
+        }
+
+        return null;
     }
 
     public InscripcionEquipoTorneo inscribirEquipo(Equipo equipo, TipoCupo tipoCupo) {
-        if (!validarEquipo(equipo)) {
-            throw new IllegalArgumentException("El equipo no cumple las condiciones del torneo");
+        String motivo = motivoRechazo(equipo);
+
+        if (motivo != null) {
+            throw new IllegalArgumentException(motivo);
         }
 
         if (tipoCupo == null) {
@@ -78,6 +107,33 @@ public class TorneoConjunto extends Torneo {
 
         return validarEquipo(equipo)
                 && equipo.getPuntajeHistorico() > 0;
+    }
+
+    @Override
+    protected int puntosPorVictoria() {
+        return deporte.getPuntosVictoria();
+    }
+
+    @Override
+    protected int puntosPorEmpate() {
+        return deporte.getPuntosEmpate();
+    }
+
+    @Override
+    protected boolean admiteEmpate() {
+        return deporte.isPermiteEmpate();
+    }
+
+    @Override
+    protected void actualizarDesempenoParticipantes() {
+        for (PosicionTorneo posicion : getPosiciones()) {
+            if (posicion.getPuntos() > 0) {
+                InscripcionEquipoTorneo inscripcion =
+                        (InscripcionEquipoTorneo) posicion.getInscripcion();
+
+                inscripcion.getEquipo().sumarPuntajeHistorico(posicion.getPuntos());
+            }
+        }
     }
 
     public DeporteConjunto getDeporte() {

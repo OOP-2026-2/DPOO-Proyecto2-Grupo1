@@ -42,6 +42,14 @@ public class RegistroAsistencia {
         }
 
         this.estado = estado;
+
+        // Quien no asistió no conserva una evaluación anterior
+        if (estado == EstadoAsistencia.AUSENTE
+                || estado == EstadoAsistencia.PENDIENTE) {
+
+            this.notaDesempeno = null;
+            this.comentario = null;
+        }
     }
 
     public void registrarEvaluacion(Double notaDesempeno, String comentario) {

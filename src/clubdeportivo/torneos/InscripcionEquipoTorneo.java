@@ -3,6 +3,7 @@ package clubdeportivo.torneos;
 import java.time.LocalDate;
 
 import clubdeportivo.deportes.Equipo;
+import usuarios.tipos.Socio;
 
 public class InscripcionEquipoTorneo
         extends InscripcionTorneo {
@@ -46,5 +47,17 @@ public class InscripcionEquipoTorneo
 
     public Equipo getEquipo() {
         return equipo;
+    }
+
+    @Override
+    public String getDescripcion() {
+        return equipo.getNombre();
+    }
+
+    // Solo un integrante activo del equipo puede gestionar la inscripción
+    @Override
+    public boolean perteneceA(ParticipanteTorneo participante) {
+        return participante instanceof Socio
+                && equipo.getJugadoresHabilitados().contains(participante);
     }
 }

@@ -2,14 +2,15 @@ package tiendaclub.ventas.tipos;
 
 import java.time.LocalDate;
 
+import tiendaclub.inventario.Bebida;
+import tiendaclub.inventario.Producto;
+import tiendaclub.inventario.Snack;
 import tiendaclub.ventas.Venta;
-import tiendaclub.ventas.descuentos.DescuentoCodigoCompartido;
-import tiendaclub.ventas.descuentos.DescuentoEmpleado;
 import tiendaclub.ventas.descuentos.PoliticaDescuento;
-import tiendaclub.ventas.descuentos.SinDescuento;
 import usuarios.Comprador;
 
 public class VentaCafeteria extends Venta {
+    public static final String RUBRO = "Cafetería";
     private static final double IMPUESTO_CONSUMO = 0.08;
     private static final double PROPINA_SUGERIDA = 0.10;
     private boolean incluirPropina;
@@ -25,6 +26,21 @@ public class VentaCafeteria extends Venta {
         super(fecha, comprador, politicaDescuento);
         this.incluirPropina = false;
         this.propina = 0;
+    }
+
+    @Override
+    public boolean admiteProducto(Producto producto) {
+        return producto instanceof Bebida || producto instanceof Snack;
+    }
+
+    @Override
+    public String getRubro() {
+        return RUBRO;
+    }
+
+    @Override
+    public double getCargosAdicionales() {
+        return propina;
     }
 
     @Override
@@ -57,35 +73,6 @@ public class VentaCafeteria extends Venta {
 
     public void finalizarVenta(
             boolean incluirPropina) {
-
-        this.incluirPropina = incluirPropina;
-        calcularTotal();
-    }
-
-    /*
-     * Método temporal para mantener compatibilidad
-     * con la consola anterior.
-     */
-    public void finalizarVenta(
-            boolean usaCodigoCompartido,
-            boolean incluirPropina) {
-
-        if (usaCodigoCompartido) {
-
-            cambiarPoliticaDescuento(
-                    new DescuentoCodigoCompartido());
-
-        } else if (getComprador()
-                .getPorcentajeDescuento() > 0) {
-
-            cambiarPoliticaDescuento(
-                    new DescuentoEmpleado());
-
-        } else {
-
-            cambiarPoliticaDescuento(
-                    new SinDescuento());
-        }
 
         this.incluirPropina = incluirPropina;
         calcularTotal();

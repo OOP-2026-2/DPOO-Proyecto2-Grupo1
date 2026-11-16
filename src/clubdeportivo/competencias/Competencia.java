@@ -3,7 +3,8 @@ package clubdeportivo.competencias;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import clubdeportivo.competencias.Partidos.PartidoOficial;
+import clubdeportivo.partidos.EstadoPartido;
+import clubdeportivo.partidos.PartidoOficial;
 import clubdeportivo.deportes.Categoria;
 import clubdeportivo.deportes.DeporteConjunto;
 import clubdeportivo.deportes.Equipo;
@@ -126,6 +127,23 @@ public class Competencia {
         return inscripcion;
     }
 
+    // Inscripciones leídas del archivo: el mínimo de jugadores ya se revisó al inscribir
+    public InscripcionCompetencia cargarInscripcion(Equipo equipo, LocalDate fechaInscripcion) {
+        if (buscarInscripcion(equipo) != null) {
+            throw new IllegalArgumentException(
+                    "El equipo ya está inscrito "
+                            + "en la competencia");
+        }
+
+        InscripcionCompetencia inscripcion = new InscripcionCompetencia(
+                fechaInscripcion,
+                equipo,
+                this);
+
+        inscripciones.add(inscripcion);
+        return inscripcion;
+    }
+
     public InscripcionCompetencia buscarInscripcion(
             Equipo equipo) {
 
@@ -208,6 +226,28 @@ public class Competencia {
     // Lo usa PartidoOficial antes de guardar el marcador
     public void validarMarcador(String marcador) {
         leerMarcador(marcador);
+    }
+
+    // Puntos que el equipo del club obtuvo en el partido según las reglas del deporte
+    public int calcularPuntosObtenidos(PartidoOficial partido) {
+        if (partido == null || partido.getCompetencia() != this) {
+            throw new IllegalArgumentException(
+                    "El partido pertenece a otra competencia");
+        }
+
+        int[] marcador = leerMarcador(partido.getMarcadorFinal());
+        return deporte.calcularPuntos(marcador[0], marcador[1]);
+    }
+
+    public boolean tienePartidosPendientes(Equipo equipo) {
+        for (PartidoOficial partido : partidos) {
+            if (partido.getEquipo() == equipo
+                    && partido.getEstado() == EstadoPartido.PROGRAMADO) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // El marcador se guarda con el formato "favor-contra", por ejemplo "3-1"

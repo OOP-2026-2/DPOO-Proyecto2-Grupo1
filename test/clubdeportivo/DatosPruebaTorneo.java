@@ -30,9 +30,24 @@ final class DatosPruebaTorneo {
         return new DeporteIndividual("Tenis", 30);
     }
 
+    // Un torneo solo se inicia desde su fecha: los escenarios que lo inician usan hoy
+    static LocalDate fechaHoy() {
+        return LocalDate.now();
+    }
+
     static TorneoIndividual torneo(String id, TipoTorneo tipo,
             FormatoTorneo formato, Modalidad modalidad, int capacidad) {
-        LocalDate fecha = fechaTorneo();
+        return torneo(id, tipo, formato, modalidad, capacidad, fechaTorneo());
+    }
+
+    static TorneoIndividual torneoDeHoy(String id, TipoTorneo tipo,
+            FormatoTorneo formato, Modalidad modalidad, int capacidad) {
+        return torneo(id, tipo, formato, modalidad, capacidad, fechaHoy());
+    }
+
+    private static TorneoIndividual torneo(String id, TipoTorneo tipo,
+            FormatoTorneo formato, Modalidad modalidad, int capacidad,
+            LocalDate fecha) {
         return new TorneoIndividual(id, "Torneo " + id, fecha,
                 LocalTime.of(10, 0), LocalTime.of(12, 0), formato,
                 capacidad, tipo,

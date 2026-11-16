@@ -4,17 +4,23 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import clubdeportivo.competencias.Competencia;
-import clubdeportivo.competencias.Partidos.Partido;
-import clubdeportivo.competencias.Partidos.PartidoInterno;
-import clubdeportivo.competencias.Partidos.PartidoOficial;
-import clubdeportivo.competencias.Partidos.PartidoPractica;
+import clubdeportivo.competencias.InscripcionCompetencia;
+import clubdeportivo.partidos.estadisticas.EstadisticaJugador;
+import clubdeportivo.partidos.EstadoPartido;
+import clubdeportivo.partidos.Partido;
+import clubdeportivo.partidos.PartidoInterno;
+import clubdeportivo.partidos.PartidoOficial;
+import clubdeportivo.partidos.PartidoPractica;
 import clubdeportivo.deportes.DeporteConjunto;
 import clubdeportivo.deportes.DeporteIndividual;
 import clubdeportivo.deportes.Equipo;
+import clubdeportivo.deportes.EstadoInscripcion;
 import clubdeportivo.deportes.InscripcionAcademia;
 import clubdeportivo.deportes.InscripcionEquipo;
 import clubdeportivo.deportes.Nivel;
@@ -22,6 +28,7 @@ import clubdeportivo.deportes.Posicion;
 import clubdeportivo.entrenamientos.EstadoAsistencia;
 import clubdeportivo.entrenamientos.RegistroAsistencia;
 import clubdeportivo.entrenamientos.SesionEntrenamiento;
+import clubdeportivo.entrenamientos.TipoSesion;
 import clubdeportivo.instalaciones.Instalacion;
 import clubdeportivo.instalaciones.Reserva;
 import clubdeportivo.instalaciones.TipoInstalacion;
@@ -36,8 +43,11 @@ import tiendaclub.inventario.Producto;
 import tiendaclub.inventario.SugerenciaProducto;
 import tiendaclub.inventario.TipoMovimiento;
 import tiendaclub.inventario.UbicacionInventario;
+import tiendaclub.ventas.ReporteVentas;
 import tiendaclub.ventas.Venta;
 import tiendaclub.ventas.detalles.DetalleVenta;
+import tiendaclub.ventas.tipos.VentaCafeteria;
+import tiendaclub.ventas.tipos.VentaTienda;
 import usuarios.Usuario;
 import usuarios.tipos.Empleado;
 import usuarios.tipos.EstudianteUniversidad;
@@ -152,6 +162,31 @@ public class ClubDeportivo {
             throw new IllegalArgumentException("Ya existe un torneo con ese ID");
         }
 
+        if (torneo.getFechaInicio().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException(
+                    "La fecha del torneo (" + torneo.getFechaInicio() + ") ya pasó");
+        }
+
+        if (torneo.getHoraInicio().isBefore(horaApertura)
+                || torneo.getHoraFin().isAfter(horaCierre)) {
+            throw new IllegalArgumentException(
+                    "El torneo debe realizarse dentro del horario del club ("
+                            + horaApertura + " - " + horaCierre + ")");
+        }
+
+        torneos.add(torneo);
+    }
+
+    // Torneos ya guardados en el archivo: se conservan aunque el horario del club haya cambiado
+    public void cargarTorneo(Torneo torneo) {
+        if (torneo == null) {
+            throw new IllegalArgumentException("El torneo no puede ser nulo");
+        }
+
+        if (buscarTorneo(torneo.getId()) != null) {
+            throw new IllegalArgumentException("Ya existe un torneo con ese ID");
+        }
+
         torneos.add(torneo);
     }
 
@@ -194,6 +229,24 @@ public class ClubDeportivo {
         }
 
         return torneo.inscribirEquipo(equipo, tipoCupo);
+    }
+
+    // Un socio solo puede inscribir en un torneo al equipo del que es integrante activo
+    public InscripcionEquipoTorneo inscribirEquipoEnTorneo(TorneoConjunto torneo, Equipo equipo,
+            TipoCupo tipoCupo, Socio solicitante) {
+
+        if (solicitante == null || equipo == null) {
+            throw new IllegalArgumentException("El equipo y el socio que lo inscribe son obligatorios");
+        }
+
+        InscripcionEquipo integrante = equipo.buscarInscripcion(solicitante);
+
+        if (integrante == null || !integrante.estaActiva()) {
+            throw new IllegalArgumentException(
+                    solicitante.getNombre() + " no es integrante activo del equipo " + equipo.getNombre());
+        }
+
+        return inscribirEquipoEnTorneo(torneo, equipo, tipoCupo);
     }
 
     public InscripcionIndividualTorneo inscribirParticipantesEnTorneo(TorneoIndividual torneo,
@@ -254,6 +307,38 @@ public class ClubDeportivo {
         }
 
         torneo.retirarInscripcion(inscripcion);
+    }
+
+    // El participante solo puede retirar una inscripción de la que hace parte
+    public void retirarInscripcionTorneo(ParticipanteTorneo solicitante, InscripcionTorneo inscripcion) {
+        if (solicitante == null || inscripcion == null) {
+            throw new IllegalArgumentException("El participante y la inscripción son obligatorios");
+        }
+
+        if (!inscripcion.perteneceA(solicitante)) {
+            throw new IllegalArgumentException(
+                    "La inscripción no pertenece a " + solicitante.getNombre());
+        }
+
+        retirarInscripcionTorneo(inscripcion);
+    }
+
+    public List<InscripcionTorneo> consultarInscripcionesDe(ParticipanteTorneo participante) {
+        List<InscripcionTorneo> resultado = new ArrayList<InscripcionTorneo>();
+
+        if (participante == null) {
+            return resultado;
+        }
+
+        for (Torneo torneo : torneos) {
+            for (InscripcionTorneo inscripcion : torneo.getInscripciones()) {
+                if (inscripcion.perteneceA(participante)) {
+                    resultado.add(inscripcion);
+                }
+            }
+        }
+
+        return resultado;
     }
 
     public void liberarCuposPreferenciales(Torneo torneo) {
@@ -411,6 +496,12 @@ public class ClubDeportivo {
                     "Ya existe un deporte de conjunto con ese nombre");
         }
 
+        // Sin posiciones no se podría inscribir a ningún jugador en sus equipos
+        if (deporte.getPosiciones().isEmpty()) {
+            throw new IllegalArgumentException(
+                    "El deporte de conjunto debe tener al menos una posición");
+        }
+
         deportesConjunto.add(deporte);
     }
 
@@ -469,16 +560,199 @@ public class ClubDeportivo {
                     "El deporte del equipo no está registrado");
         }
 
-        for (Equipo existente : deporte.getEquipos()) {
-            if (existente.getNombre().equalsIgnoreCase(
-                    equipo.getNombre())) {
-
-                throw new IllegalArgumentException(
-                        "Ya existe un equipo con ese nombre en el deporte");
-            }
+        // El nombre identifica al equipo en todo el club (búsquedas y archivos)
+        if (buscarEquipo(equipo.getNombre()) != null) {
+            throw new IllegalArgumentException(
+                    "Ya existe un equipo con ese nombre");
         }
 
         deporte.agregarEquipo(equipo);
+    }
+
+    // Un equipo dado de baja no juega más: se liberan sus cupos y sus inscripciones
+    public void darDeBajaEquipo(Equipo equipo) {
+        validarEquipoRegistrado(equipo);
+
+        if (!equipo.isActivo()) {
+            throw new IllegalStateException(
+                    "El equipo " + equipo.getNombre() + " ya está dado de baja");
+        }
+
+        for (Torneo torneo : torneos) {
+            if (torneo.getEstado() == EstadoTorneo.EN_CURSO
+                    && buscarInscripcionActivaDeEquipo(torneo, equipo) != null) {
+
+                throw new IllegalStateException(
+                        "El equipo juega el torneo en curso " + torneo.getNombre()
+                                + "; se puede dar de baja cuando el torneo finalice");
+            }
+        }
+
+        for (Competencia competencia : competencias) {
+            if (competencia.tienePartidosPendientes(equipo)) {
+                throw new IllegalStateException(
+                        "El equipo tiene partidos programados en " + competencia.getNombre()
+                                + "; registre su resultado o cancélelos primero");
+            }
+        }
+
+        for (Partido partido : partidos) {
+            if (partido instanceof PartidoInterno
+                    && partido.getEstado() == EstadoPartido.PROGRAMADO
+                    && juegaPartidoInterno((PartidoInterno) partido, equipo)) {
+
+                throw new IllegalStateException(
+                        "El equipo tiene un partido interno programado el "
+                                + partido.getFecha() + "; regístrelo o cancélelo primero");
+            }
+        }
+
+        for (Torneo torneo : torneos) {
+            InscripcionTorneo inscripcion = buscarInscripcionActivaDeEquipo(torneo, equipo);
+
+            if (inscripcion != null && torneo.getEstado() == EstadoTorneo.ABIERTO) {
+                torneo.retirarInscripcion(inscripcion);
+            }
+        }
+
+        for (Competencia competencia : competencias) {
+            InscripcionCompetencia inscripcion = competencia.buscarInscripcion(equipo);
+
+            if (inscripcion != null
+                    && inscripcion.getEstado() != EstadoInscripcion.RETIRADA) {
+                inscripcion.retirar();
+            }
+        }
+
+        equipo.desactivar();
+    }
+
+    private InscripcionTorneo buscarInscripcionActivaDeEquipo(Torneo torneo, Equipo equipo) {
+        for (InscripcionTorneo inscripcion : torneo.getInscripcionesActivas()) {
+            if (inscripcion instanceof InscripcionEquipoTorneo
+                    && ((InscripcionEquipoTorneo) inscripcion).getEquipo() == equipo) {
+                return inscripcion;
+            }
+        }
+
+        return null;
+    }
+
+    private boolean juegaPartidoInterno(PartidoInterno partido, Equipo equipo) {
+        return partido.getEquipoLocal() == equipo
+                || partido.getEquipoVisitante() == equipo;
+    }
+
+    private void validarEquipoRegistrado(Equipo equipo) {
+        if (equipo == null) {
+            throw new IllegalArgumentException("El equipo es obligatorio");
+        }
+
+        if (buscarEquipo(equipo.getNombre()) != equipo) {
+            throw new IllegalArgumentException(
+                    "El equipo no está registrado en el club");
+        }
+    }
+
+    public List<Equipo> getEquipos() {
+        List<Equipo> resultado = new ArrayList<Equipo>();
+
+        for (DeporteConjunto deporte : deportesConjunto) {
+            resultado.addAll(deporte.getEquipos());
+        }
+
+        return resultado;
+    }
+
+    // Inscripciones del socio en equipos (activas o suspendidas)
+    public List<InscripcionEquipo> consultarEquiposDe(Socio socio) {
+        List<InscripcionEquipo> resultado = new ArrayList<InscripcionEquipo>();
+
+        for (Equipo equipo : getEquipos()) {
+            InscripcionEquipo inscripcion = equipo.buscarInscripcion(socio);
+
+            if (inscripcion != null
+                    && inscripcion.getEstado() != EstadoInscripcion.RETIRADA) {
+                resultado.add(inscripcion);
+            }
+        }
+
+        return resultado;
+    }
+
+    // Equipos activos ordenados por puntaje histórico, de mayor a menor (deporte nulo = todos)
+    public List<Equipo> consultarRankingEquipos(DeporteConjunto deporte) {
+        List<Equipo> ranking = new ArrayList<Equipo>();
+
+        for (Equipo equipo : getEquipos()) {
+            if (equipo.isActivo()
+                    && (deporte == null || equipo.getDeporte() == deporte)) {
+                ranking.add(equipo);
+            }
+        }
+
+        Collections.sort(ranking, new Comparator<Equipo>() {
+            @Override
+            public int compare(Equipo uno, Equipo otro) {
+                return Double.compare(otro.getPuntajeHistorico(), uno.getPuntajeHistorico());
+            }
+        });
+
+        return ranking;
+    }
+
+    // Integrantes de la academia ordenados por su puntaje de ranking, de mayor a menor
+    public List<InscripcionAcademia> consultarRankingAcademia(DeporteIndividual deporte) {
+        if (deporte == null || !deportesIndividuales.contains(deporte)) {
+            throw new IllegalArgumentException(
+                    "El deporte individual no está registrado");
+        }
+
+        List<InscripcionAcademia> ranking = new ArrayList<InscripcionAcademia>();
+
+        for (InscripcionAcademia inscripcion : deporte.getInscripciones()) {
+            if (inscripcion.getEstado() != EstadoInscripcion.RETIRADA) {
+                ranking.add(inscripcion);
+            }
+        }
+
+        Collections.sort(ranking, new Comparator<InscripcionAcademia>() {
+            @Override
+            public int compare(InscripcionAcademia una, InscripcionAcademia otra) {
+                return Double.compare(otra.getPuntajeRanking(), una.getPuntajeRanking());
+            }
+        });
+
+        return ranking;
+    }
+
+    public List<InscripcionEquipo> consultarJugadoresSuspendidos() {
+        List<InscripcionEquipo> suspendidos = new ArrayList<InscripcionEquipo>();
+
+        for (Equipo equipo : getEquipos()) {
+            for (InscripcionEquipo inscripcion : equipo.getInscripciones()) {
+                if (inscripcion.estaSuspendida()) {
+                    suspendidos.add(inscripcion);
+                }
+            }
+        }
+
+        return suspendidos;
+    }
+
+    public List<InscripcionAcademia> consultarAcademiasDe(Socio socio) {
+        List<InscripcionAcademia> resultado = new ArrayList<InscripcionAcademia>();
+
+        for (DeporteIndividual deporte : deportesIndividuales) {
+            for (InscripcionAcademia inscripcion : deporte.getInscripciones()) {
+                if (inscripcion.getSocio() == socio
+                        && inscripcion.getEstado() != EstadoInscripcion.RETIRADA) {
+                    resultado.add(inscripcion);
+                }
+            }
+        }
+
+        return resultado;
     }
 
     public Equipo buscarEquipo(String nombre) {
@@ -543,13 +817,15 @@ public class ClubDeportivo {
 
             InscripcionEquipo existente = otroEquipo.buscarInscripcion(socio);
 
+            // Un suspendido sigue siendo integrante; un equipo dado de baja ya no cuenta
             if (mismaCategoria
+                    && otroEquipo.isActivo()
                     && existente != null
-                    && existente.estaActiva()) {
+                    && existente.getEstado() != EstadoInscripcion.RETIRADA) {
 
                 throw new IllegalArgumentException(
-                        "El socio ya pertenece a un equipo "
-                                + "activo de esta disciplina y categoría");
+                        "El socio ya pertenece al equipo " + otroEquipo.getNombre()
+                                + " de esta disciplina y categoría");
             }
         }
 
@@ -561,6 +837,41 @@ public class ClubDeportivo {
 
         equipo.agregarInscripcion(inscripcion);
         return inscripcion;
+    }
+
+    // Inscripciones guardadas en el archivo: no se vuelve a revisar la edad,
+    // porque el socio pudo cumplir años después de entrar a su categoría
+    public InscripcionEquipo cargarInscripcionEquipo(
+            Socio socio, Equipo equipo,
+            Posicion posicion, int numeroCamiseta) {
+
+        if (socio == null || buscarUsuario(socio.getId()) != socio) {
+            throw new IllegalArgumentException(
+                    "El socio no está registrado en el club");
+        }
+
+        validarEquipoRegistrado(equipo);
+
+        InscripcionEquipo inscripcion = new InscripcionEquipo(
+                socio, equipo, posicion, numeroCamiseta);
+
+        equipo.cargarInscripcion(inscripcion);
+        return inscripcion;
+    }
+
+    public void retirarSocioDeEquipo(Socio socio, Equipo equipo) {
+        validarEquipoRegistrado(equipo);
+
+        InscripcionEquipo inscripcion = equipo.buscarInscripcion(socio);
+
+        if (inscripcion == null
+                || inscripcion.getEstado() == EstadoInscripcion.RETIRADA) {
+
+            throw new IllegalArgumentException(
+                    "El socio no es integrante del equipo " + equipo.getNombre());
+        }
+
+        inscripcion.retirar();
     }
 
     private int calcularEdad(LocalDate fechaNacimiento) {
@@ -685,6 +996,9 @@ public class ClubDeportivo {
                 throw new IllegalArgumentException(
                         "Los equipos del partido no están registrados");
             }
+
+            validarMinimoJugadores(interno.getEquipoLocal());
+            validarMinimoJugadores(interno.getEquipoVisitante());
         } else if (partido instanceof PartidoPractica) {
             PartidoPractica practica = (PartidoPractica) partido;
 
@@ -697,6 +1011,206 @@ public class ClubDeportivo {
         }
 
         partidos.add(partido);
+    }
+
+    // Partidos leídos del archivo: los equipos ya cumplían el mínimo cuando se programaron
+    public void cargarPartido(Partido partido) {
+        if (partido == null) {
+            throw new IllegalArgumentException(
+                    "El partido no puede ser nulo");
+        }
+
+        if (partido instanceof PartidoOficial) {
+            PartidoOficial oficial = (PartidoOficial) partido;
+
+            if (!competencias.contains(oficial.getCompetencia())) {
+                throw new IllegalArgumentException(
+                        "La competencia no está registrada en el club");
+            }
+
+            oficial.getCompetencia().programarPartido(oficial);
+        }
+
+        if (!partidos.contains(partido)) {
+            partidos.add(partido);
+        }
+    }
+
+    private void validarMinimoJugadores(Equipo equipo) {
+        if (!equipo.cumpleMinimoJugadores()) {
+            throw new IllegalArgumentException(
+                    "El equipo " + equipo.getNombre() + " tiene "
+                            + equipo.getJugadoresHabilitados().size()
+                            + " jugadores habilitados y el deporte exige "
+                            + equipo.getDeporte().getMinimoJugadores());
+        }
+    }
+
+    public InscripcionCompetencia inscribirEquipoEnCompetencia(
+            Competencia competencia, Equipo equipo) {
+
+        validarCompetenciaRegistrada(competencia);
+        validarEquipoRegistrado(equipo);
+
+        if (equipo.isActivo()
+                && equipo.getDeporte() == competencia.getDeporte()
+                && equipo.getCategoria() == competencia.getCategoria()) {
+
+            validarMinimoJugadores(equipo);
+        }
+
+        return competencia.inscribirEquipo(equipo);
+    }
+
+    public void agregarJugadorANomina(
+            Competencia competencia, Equipo equipo, Socio socio) {
+
+        validarCompetenciaRegistrada(competencia);
+
+        InscripcionCompetencia inscripcion = competencia.buscarInscripcion(equipo);
+
+        if (inscripcion == null || !inscripcion.estaActiva()) {
+            throw new IllegalArgumentException(
+                    "El equipo no tiene una inscripción activa en la competencia");
+        }
+
+        InscripcionEquipo integrante = equipo.buscarInscripcion(socio);
+
+        if (integrante != null && integrante.estaSuspendida()) {
+            throw new IllegalArgumentException(
+                    socio.getNombre() + " está suspendido y no puede entrar a la nómina");
+        }
+
+        inscripcion.agregarJugadorNomina(socio);
+    }
+
+    private void validarCompetenciaRegistrada(Competencia competencia) {
+        if (competencia == null) {
+            throw new IllegalArgumentException("La competencia es obligatoria");
+        }
+
+        if (!competencias.contains(competencia)) {
+            throw new IllegalArgumentException(
+                    "La competencia no está registrada en el club");
+        }
+    }
+
+    // Con estado nulo se devuelven todos los partidos
+    public List<Partido> consultarPartidos(EstadoPartido estado) {
+        List<Partido> resultado = new ArrayList<Partido>();
+
+        for (Partido partido : partidos) {
+            if (estado == null || partido.getEstado() == estado) {
+                resultado.add(partido);
+            }
+        }
+
+        return resultado;
+    }
+
+    public void cancelarPartido(Partido partido) {
+        validarPartidoRegistrado(partido);
+        partido.cancelar();
+    }
+
+    /*
+     * Registra el marcador, finaliza el partido y guarda las estadísticas.
+     * En un partido oficial además:
+     * 1. los jugadores que ya estaban suspendidos cumplen esta fecha,
+     * 2. se suspende a quien acumuló tarjetas en este partido y
+     * 3. el puntaje histórico del equipo sube con los puntos obtenidos.
+     * Devuelve los socios que quedaron suspendidos.
+     */
+    public List<Socio> registrarResultadoPartido(Partido partido, String marcador,
+            List<EstadisticaJugador> estadisticas) {
+
+        validarPartidoRegistrado(partido);
+
+        if (partido.getEstado() != EstadoPartido.PROGRAMADO) {
+            throw new IllegalStateException(
+                    "El partido ya fue finalizado o cancelado");
+        }
+
+        List<EstadisticaJugador> lista = estadisticas == null
+                ? new ArrayList<EstadisticaJugador>()
+                : new ArrayList<EstadisticaJugador>(estadisticas);
+
+        // Todo se valida antes de cambiar el partido, para no dejarlo a medias
+        List<Socio> conEstadistica = new ArrayList<Socio>();
+
+        for (EstadisticaJugador estadistica : lista) {
+            if (estadistica == null) {
+                throw new IllegalArgumentException("La estadística no puede ser nula");
+            }
+
+            Socio jugador = estadistica.getJugador();
+
+            if (partido instanceof PartidoOficial) {
+                InscripcionEquipo integrante = ((PartidoOficial) partido)
+                        .getEquipo().buscarInscripcion(jugador);
+
+                if (integrante != null && integrante.estaSuspendida()) {
+                    throw new IllegalArgumentException(
+                            jugador.getNombre() + " está suspendido y no pudo jugar este partido");
+                }
+            }
+
+            partido.validarEstadistica(estadistica);
+
+            if (conEstadistica.contains(jugador)) {
+                throw new IllegalArgumentException(
+                        jugador.getNombre() + " tiene más de una estadística en el partido");
+            }
+
+            conEstadistica.add(jugador);
+        }
+
+        partido.registrarResultado(marcador);
+        partido.finalizar();
+
+        for (EstadisticaJugador estadistica : lista) {
+            partido.agregarEstadistica(estadistica);
+        }
+
+        List<Socio> suspendidos = new ArrayList<Socio>();
+
+        if (partido instanceof PartidoOficial) {
+            PartidoOficial oficial = (PartidoOficial) partido;
+            Equipo equipo = oficial.getEquipo();
+
+            for (InscripcionEquipo inscripcion : equipo.getInscripciones()) {
+                inscripcion.cumplirPartidoSuspension();
+            }
+
+            for (EstadisticaJugador estadistica : lista) {
+                InscripcionEquipo integrante = equipo.buscarInscripcion(
+                        estadistica.getJugador());
+
+                if (estadistica.ameritaSuspension()
+                        && integrante != null
+                        && integrante.getEstado() != EstadoInscripcion.RETIRADA) {
+
+                    integrante.suspender();
+                    suspendidos.add(estadistica.getJugador());
+                }
+            }
+
+            equipo.sumarPuntajeHistorico(
+                    oficial.getCompetencia().calcularPuntosObtenidos(oficial));
+        }
+
+        return suspendidos;
+    }
+
+    private void validarPartidoRegistrado(Partido partido) {
+        if (partido == null) {
+            throw new IllegalArgumentException("El partido es obligatorio");
+        }
+
+        if (!partidos.contains(partido)) {
+            throw new IllegalArgumentException(
+                    "El partido no está registrado en el club");
+        }
     }
 
     // Entrenamientos y asistencias
@@ -892,6 +1406,14 @@ public class ClubDeportivo {
                     "El socio no está registrado en el club");
         }
 
+        if (sesion.getTipo() == TipoSesion.INDIVIDUAL
+                && !sesion.getRegistros().isEmpty()
+                && sesion.buscarRegistro(socio) == null) {
+
+            throw new IllegalStateException(
+                    "La sesión individual ya tiene asignado un socio");
+        }
+
         RegistroAsistencia registro = new RegistroAsistencia(
                 sesion,
                 socio,
@@ -899,6 +1421,91 @@ public class ClubDeportivo {
 
         sesion.agregarRegistro(registro);
         return registro;
+    }
+
+    // Solo el entrenador a cargo de la sesión registra la asistencia y la evaluación (nota de 1 a 5)
+    public RegistroAsistencia registrarAsistenciaSesion(
+            Entrenador entrenador,
+            SesionEntrenamiento sesion,
+            Socio socio,
+            EstadoAsistencia estado,
+            Double nota,
+            String comentario) {
+
+        if (entrenador == null || sesion == null
+                || socio == null || estado == null) {
+
+            throw new IllegalArgumentException(
+                    "El entrenador, la sesión, el socio y el estado son obligatorios");
+        }
+
+        if (!sesionesEntrenamiento.contains(sesion)) {
+            throw new IllegalArgumentException(
+                    "La sesión no está registrada en el club");
+        }
+
+        if (sesion.getEntrenador() != entrenador) {
+            throw new IllegalArgumentException(
+                    "Solo el entrenador de la sesión puede registrar su asistencia");
+        }
+
+        if (estado == EstadoAsistencia.PENDIENTE) {
+            throw new IllegalArgumentException(
+                    "Debe indicar si el socio asistió, llegó tarde o faltó");
+        }
+
+        boolean asistio = estado == EstadoAsistencia.ASISTIO
+                || estado == EstadoAsistencia.TARDE;
+
+        if (nota != null && !asistio) {
+            throw new IllegalArgumentException(
+                    "Solo se evalúa a un socio que asistió o llegó tarde");
+        }
+
+        if (nota != null && (nota < 1 || nota > 5)) {
+            throw new IllegalArgumentException(
+                    "La nota debe estar entre 1 y 5");
+        }
+
+        RegistroAsistencia registro = sesion.buscarRegistro(socio);
+
+        if (registro == null) {
+            registro = registrarAsistencia(sesion, socio);
+        }
+
+        registro.registrarAsistencia(estado);
+
+        if (nota != null) {
+            registro.registrarEvaluacion(nota, comentario);
+        }
+
+        return registro;
+    }
+
+    public List<SesionEntrenamiento> consultarSesionesDe(Entrenador entrenador) {
+        List<SesionEntrenamiento> resultado = new ArrayList<SesionEntrenamiento>();
+
+        for (SesionEntrenamiento sesion : sesionesEntrenamiento) {
+            if (sesion.getEntrenador() == entrenador) {
+                resultado.add(sesion);
+            }
+        }
+
+        return resultado;
+    }
+
+    // Sesiones a las que el socio puede asistir o en las que ya tiene registro
+    public List<SesionEntrenamiento> consultarSesionesDe(Socio socio) {
+        List<SesionEntrenamiento> resultado = new ArrayList<SesionEntrenamiento>();
+
+        for (SesionEntrenamiento sesion : sesionesEntrenamiento) {
+            if (sesion.estaHabilitado(socio)
+                    || sesion.buscarRegistro(socio) != null) {
+                resultado.add(sesion);
+            }
+        }
+
+        return resultado;
     }
 
     // Instalaciones y reservas
@@ -986,7 +1593,7 @@ public class ClubDeportivo {
         return true;
     }
 
-    public void registrarReserva(Reserva reserva) {
+    public void registrarReserva(Reserva reserva) throws ReservaNoDisponibleException {
         if (reserva == null) {
             throw new IllegalArgumentException(
                     "La reserva no puede ser nula");
@@ -1000,14 +1607,44 @@ public class ClubDeportivo {
                     "La instalación no está registrada");
         }
 
+        if (buscarUsuario(reserva.getSocio().getId()) != reserva.getSocio()) {
+            throw new IllegalArgumentException(
+                    "El socio no está registrado en el club");
+        }
+
         if (!reserva.esFechaValida()) {
             throw new IllegalArgumentException(
                     "No se permiten reservas en fechas pasadas");
         }
 
-        if (!reserva.cantidadJugadoresValida()) {
+        if (reserva.getHoraInicio().isBefore(horaApertura)
+                || reserva.calcularHoraFin().isAfter(horaCierre)) {
+
+            throw new ReservaNoDisponibleException(
+                    "La reserva debe estar dentro del horario del club ("
+                            + horaApertura + " - " + horaCierre + ")");
+        }
+
+        DeporteConjunto deporteConjunto = reserva.getDeporteConjunto();
+
+        if (instalacion.getTipo() == TipoInstalacion.CANCHA_CONJUNTO
+                && deporteConjunto == null) {
+
             throw new IllegalArgumentException(
-                    "La cantidad de jugadores no es válida");
+                    "Para reservar una cancha de conjunto se debe indicar el deporte");
+        }
+
+        if (deporteConjunto != null
+                && !deportesConjunto.contains(deporteConjunto)) {
+
+            throw new IllegalArgumentException(
+                    "El deporte de la reserva no está registrado");
+        }
+
+        String motivo = reserva.motivoCantidadJugadoresInvalida();
+
+        if (motivo != null) {
+            throw new IllegalArgumentException(motivo);
         }
 
         if (!consultarDisponibilidad(
@@ -1095,8 +1732,46 @@ public class ClubDeportivo {
             throw new IllegalArgumentException("El pago no puede ser nulo");
         }
 
+        Socio socio = pago.getSocio();
+
+        if (buscarUsuario(socio.getId()) != socio) {
+            throw new IllegalArgumentException(
+                    "El socio no está registrado en el club");
+        }
+
+        for (PagoMensualidad existente : socio.getPagos()) {
+            if (existente.correspondeAlPeriodo(pago.getPeriodo())) {
+                throw new IllegalArgumentException(
+                        socio.getNombre() + " ya pagó la mensualidad de " + pago.getPeriodo());
+            }
+        }
+
         pagosMensualidad.add(pago);
-        pago.getSocio().agregarPago(pago);
+        socio.agregarPago(pago);
+    }
+
+    public List<PagoMensualidad> consultarPagosDe(Socio socio) {
+        List<PagoMensualidad> resultado = new ArrayList<PagoMensualidad>();
+
+        for (PagoMensualidad pago : pagosMensualidad) {
+            if (pago.getSocio() == socio) {
+                resultado.add(pago);
+            }
+        }
+
+        return resultado;
+    }
+
+    public double calcularTotalPagos(String periodo) {
+        double total = 0;
+
+        for (PagoMensualidad pago : pagosMensualidad) {
+            if (periodo == null || pago.correspondeAlPeriodo(periodo)) {
+                total += pago.getValor();
+            }
+        }
+
+        return total;
     }
 
     // Productos y ubicaciones
@@ -1195,7 +1870,7 @@ public class ClubDeportivo {
     }
 
     public void trasladarProducto(Producto producto, UbicacionInventario origen,
-            UbicacionInventario destino, int cantidad) {
+            UbicacionInventario destino, int cantidad) throws InventarioInsuficienteException {
 
         validarProductoYUbicacion(producto, origen);
         validarProductoYUbicacion(producto, destino);
@@ -1257,7 +1932,8 @@ public class ClubDeportivo {
         ventas.add(venta);
     }
 
-    public void procesarVenta(Venta venta, UbicacionInventario ubicacion) {
+    public void procesarVenta(Venta venta, UbicacionInventario ubicacion)
+            throws InventarioInsuficienteException {
         if (venta == null || ubicacion == null) {
             throw new IllegalArgumentException("La venta y la ubicación son obligatorias");
         }
@@ -1409,6 +2085,59 @@ public class ClubDeportivo {
             throw new IllegalArgumentException(
                     "El código de descuento compartido no es válido");
         }
+    }
+
+    // Reporte de ventas entre dos fechas (incluidas), con el dinero de cada rubro
+    public ReporteVentas generarReporteVentas(LocalDate desde, LocalDate hasta) {
+        ReporteVentas reporte = new ReporteVentas(desde, hasta);
+
+        reporte.registrarRubro(VentaTienda.RUBRO);
+        reporte.registrarRubro(VentaCafeteria.RUBRO);
+
+        for (Venta venta : ventas) {
+            if (reporte.incluye(venta.getFecha())) {
+                reporte.agregarVenta(venta);
+            }
+        }
+
+        return reporte;
+    }
+
+    // Devuelve null si no hay ventas registradas
+    public LocalDate getFechaPrimeraVenta() {
+        LocalDate primera = null;
+
+        for (Venta venta : ventas) {
+            if (primera == null || venta.getFecha().isBefore(primera)) {
+                primera = venta.getFecha();
+            }
+        }
+
+        return primera;
+    }
+
+    public LocalDate getFechaUltimaVenta() {
+        LocalDate ultima = null;
+
+        for (Venta venta : ventas) {
+            if (ultima == null || venta.getFecha().isAfter(ultima)) {
+                ultima = venta.getFecha();
+            }
+        }
+
+        return ultima;
+    }
+
+    public int contarUnidadesMovidas(TipoMovimiento tipo) {
+        int unidades = 0;
+
+        for (MovimientoInventario movimiento : movimientosInventario) {
+            if (movimiento.getTipo() == tipo) {
+                unidades += movimiento.getCantidad();
+            }
+        }
+
+        return unidades;
     }
 
     // Sugerencias de productos

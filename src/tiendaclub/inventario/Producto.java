@@ -30,6 +30,9 @@ public abstract class Producto {
         this.precio = nuevoPrecio;
     }
 
+    // Nombre del tipo de producto para mostrarlo y para los reportes
+    public abstract String getTipoProducto();
+
     public String getNombre() {
         return nombre;
     }
