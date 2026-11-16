@@ -25,7 +25,7 @@ import usuarios.tipos.empleados.Entrenador;
 public class InscripcionesTorneoTest {
     @Test
     @DisplayName("Sencillos rechaza una inscripción de dos personas")
-    void sencillosRechazaDosParticipantes() {
+    public void sencillosRechazaDosParticipantes() {
         TorneoIndividual torneo = torneo(Modalidad.SENCILLOS);
         assertThrows(IllegalArgumentException.class,
                 () -> torneo.inscribirParticipantes(
@@ -37,7 +37,7 @@ public class InscripcionesTorneoTest {
 
     @Test
     @DisplayName("Dobles rechaza una inscripción de una sola persona")
-    void doblesRechazaUnParticipante() {
+    public void doblesRechazaUnParticipante() {
         TorneoIndividual torneo = torneo(Modalidad.DOBLES);
         assertThrows(IllegalArgumentException.class,
                 () -> torneo.inscribirParticipantes(
@@ -48,7 +48,7 @@ public class InscripcionesTorneoTest {
 
     @Test
     @DisplayName("El cupo preferencial rechaza a un participante externo")
-    void cupoPreferencialRechazaParticipanteExterno() {
+    public void cupoPreferencialRechazaParticipanteExterno() {
         TorneoIndividual torneo = torneo(Modalidad.SENCILLOS);
         assertThrows(IllegalArgumentException.class,
                 () -> torneo.inscribirParticipantes(
@@ -59,7 +59,7 @@ public class InscripcionesTorneoTest {
 
     @Test
     @DisplayName("Un socio sin academia no está habilitado")
-    void socioSinAcademiaNoEstaHabilitado() {
+    public void socioSinAcademiaNoEstaHabilitado() {
         TorneoIndividual torneo = torneo(Modalidad.SENCILLOS);
         Socio socio = socio("S1");
         assertFalse(torneo.validarParticipante(socio));
@@ -71,7 +71,7 @@ public class InscripcionesTorneoTest {
 
     @Test
     @DisplayName("Un socio con academia y nivel correcto está habilitado")
-    void socioConAcademiaYNivelCorrectoEstaHabilitado() {
+    public void socioConAcademiaYNivelCorrectoEstaHabilitado() {
         TorneoIndividual torneo = torneo(Modalidad.SENCILLOS);
         Socio socio = socio("S1");
         InscripcionAcademia academia = new InscripcionAcademia(
@@ -87,7 +87,7 @@ public class InscripcionesTorneoTest {
 
     @Test
     @DisplayName("Un empleado sin turno ese día no paga el torneo competitivo")
-    void empleadoSinCruceNoPagaTorneoCompetitivo() {
+    public void empleadoSinCruceNoPagaTorneoCompetitivo() {
         TorneoIndividual torneo = DatosPruebaTorneo.torneo(
                 "EMPLEADO", TipoTorneo.COMPETITIVO,
                 FormatoTorneo.TODOS_CONTRA_TODOS,
@@ -104,7 +104,7 @@ public class InscripcionesTorneoTest {
 
     @Test
     @DisplayName("Un participante externo paga la tarifa competitiva")
-    void participanteExternoPagaTarifaCompetitiva() {
+    public void participanteExternoPagaTarifaCompetitiva() {
         TorneoIndividual torneo = DatosPruebaTorneo.torneo(
                 "EXTERNO", TipoTorneo.COMPETITIVO,
                 FormatoTorneo.TODOS_CONTRA_TODOS,
@@ -119,7 +119,7 @@ public class InscripcionesTorneoTest {
 
     @Test
     @DisplayName("La inscripción detecta el mismo ID aunque sea otro objeto")
-    void inscripcionDetectaMismoIdAunqueSeaOtroObjeto() {
+    public void inscripcionDetectaMismoIdAunqueSeaOtroObjeto() {
         TorneoIndividual torneo = torneo(Modalidad.DOBLES);
         InscripcionIndividualTorneo inscripcion =
                 new InscripcionIndividualTorneo(
@@ -135,7 +135,7 @@ public class InscripcionesTorneoTest {
 
     @Test
     @DisplayName("Una inscripción no puede retirarse dos veces")
-    void inscripcionNoPuedeRetirarseDosVeces() {
+    public void inscripcionNoPuedeRetirarseDosVeces() {
         TorneoIndividual torneo = torneo(Modalidad.SENCILLOS);
         InscripcionIndividualTorneo inscripcion =
                 DatosPruebaTorneo.inscribirExterno(torneo, "P1");

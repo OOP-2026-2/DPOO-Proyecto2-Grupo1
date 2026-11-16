@@ -74,7 +74,7 @@ public class CompetenciasYPartidosTest {
     private int consecutivo;
 
     @BeforeEach
-    void prepararCompetencia() {
+    public void prepararCompetencia() {
         club = new ClubDeportivo();
         futbol = new DeporteConjunto("Fútbol", MINIMO_JUGADORES, PUNTOS_VICTORIA, PUNTOS_EMPATE, true);
         jugadorDeCampo = new Posicion("Jugador de campo");
@@ -99,13 +99,13 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("Un equipo con el mínimo de jugadores queda inscrito y activo")
-        void inscribeEquipo() {
+        public void inscribeEquipo() {
             assertTrue(liga.buscarInscripcion(equipo).estaActiva());
         }
 
         @Test
         @DisplayName("Un equipo sin el mínimo se rechaza indicando cuántos jugadores tiene")
-        void rechazaEquipoIncompleto() {
+        public void rechazaEquipoIncompleto() {
             Equipo incompleto = registrarEquipo("Incompleto");
             inscribirNuevoSocio(incompleto);
 
@@ -117,7 +117,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("Un jugador habilitado entra a la nómina; uno suspendido no")
-        void nominaRechazaSuspendido() {
+        public void nominaRechazaSuspendido() {
             club.agregarJugadorANomina(liga, equipo, primero);
             equipo.buscarInscripcion(segundo).suspender();
 
@@ -134,13 +134,13 @@ public class CompetenciasYPartidosTest {
         private PartidoOficial partido;
 
         @BeforeEach
-        void programarPartido() {
+        public void programarPartido() {
             partido = programarOficial(LocalDate.now().plusDays(1));
         }
 
         @Test
         @DisplayName("Una victoria suma sus puntos al puntaje histórico y a la tabla")
-        void victoriaSumaPuntos() {
+        public void victoriaSumaPuntos() {
             club.registrarResultadoPartido(partido, "3-1", null);
 
             assertAll("victoria",
@@ -152,7 +152,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("Un empate suma los puntos de empate y una derrota no suma")
-        void empateYDerrota() {
+        public void empateYDerrota() {
             club.registrarResultadoPartido(partido, "1-1", null);
             club.registrarResultadoPartido(programarOficial(LocalDate.now().plusDays(8)), "0-2", null);
 
@@ -161,7 +161,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("Una tarjeta roja suspende al jugador para el siguiente partido oficial")
-        void rojaSuspende() {
+        public void rojaSuspende() {
             EstadisticaFutbol estadistica = new EstadisticaFutbol(primero, partido);
             estadistica.registrarTarjetaRoja();
 
@@ -180,7 +180,7 @@ public class CompetenciasYPartidosTest {
         @ParameterizedTest(name = "{0} amarillas")
         @ValueSource(ints = { EstadisticaFutbol.AMARILLAS_PARA_SUSPENSION, EstadisticaFutbol.AMARILLAS_PARA_SUSPENSION + 1 })
         @DisplayName("Acumular amarillas en un partido también suspende")
-        void amarillasSuspenden(int amarillas) {
+        public void amarillasSuspenden(int amarillas) {
             EstadisticaFutbol estadistica = new EstadisticaFutbol(segundo, partido);
 
             for (int i = 0; i < amarillas; i++) {
@@ -194,7 +194,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("Una sola amarilla no suspende")
-        void unaAmarillaNoSuspende() {
+        public void unaAmarillaNoSuspende() {
             EstadisticaFutbol estadistica = new EstadisticaFutbol(segundo, partido);
             estadistica.registrarTarjetaAmarilla();
 
@@ -207,7 +207,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("El suspendido no puede tener estadísticas y el partido no queda a medias")
-        void suspendidoNoJuega() {
+        public void suspendidoNoJuega() {
             equipo.buscarInscripcion(primero).suspender();
             EstadisticaFutbol estadistica = new EstadisticaFutbol(primero, partido);
             estadistica.registrarGol();
@@ -223,7 +223,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("El suspendido cumple su fecha en el siguiente partido oficial y vuelve a estar activo")
-        void cumpleLaSuspension() {
+        public void cumpleLaSuspension() {
             EstadisticaFutbol roja = new EstadisticaFutbol(primero, partido);
             roja.registrarTarjetaRoja();
             club.registrarResultadoPartido(partido, "2-0", Arrays.<EstadisticaJugador>asList(roja));
@@ -235,7 +235,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("Un jugador fuera de la nómina no puede tener estadísticas")
-        void jugadorFueraDeNomina() {
+        public void jugadorFueraDeNomina() {
             club.agregarJugadorANomina(liga, equipo, segundo);
             club.agregarJugadorANomina(liga, equipo, tercero);
             EstadisticaFutbol estadistica = new EstadisticaFutbol(primero, partido);
@@ -247,7 +247,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("Un jugador retirado no puede tener estadísticas aunque siga en la nómina")
-        void retiradoEnNominaNoJuega() {
+        public void retiradoEnNominaNoJuega() {
             club.agregarJugadorANomina(liga, equipo, primero);
             club.agregarJugadorANomina(liga, equipo, segundo);
             club.retirarSocioDeEquipo(primero, equipo);
@@ -261,7 +261,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("Un marcador inválido se rechaza sin cambiar el puntaje")
-        void marcadorInvalido() {
+        public void marcadorInvalido() {
             assertThrows(IllegalArgumentException.class,
                     () -> club.registrarResultadoPartido(partido, "tres a uno", null));
 
@@ -272,7 +272,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("Un partido finalizado no se registra otra vez")
-        void partidoFinalizado() {
+        public void partidoFinalizado() {
             club.registrarResultadoPartido(partido, "1-0", null);
 
             assertThrows(IllegalStateException.class,
@@ -282,7 +282,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("Un partido cancelado sale de los programados")
-        void cancelarPartido() {
+        public void cancelarPartido() {
             club.cancelarPartido(partido);
 
             assertAll("cancelado",
@@ -297,7 +297,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("Un partido interno exige el mínimo de jugadores en los dos equipos")
-        void internoExigeMinimo() {
+        public void internoExigeMinimo() {
             Equipo incompleto = registrarEquipo("Incompleto");
             inscribirNuevoSocio(incompleto);
 
@@ -308,7 +308,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("Las tarjetas de un partido interno no suspenden ni suman puntaje histórico")
-        void internoNoSuspende() {
+        public void internoNoSuspende() {
             Equipo rival = registrarEquipo("Rival interno");
             inscribirNuevoSocio(rival);
             inscribirNuevoSocio(rival);
@@ -329,7 +329,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("Un jugador retirado del equipo no puede tener estadísticas en un partido interno")
-        void retiradoNoJuegaInterno() {
+        public void retiradoNoJuegaInterno() {
             PartidoInterno interno = programarInterno();
             club.retirarSocioDeEquipo(primero, equipo);
             EstadisticaFutbol gol = new EstadisticaFutbol(primero, interno);
@@ -342,7 +342,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("Un jugador suspendido tampoco tiene estadísticas en un partido interno")
-        void suspendidoNoJuegaInterno() {
+        public void suspendidoNoJuegaInterno() {
             PartidoInterno interno = programarInterno();
             equipo.buscarInscripcion(segundo).suspender();
             EstadisticaFutbol gol = new EstadisticaFutbol(segundo, interno);
@@ -353,7 +353,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("Un partido de práctica no se cierra sin los participantes de su modalidad")
-        void practicaIncompleta() {
+        public void practicaIncompleta() {
             DeporteIndividual tenis = new DeporteIndividual("Tenis", 2);
             club.registrarDeporteIndividual(tenis);
             club.inscribirSocioEnAcademia(primero, tenis, Nivel.INTERMEDIO);
@@ -374,7 +374,7 @@ public class CompetenciasYPartidosTest {
         @ParameterizedTest(name = "{0}")
         @ValueSource(strings = { "Fútbol", "FUTBOL", "Futsal" })
         @DisplayName("El fútbol usa estadísticas de goles y tarjetas")
-        void creaEstadisticaDeFutbol(String deporte) {
+        public void creaEstadisticaDeFutbol(String deporte) {
             PartidoOficial partido = programarOficial(LocalDate.now().plusDays(1));
 
             assertTrue(EstadisticaJugador.crearPara(deporte, primero, partido) instanceof EstadisticaFutbol);
@@ -382,7 +382,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("El baloncesto usa estadísticas de puntos y rebotes")
-        void creaEstadisticaDeBaloncesto() {
+        public void creaEstadisticaDeBaloncesto() {
             PartidoOficial partido = programarOficial(LocalDate.now().plusDays(1));
 
             assertTrue(EstadisticaJugador.crearPara("Baloncesto", primero, partido)
@@ -391,7 +391,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("Un deporte sin estadísticas definidas se rechaza")
-        void deporteSinEstadisticas() {
+        public void deporteSinEstadisticas() {
             PartidoOficial partido = programarOficial(LocalDate.now().plusDays(1));
 
             assertThrows(IllegalArgumentException.class,
@@ -405,7 +405,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("Al finalizar un torneo de conjunto cada equipo suma los puntos que obtuvo")
-        void torneoDeConjuntoSumaPuntaje() {
+        public void torneoDeConjuntoSumaPuntaje() {
             Equipo rival = registrarEquipo("Rival torneo");
             inscribirNuevoSocio(rival);
             inscribirNuevoSocio(rival);
@@ -430,7 +430,7 @@ public class CompetenciasYPartidosTest {
 
         @Test
         @DisplayName("Al finalizar un torneo individual cada socio suma sus puntos en el ranking de la academia")
-        void torneoIndividualSumaRanking() {
+        public void torneoIndividualSumaRanking() {
             DeporteIndividual tenis = new DeporteIndividual("Tenis", 2);
             club.registrarDeporteIndividual(tenis);
             InscripcionAcademia academiaPrimero = club.inscribirSocioEnAcademia(primero, tenis, Nivel.INTERMEDIO);

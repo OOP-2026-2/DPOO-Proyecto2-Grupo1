@@ -1,0 +1,5 @@
+ARTICULO;Camiseta Séneca;45000.0;Ropa
+ARTICULO;Balón de fútbol;80000.0;Implementos
+BEBIDA;Agua;2500.0;false
+BEBIDA;Café;3500.0;true
+SNACK;Galletas de avena;3000.0;Gluten

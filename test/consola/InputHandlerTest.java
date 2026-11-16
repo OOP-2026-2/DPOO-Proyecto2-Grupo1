@@ -24,21 +24,21 @@ public class InputHandlerTest {
     private ByteArrayOutputStream salida;
 
     @BeforeEach
-    void capturarSalida() {
+    public void capturarSalida() {
         salidaOriginal = System.out;
         salida = new ByteArrayOutputStream();
         System.setOut(new PrintStream(salida));
     }
 
     @AfterEach
-    void restaurarSalida() {
+    public void restaurarSalida() {
         System.setOut(salidaOriginal);
     }
 
     @ParameterizedTest(name = "\"{0}\"")
     @ValueSource(strings = { "a;b", "a|b", "a,b" })
     @DisplayName("Un nombre con separadores de archivo se rechaza y se vuelve a pedir")
-    void nombreConSeparadores(String invalido) {
+    public void nombreConSeparadores(String invalido) {
         entrada(invalido, "valido");
 
         assertEquals("valido", InputHandler.readString("Nombre: "));
@@ -47,7 +47,7 @@ public class InputHandlerTest {
 
     @Test
     @DisplayName("Un comentario admite comas pero no punto y coma")
-    void textoLibreAdmiteComas() {
+    public void textoLibreAdmiteComas() {
         entrada("bien; mal", "Buen trabajo, sigue así");
 
         assertEquals("Buen trabajo, sigue así", InputHandler.readTextoLibre("Comentario: "));
@@ -55,7 +55,7 @@ public class InputHandlerTest {
 
     @Test
     @DisplayName("Un número decimal se puede escribir con coma")
-    void decimalConComa() {
+    public void decimalConComa() {
         entrada("0,25");
 
         assertEquals(0.25, InputHandler.readDouble("Valor: "), 0.0001);
@@ -63,7 +63,7 @@ public class InputHandlerTest {
 
     @Test
     @DisplayName("Un entero inválido se vuelve a pedir")
-    void enteroInvalido() {
+    public void enteroInvalido() {
         entrada("siete", "7");
 
         assertEquals(7, InputHandler.readInt("Número: "));
@@ -71,7 +71,7 @@ public class InputHandlerTest {
 
     @Test
     @DisplayName("Un entero fuera del rango se vuelve a pedir")
-    void enteroFueraDeRango() {
+    public void enteroFueraDeRango() {
         entrada("9", "2");
 
         assertEquals(2, InputHandler.readIntEnRango("Opción: ", 1, 3));
@@ -79,7 +79,7 @@ public class InputHandlerTest {
 
     @Test
     @DisplayName("Una opción de enumeración se elige por número o por nombre")
-    void enumeracionPorNumeroONombre() {
+    public void enumeracionPorNumeroONombre() {
         entrada("2", "avanzado", "9", "principiante");
         Nivel[] niveles = Nivel.values();
 
@@ -90,7 +90,7 @@ public class InputHandlerTest {
 
     @Test
     @DisplayName("En un filtro la opción 0 significa todos")
-    void filtroTodos() {
+    public void filtroTodos() {
         entrada("0");
 
         assertNull(InputHandler.readEnumOpcional("Nivel:", Nivel.values()));
@@ -98,7 +98,7 @@ public class InputHandlerTest {
 
     @Test
     @DisplayName("Un periodo inválido se vuelve a pedir")
-    void periodoInvalido() {
+    public void periodoInvalido() {
         entrada("2026-13", "2026-11");
 
         assertEquals("2026-11", InputHandler.readPeriodo("Periodo: "));
@@ -106,7 +106,7 @@ public class InputHandlerTest {
 
     @Test
     @DisplayName("Una respuesta distinta de s o n se vuelve a pedir")
-    void respuestaSiNo() {
+    public void respuestaSiNo() {
         entrada("tal vez", "sí");
 
         assertTrue(InputHandler.readBoolean("¿Confirma? "));
@@ -114,7 +114,7 @@ public class InputHandlerTest {
 
     @Test
     @DisplayName("Si se acaba la entrada se informa con una excepción")
-    void finDeLaEntrada() {
+    public void finDeLaEntrada() {
         entrada();
 
         assertThrows(IllegalStateException.class, () -> InputHandler.readString("Nombre: "));

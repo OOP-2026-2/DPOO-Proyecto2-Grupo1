@@ -49,7 +49,7 @@ public class EntrenamientosTest {
     private LocalDate fecha;
 
     @BeforeEach
-    void programarSesion() {
+    public void programarSesion() {
         club = new ClubDeportivo();
         fecha = LocalDate.now().plusDays(7);
         entrenador = registrarEntrenador("E1");
@@ -73,7 +73,7 @@ public class EntrenamientosTest {
 
     @Test
     @DisplayName("El entrenador registra la asistencia y la evaluación de un integrante")
-    void registraAsistenciaYEvaluacion() {
+    public void registraAsistenciaYEvaluacion() {
         RegistroAsistencia registro = club.registrarAsistenciaSesion(entrenador, sesion, jugador,
                 EstadoAsistencia.ASISTIO, NOTA_VALIDA, "Buena intensidad");
 
@@ -86,7 +86,7 @@ public class EntrenamientosTest {
 
     @Test
     @DisplayName("Solo el entrenador a cargo de la sesión puede registrar su asistencia")
-    void otroEntrenadorNoRegistra() {
+    public void otroEntrenadorNoRegistra() {
         Entrenador otro = registrarEntrenador("E2");
 
         assertThrows(IllegalArgumentException.class, () -> club.registrarAsistenciaSesion(otro, sesion,
@@ -97,7 +97,7 @@ public class EntrenamientosTest {
     @ParameterizedTest(name = "Nota {0}")
     @ValueSource(doubles = { 0.5, 5.5 })
     @DisplayName("Una nota fuera de 1 a 5 se rechaza sin dejar registro")
-    void notaFueraDeRango(double nota) {
+    public void notaFueraDeRango(double nota) {
         assertThrows(IllegalArgumentException.class, () -> club.registrarAsistenciaSesion(entrenador,
                 sesion, jugador, EstadoAsistencia.ASISTIO, nota, "Fuera de rango"));
         assertNull(sesion.buscarRegistro(jugador));
@@ -105,14 +105,14 @@ public class EntrenamientosTest {
 
     @Test
     @DisplayName("No se evalúa a un socio ausente")
-    void ausenteNoSeEvalua() {
+    public void ausenteNoSeEvalua() {
         assertThrows(IllegalArgumentException.class, () -> club.registrarAsistenciaSesion(entrenador,
                 sesion, jugador, EstadoAsistencia.AUSENTE, NOTA_VALIDA, "No vino"));
     }
 
     @Test
     @DisplayName("Si se corrige a AUSENTE se borra la evaluación anterior")
-    void corregirAAusenteBorraNota() {
+    public void corregirAAusenteBorraNota() {
         club.registrarAsistenciaSesion(entrenador, sesion, jugador, EstadoAsistencia.TARDE,
                 NOTA_VALIDA, "Llegó tarde");
 
@@ -125,14 +125,14 @@ public class EntrenamientosTest {
 
     @Test
     @DisplayName("La asistencia debe quedar como asistió, tarde o ausente")
-    void estadoPendienteNoSeAcepta() {
+    public void estadoPendienteNoSeAcepta() {
         assertThrows(IllegalArgumentException.class, () -> club.registrarAsistenciaSesion(entrenador,
                 sesion, jugador, EstadoAsistencia.PENDIENTE, null, null));
     }
 
     @Test
     @DisplayName("Un socio que no es del equipo de la sesión no tiene asistencia")
-    void socioAjenoAlEquipo() {
+    public void socioAjenoAlEquipo() {
         Socio ajeno = registrarSocio("S-AJENO");
 
         assertThrows(IllegalArgumentException.class, () -> club.registrarAsistenciaSesion(entrenador,
@@ -141,7 +141,7 @@ public class EntrenamientosTest {
 
     @Test
     @DisplayName("Una sesión individual es para un solo socio")
-    void sesionIndividualUnSocio() {
+    public void sesionIndividualUnSocio() {
         DeporteIndividual tenis = new DeporteIndividual("Tenis", 2);
         club.registrarDeporteIndividual(tenis);
         Instalacion canchaTenis = new Instalacion("TENIS-1", TipoInstalacion.CANCHA_TENIS, 4, false, tenis);
@@ -160,7 +160,7 @@ public class EntrenamientosTest {
 
     @Test
     @DisplayName("El entrenador y el socio consultan las sesiones que les corresponden")
-    void consultarSesiones() {
+    public void consultarSesiones() {
         Socio sinEquipo = registrarSocio("S-SOLO");
 
         assertAll("consultas",
@@ -172,7 +172,7 @@ public class EntrenamientosTest {
 
     @Test
     @DisplayName("Una sesión que termina después del cierre del club se rechaza")
-    void sesionFueraDelHorario() {
+    public void sesionFueraDelHorario() {
         SesionEntrenamiento tarde = new SesionEntrenamiento(fecha, club.getHoraCierre().minusMinutes(30),
                 DURACION_MINUTOS, entrenador, cancha, TipoSesion.GRUPAL);
         tarde.asignarEquipo(equipo);

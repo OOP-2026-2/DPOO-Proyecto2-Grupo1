@@ -1,0 +1,15 @@
+2026-11-15;30;REABASTECIMIENTO;Camiseta Séneca;;Bodega
+2026-11-15;10;REABASTECIMIENTO;Balón de fútbol;;Bodega
+2026-11-15;60;REABASTECIMIENTO;Agua;;Bodega
+2026-11-15;40;REABASTECIMIENTO;Café;;Bodega
+2026-11-15;40;REABASTECIMIENTO;Galletas de avena;;Bodega
+2026-11-15;10;TRASLADO;Camiseta Séneca;Bodega;Tienda
+2026-11-15;4;TRASLADO;Balón de fútbol;Bodega;Tienda
+2026-11-15;24;TRASLADO;Agua;Bodega;Cafetería
+2026-11-15;20;TRASLADO;Café;Bodega;Cafetería
+2026-11-15;20;TRASLADO;Galletas de avena;Bodega;Cafetería
+2026-11-15;1;SALIDA;Camiseta Séneca;Tienda;
+2026-11-15;1;SALIDA;Galletas de avena;Cafetería;
+2026-11-15;2;SALIDA;Café;Cafetería;
+2026-11-15;1;SALIDA;Balón de fútbol;Tienda;
+2026-11-15;3;SALIDA;Agua;Cafetería;

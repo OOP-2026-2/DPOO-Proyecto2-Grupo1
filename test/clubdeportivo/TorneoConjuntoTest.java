@@ -28,7 +28,7 @@ public class TorneoConjuntoTest {
     private TorneoConjunto torneo;
 
     @BeforeEach
-    void prepararPrueba() {
+    public void prepararPrueba() {
         futbol = new DeporteConjunto("Fútbol", 2, 3, 1, true);
         delantero = new Posicion("Delantero");
         futbol.agregarPosicion(delantero);
@@ -44,7 +44,7 @@ public class TorneoConjuntoTest {
 
     @Test
     @DisplayName("Un equipo dado de baja no es válido")
-    void equipoInactivoNoEsValido() {
+    public void equipoInactivoNoEsValido() {
         Equipo equipo = equipoCompleto("Inactivo", Categoria.MAYORES);
         equipo.desactivar();
         assertFalse(torneo.validarEquipo(equipo));
@@ -52,14 +52,14 @@ public class TorneoConjuntoTest {
 
     @Test
     @DisplayName("Un equipo de otra categoría no es válido")
-    void equipoDeOtraCategoriaNoEsValido() {
+    public void equipoDeOtraCategoriaNoEsValido() {
         Equipo equipo = equipoCompleto("Sub 17", Categoria.SUB_17);
         assertFalse(torneo.validarEquipo(equipo));
     }
 
     @Test
     @DisplayName("Un equipo sin el mínimo de jugadores no es válido")
-    void equipoSinMinimoDeJugadoresNoEsValido() {
+    public void equipoSinMinimoDeJugadoresNoEsValido() {
         Equipo equipo = new Equipo(
                 "Incompleto", Categoria.MAYORES, 10, futbol);
         agregarJugador(equipo, "S1", 1);
@@ -68,14 +68,14 @@ public class TorneoConjuntoTest {
 
     @Test
     @DisplayName("Un equipo completo es válido")
-    void equipoCompletoEsValido() {
+    public void equipoCompletoEsValido() {
         assertTrue(torneo.validarEquipo(
                 equipoCompleto("Completo", Categoria.MAYORES)));
     }
 
     @Test
     @DisplayName("No se inscribe el mismo equipo dos veces")
-    void noPermiteInscribirElMismoEquipoDosVeces() {
+    public void noPermiteInscribirElMismoEquipoDosVeces() {
         Equipo equipo = equipoCompleto("Duplicado", Categoria.MAYORES);
         torneo.inscribirEquipo(equipo, TipoCupo.REGULAR);
         assertThrows(IllegalArgumentException.class,
@@ -84,7 +84,7 @@ public class TorneoConjuntoTest {
 
     @Test
     @DisplayName("El cupo preferencial exige puntaje histórico")
-    void cupoPreferencialExigePuntajeHistorico() {
+    public void cupoPreferencialExigePuntajeHistorico() {
         Equipo equipo = equipoCompleto("Preferencial", Categoria.MAYORES);
         assertThrows(IllegalArgumentException.class,
                 () -> torneo.inscribirEquipo(

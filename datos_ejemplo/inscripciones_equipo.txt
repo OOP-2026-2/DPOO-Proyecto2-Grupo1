@@ -1,0 +1,8 @@
+S-001;Fútbol;Séneca FC;Arquero;1;ACTIVA;0
+S-002;Fútbol;Séneca FC;Defensa;2;SUSPENDIDA;1
+S-003;Fútbol;Séneca FC;Volante;3;ACTIVA;0
+S-004;Fútbol;Séneca FC;Delantero;4;ACTIVA;0
+S-005;Fútbol;Séneca FC;Delantero;5;ACTIVA;0
+S-006;Fútbol;Séneca FC;Delantero;6;ACTIVA;0
+S-007;Fútbol;Séneca B;Arquero;7;ACTIVA;0
+S-008;Fútbol;Séneca B;Defensa;8;ACTIVA;0

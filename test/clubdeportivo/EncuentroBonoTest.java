@@ -21,7 +21,7 @@ import usuarios.tipos.Socio;
 public class EncuentroBonoTest {
     @Test
     @DisplayName("Un encuentro no puede enfrentar una inscripción consigo misma")
-    void encuentroRechazaLaMismaInscripcionComoRival() {
+    public void encuentroRechazaLaMismaInscripcionComoRival() {
         TorneoIndividual torneo = torneoConDosInscripciones();
         InscripcionIndividualTorneo inscripcion =
                 (InscripcionIndividualTorneo) torneo.getInscripciones().get(0);
@@ -32,14 +32,14 @@ public class EncuentroBonoTest {
 
     @Test
     @DisplayName("Un encuentro no finaliza si no tiene marcador")
-    void encuentroNoFinalizaSinMarcador() {
+    public void encuentroNoFinalizaSinMarcador() {
         EncuentroTorneo encuentro = encuentroProgramado();
         assertThrows(IllegalStateException.class, encuentro::finalizar);
     }
 
     @Test
     @DisplayName("Un encuentro cancelado no acepta resultado")
-    void encuentroCanceladoNoAceptaResultado() {
+    public void encuentroCanceladoNoAceptaResultado() {
         EncuentroTorneo encuentro = encuentroProgramado();
         encuentro.cancelar();
         assertThrows(IllegalStateException.class,
@@ -48,7 +48,7 @@ public class EncuentroBonoTest {
 
     @Test
     @DisplayName("Un encuentro finalizado no puede cancelarse")
-    void encuentroFinalizadoNoPuedeCancelarse() {
+    public void encuentroFinalizadoNoPuedeCancelarse() {
         EncuentroTorneo encuentro = encuentroProgramado();
         encuentro.registrarResultado("2-1");
         encuentro.finalizar();
@@ -57,7 +57,7 @@ public class EncuentroBonoTest {
 
     @Test
     @DisplayName("Un bono vencido no aplica descuento")
-    void bonoVencidoNoAplicaDescuento() {
+    public void bonoVencidoNoAplicaDescuento() {
         BonoDescuento bono = bono(
                 LocalDate.now().minusDays(10),
                 LocalDate.now().minusDays(1));
@@ -68,7 +68,7 @@ public class EncuentroBonoTest {
 
     @Test
     @DisplayName("Un bono disponible descuenta su porcentaje del subtotal")
-    void bonoDisponibleCalculaPorcentaje() {
+    public void bonoDisponibleCalculaPorcentaje() {
         BonoDescuento bono = bono(
                 LocalDate.now(), LocalDate.now().plusDays(30));
         assertEquals(10000, bono.calcularDescuento(100000), 0.001);
@@ -76,7 +76,7 @@ public class EncuentroBonoTest {
 
     @Test
     @DisplayName("Un bono no puede usarse dos veces")
-    void bonoNoPuedeUsarseDosVeces() {
+    public void bonoNoPuedeUsarseDosVeces() {
         BonoDescuento bono = bono(
                 LocalDate.now(), LocalDate.now().plusDays(30));
         bono.usar();
@@ -86,7 +86,7 @@ public class EncuentroBonoTest {
 
     @Test
     @DisplayName("El bono rechaza un subtotal negativo")
-    void bonoRechazaSubtotalNegativo() {
+    public void bonoRechazaSubtotalNegativo() {
         BonoDescuento bono = bono(
                 LocalDate.now(), LocalDate.now().plusDays(30));
         assertThrows(IllegalArgumentException.class,

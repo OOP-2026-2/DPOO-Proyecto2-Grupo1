@@ -9,12 +9,14 @@
 
 ## Ejecución en Eclipse
 
-1. Seleccionar **File > Import > Maven > Existing Maven Projects**.
-2. Elegir la carpeta que contiene `pom.xml`.
-3. (Opcional) Para probar con datos de ejemplo, copiar la carpeta `datos_ejemplo` en la raíz del proyecto con el nombre `datos`.
-4. Ejecutar `consola.Main` (`src/consola/Main.java`) para escoger el rol, o ejecutar `consola.MainAdministrador`, `consola.MainEmpleado` o `consola.MainParticipante`.
-5. Salir mediante la opción `0` para guardar los cambios en la carpeta `datos`. Si algún archivo de `datos` tiene información inválida, el programa lo informa y no guarda nada, para no sobrescribir los datos.
-6. Ejecutar la carpeta `test` mediante **Run As > JUnit Test**.
+Configuración según la guía del curso (sección 1.1): proyecto Java normal con JUnit 5 en el Build Path.
+
+1. **File > Import > General > Existing Projects into Workspace**, elegir la carpeta del proyecto y finalizar. Los archivos `.project` y `.classpath` ya dejan `src` y `test` como carpetas de código fuente, `bin` como salida y la biblioteca **JUnit 5** en el Build Path.
+   - Si se crea el proyecto a mano: **File > New > Java Project** (JavaSE-1.8 o JavaSE-17), quitar la carpeta `src` que Eclipse crea, copiar las carpetas `src`, `test` y `datos` del repositorio, marcar `src` y `test` como *Source Folder* y agregar JUnit 5 con **Build Path > Add Libraries... > JUnit > JUnit 5**.
+2. Para probar con datos de ejemplo, copiar la carpeta `datos_ejemplo` en la raíz del proyecto con el nombre `datos`.
+3. Ejecutar `consola.Main` (`src/consola/Main.java`) con **Run As > Java Application** para escoger el rol, o ejecutar `consola.MainAdministrador`, `consola.MainEmpleado` o `consola.MainParticipante`.
+4. Salir mediante la opción `0` para guardar los cambios en la carpeta `datos`. Si algún archivo de `datos` tiene información inválida, el programa lo informa y no guarda nada, para no sobrescribir los datos.
+5. Ejecutar las pruebas con clic derecho sobre la carpeta `test` > **Run As > JUnit Test** (232 pruebas). La guía paso a paso de las pruebas por consola está en `GUIA_PRUEBAS_CONSOLA.md`.
 
 ## Usuarios de los datos de ejemplo
 

@@ -39,7 +39,7 @@ public class ReporteVentasTest {
     private Snack galleta;
 
     @BeforeEach
-    void registrarVentas() {
+    public void registrarVentas() {
         club = new ClubDeportivo();
         socio = new Socio("S1", "Socio", LocalDate.of(1995, 5, 5), "socio", "clave");
         club.registrarUsuario(socio);
@@ -54,7 +54,7 @@ public class ReporteVentasTest {
 
     @Test
     @DisplayName("El dinero se separa por rubro e incluye las ventas de los dos extremos del rango")
-    void dineroPorRubro() {
+    public void dineroPorRubro() {
         ReporteVentas reporte = club.generarReporteVentas(DIA_UNO, DIA_DOS);
         ResumenRubro tienda = reporte.buscarRubro(VentaTienda.RUBRO);
         ResumenRubro cafeteria = reporte.buscarRubro(VentaCafeteria.RUBRO);
@@ -70,7 +70,7 @@ public class ReporteVentasTest {
 
     @Test
     @DisplayName("Un rubro sin ventas en el periodo aparece en cero")
-    void rubroSinVentas() {
+    public void rubroSinVentas() {
         ReporteVentas reporte = club.generarReporteVentas(DIA_UNO, DIA_UNO);
 
         assertAll("cafetería sin ventas",
@@ -81,7 +81,7 @@ public class ReporteVentasTest {
 
     @Test
     @DisplayName("Las unidades y el dinero se agrupan por tipo de producto")
-    void porTipoDeProducto() {
+    public void porTipoDeProducto() {
         ReporteVentas reporte = club.generarReporteVentas(DIA_UNO, DIA_DOS);
 
         assertAll("tipos de producto",
@@ -93,13 +93,13 @@ public class ReporteVentasTest {
 
     @Test
     @DisplayName("Una fecha final anterior a la inicial se rechaza")
-    void rangoInvertido() {
+    public void rangoInvertido() {
         assertThrows(IllegalArgumentException.class, () -> club.generarReporteVentas(DIA_DOS, DIA_UNO));
     }
 
     @Test
     @DisplayName("El club informa entre qué fechas hay ventas registradas")
-    void fechasRegistradas() {
+    public void fechasRegistradas() {
         assertAll("fechas",
                 () -> assertEquals(DIA_UNO, club.getFechaPrimeraVenta()),
                 () -> assertEquals(DIA_FUERA, club.getFechaUltimaVenta()),

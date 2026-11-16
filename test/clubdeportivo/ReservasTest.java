@@ -43,7 +43,7 @@ public class ReservasTest {
     private LocalDate fecha;
 
     @BeforeEach
-    void prepararInstalaciones() {
+    public void prepararInstalaciones() {
         club = new ClubDeportivo();
         fecha = LocalDate.now().plusDays(3);
         socio = new Socio("S1", "Socio Uno", LocalDate.of(2000, 1, 1), "socio1", "clave");
@@ -61,7 +61,7 @@ public class ReservasTest {
 
     @Test
     @DisplayName("Una reserva válida queda registrada en el club y en la instalación")
-    void reservaValida() throws ReservaNoDisponibleException {
+    public void reservaValida() throws ReservaNoDisponibleException {
         Reserva reserva = new Reserva(socio, canchaTenis, fecha, HORA, DURACION, JUGADORES_SENCILLOS,
                 Modalidad.SENCILLOS);
 
@@ -76,14 +76,14 @@ public class ReservasTest {
     @ParameterizedTest(name = "{0} jugadores")
     @ValueSource(ints = { 1, 3, 4 })
     @DisplayName("En sencillos de tenis solo se admiten dos jugadores")
-    void jugadoresInvalidosEnSencillos(int jugadores) {
+    public void jugadoresInvalidosEnSencillos(int jugadores) {
         assertThrows(IllegalArgumentException.class, () -> new Reserva(socio, canchaTenis, fecha, HORA,
                 DURACION, jugadores, Modalidad.SENCILLOS));
     }
 
     @Test
     @DisplayName("Una reserva fuera del horario del club no está disponible")
-    void fueraDelHorario() {
+    public void fueraDelHorario() {
         Reserva nocturna = new Reserva(socio, canchaTenis, fecha, club.getHoraCierre().minusMinutes(30),
                 DURACION, JUGADORES_SENCILLOS, Modalidad.SENCILLOS);
 
@@ -93,7 +93,7 @@ public class ReservasTest {
 
     @Test
     @DisplayName("Una reserva que se cruza con otra en la misma instalación se rechaza")
-    void cruceDeReservas() throws ReservaNoDisponibleException {
+    public void cruceDeReservas() throws ReservaNoDisponibleException {
         club.registrarReserva(new Reserva(socio, canchaTenis, fecha, HORA, DURACION, JUGADORES_SENCILLOS,
                 Modalidad.SENCILLOS));
         Reserva cruzada = new Reserva(socio, canchaTenis, fecha, HORA.plusMinutes(30), DURACION,
@@ -104,7 +104,7 @@ public class ReservasTest {
 
     @Test
     @DisplayName("El deporte no puede tener más canchas reservadas al tiempo que su máximo")
-    void maximoDeInstalacionesDelDeporte() throws ReservaNoDisponibleException {
+    public void maximoDeInstalacionesDelDeporte() throws ReservaNoDisponibleException {
         Instalacion otraCancha = new Instalacion("TENIS-2", TipoInstalacion.CANCHA_TENIS, 4, false, tenis);
         club.registrarInstalacion(otraCancha);
         club.registrarReserva(new Reserva(socio, canchaTenis, fecha, HORA, DURACION, JUGADORES_SENCILLOS,
@@ -117,7 +117,7 @@ public class ReservasTest {
 
     @Test
     @DisplayName("No se reserva en una fecha pasada")
-    void fechaPasada() {
+    public void fechaPasada() {
         Reserva pasada = new Reserva(socio, canchaTenis, LocalDate.now().minusDays(1), HORA, DURACION,
                 JUGADORES_SENCILLOS, Modalidad.SENCILLOS);
 
@@ -126,7 +126,7 @@ public class ReservasTest {
 
     @Test
     @DisplayName("La cancha de conjunto exige el mínimo de jugadores de su deporte")
-    void canchaDeConjuntoExigeMinimo() throws ReservaNoDisponibleException {
+    public void canchaDeConjuntoExigeMinimo() throws ReservaNoDisponibleException {
         IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
                 () -> new Reserva(socio, canchaFutbol, fecha, HORA, DURACION, MINIMO_FUTBOL - 1, futbol));
         Reserva completa = new Reserva(socio, canchaFutbol, fecha, HORA, DURACION, MINIMO_FUTBOL, futbol);
@@ -138,7 +138,7 @@ public class ReservasTest {
 
     @Test
     @DisplayName("La cancha de conjunto se reserva indicando un deporte registrado")
-    void canchaDeConjuntoSinDeporte() {
+    public void canchaDeConjuntoSinDeporte() {
         DeporteConjunto noRegistrado = new DeporteConjunto("Rugby", 2, 4, 2, true);
         Reserva sinDeporte = new Reserva(socio, canchaFutbol, fecha, HORA, DURACION, MINIMO_FUTBOL,
                 Modalidad.DOBLES);

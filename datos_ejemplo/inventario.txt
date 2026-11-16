@@ -1,0 +1,10 @@
+Camiseta Séneca;Bodega;20
+Balón de fútbol;Bodega;6
+Agua;Bodega;36
+Café;Bodega;20
+Galletas de avena;Bodega;20
+Camiseta Séneca;Tienda;9
+Balón de fútbol;Tienda;3
+Agua;Cafetería;21
+Café;Cafetería;18
+Galletas de avena;Cafetería;19

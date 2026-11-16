@@ -1,0 +1,2 @@
+Fútbol;Séneca FC;MAYORES;12;true;3.0
+Fútbol;Séneca B;MAYORES;12;true;0.0

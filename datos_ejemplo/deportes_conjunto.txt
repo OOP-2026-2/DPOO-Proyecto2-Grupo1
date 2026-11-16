@@ -1,0 +1,2 @@
+Fútbol;5;Arquero,Defensa,Volante,Delantero;3;1;true
+Baloncesto;5;Base,Escolta,Alero,Ala-pívot,Pívot;2;0;false

@@ -40,7 +40,7 @@ public class TorneoReglasTest {
 
     @Test
     @DisplayName("Se rechaza un torneo cuya hora final no es posterior a la inicial")
-    void rechazaHorarioSinDuracion() {
+    public void rechazaHorarioSinDuracion() {
         LocalDate fecha = DatosPruebaTorneo.fechaTorneo();
         assertThrows(IllegalArgumentException.class,
                 () -> new TorneoIndividual("HORARIO", "Horario", fecha,
@@ -55,7 +55,7 @@ public class TorneoReglasTest {
 
     @Test
     @DisplayName("Se rechaza un torneo recreativo con tarifa")
-    void rechazaTorneoRecreativoConTarifa() {
+    public void rechazaTorneoRecreativoConTarifa() {
         LocalDate fecha = DatosPruebaTorneo.fechaTorneo();
         assertThrows(IllegalArgumentException.class,
                 () -> new TorneoIndividual("TARIFA-R", "Recreativo", fecha,
@@ -70,7 +70,7 @@ public class TorneoReglasTest {
 
     @Test
     @DisplayName("Se rechaza un torneo competitivo sin tarifa")
-    void rechazaTorneoCompetitivoSinTarifa() {
+    public void rechazaTorneoCompetitivoSinTarifa() {
         LocalDate fecha = DatosPruebaTorneo.fechaTorneo();
         assertThrows(IllegalArgumentException.class,
                 () -> new TorneoIndividual("TARIFA-C", "Competitivo", fecha,
@@ -85,7 +85,7 @@ public class TorneoReglasTest {
 
     @Test
     @DisplayName("No inicia un torneo con una sola inscripción")
-    void noIniciaConUnaSolaInscripcion() {
+    public void noIniciaConUnaSolaInscripcion() {
         TorneoIndividual torneo = DatosPruebaTorneo.torneoDeHoy(
                 "UNICO", TipoTorneo.RECREATIVO,
                 FormatoTorneo.TODOS_CONTRA_TODOS,
@@ -97,7 +97,7 @@ public class TorneoReglasTest {
 
     @Test
     @DisplayName("Se rechaza un participante inscrito dos veces")
-    void rechazaParticipanteDuplicado() {
+    public void rechazaParticipanteDuplicado() {
         TorneoIndividual torneo = DatosPruebaTorneo.torneo(
                 "DUPLICADO", TipoTorneo.RECREATIVO,
                 FormatoTorneo.TODOS_CONTRA_TODOS,
@@ -113,7 +113,7 @@ public class TorneoReglasTest {
 
     @Test
     @DisplayName("Se rechaza la inscripción cuando no hay cupo")
-    void rechazaInscripcionCuandoNoHayCupo() {
+    public void rechazaInscripcionCuandoNoHayCupo() {
         TorneoIndividual torneo = DatosPruebaTorneo.torneo(
                 "LLENO", TipoTorneo.RECREATIVO,
                 FormatoTorneo.TODOS_CONTRA_TODOS,
@@ -128,7 +128,7 @@ public class TorneoReglasTest {
 
     @Test
     @DisplayName("No se permite retirar una inscripción después de iniciar")
-    void noPermiteRetiroDespuesDeIniciar() {
+    public void noPermiteRetiroDespuesDeIniciar() {
         TorneoIndividual torneo = DatosPruebaTorneo.torneoDeHoy(
                 "RETIRO", TipoTorneo.RECREATIVO,
                 FormatoTorneo.TODOS_CONTRA_TODOS,
@@ -143,7 +143,7 @@ public class TorneoReglasTest {
 
     @Test
     @DisplayName("Todos contra todos con tres participantes genera tres encuentros")
-    void generaTresEncuentrosParaTresParticipantes() {
+    public void generaTresEncuentrosParaTresParticipantes() {
         TorneoIndividual torneo = DatosPruebaTorneo.torneoDeHoy(
                 "TRES", TipoTorneo.RECREATIVO,
                 FormatoTorneo.TODOS_CONTRA_TODOS,
@@ -160,7 +160,7 @@ public class TorneoReglasTest {
     @ParameterizedTest(name = "Marcador \"{0}\"")
     @ValueSource(strings = { "dos a uno", "3", "2-1-0", "-1", "a-b", "-2-1" })
     @DisplayName("Se rechaza un marcador con formato inválido")
-    void rechazaMarcadorConFormatoInvalido(String marcador) {
+    public void rechazaMarcadorConFormatoInvalido(String marcador) {
         TorneoIndividual torneo = prepararTorneo("MARCADOR",
                 FormatoTorneo.TODOS_CONTRA_TODOS);
         EncuentroTorneo encuentro = torneo.getEncuentros().get(0);
@@ -173,7 +173,7 @@ public class TorneoReglasTest {
 
     @Test
     @DisplayName("Con los mismos puntos gana quien tiene mejor diferencia de marcador")
-    void desempataPorDiferenciaDeMarcador() {
+    public void desempataPorDiferenciaDeMarcador() {
         TorneoIndividual torneo = DatosPruebaTorneo.torneoDeHoy("DESEMPATE",
                 TipoTorneo.RECREATIVO, FormatoTorneo.TODOS_CONTRA_TODOS,
                 Modalidad.SENCILLOS, CAPACIDAD_TRES);
@@ -197,7 +197,7 @@ public class TorneoReglasTest {
 
     @Test
     @DisplayName("Eliminación directa con cuatro inscritos genera la final al cerrar la primera ronda")
-    void eliminacionDirectaGeneraSiguienteRonda() {
+    public void eliminacionDirectaGeneraSiguienteRonda() {
         TorneoIndividual torneo = DatosPruebaTorneo.torneoDeHoy("RONDAS",
                 TipoTorneo.RECREATIVO, FormatoTorneo.ELIMINACION_DIRECTA,
                 Modalidad.SENCILLOS, CAPACIDAD_CUATRO);
@@ -225,7 +225,7 @@ public class TorneoReglasTest {
 
     @Test
     @DisplayName("No se registra un resultado si el torneo no está en curso")
-    void noRegistraResultadoSiTorneoNoEstaEnCurso() {
+    public void noRegistraResultadoSiTorneoNoEstaEnCurso() {
         TorneoIndividual torneo = prepararTorneo("CERRADO",
                 FormatoTorneo.TODOS_CONTRA_TODOS);
         EncuentroTorneo encuentro = torneo.getEncuentros().get(0);
@@ -238,7 +238,7 @@ public class TorneoReglasTest {
 
     @Test
     @DisplayName("Un torneo no se puede iniciar antes de su fecha")
-    void noIniciaAntesDeSuFecha() {
+    public void noIniciaAntesDeSuFecha() {
         TorneoIndividual futuro = DatosPruebaTorneo.torneo("FUTURO", TipoTorneo.RECREATIVO,
                 FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS, CAPACIDAD_CUATRO);
         DatosPruebaTorneo.inscribirExterno(futuro, "F1");
@@ -255,7 +255,7 @@ public class TorneoReglasTest {
     @ParameterizedTest(name = "{0} participantes")
     @ValueSource(ints = { 2, 3, 4, 5, 6 })
     @DisplayName("En todos contra todos cada pareja juega una vez y nadie tiene dos encuentros a la misma hora")
-    void todosContraTodosSinCruces(int participantes) {
+    public void todosContraTodosSinCruces(int participantes) {
         TorneoIndividual torneo = DatosPruebaTorneo.torneoDeHoy("CRUCES", TipoTorneo.RECREATIVO,
                 FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS, CAPACIDAD_SEIS);
         torneo.liberarCuposPreferenciales();
@@ -297,7 +297,7 @@ public class TorneoReglasTest {
 
     @Test
     @DisplayName("En eliminación directa cada ronda se juega el mismo día en una franja posterior")
-    void eliminacionDirectaPorFranjas() {
+    public void eliminacionDirectaPorFranjas() {
         TorneoIndividual torneo = DatosPruebaTorneo.torneoDeHoy("FRANJAS", TipoTorneo.RECREATIVO,
                 FormatoTorneo.ELIMINACION_DIRECTA, Modalidad.SENCILLOS, CAPACIDAD_CUATRO);
         torneo.liberarCuposPreferenciales();
@@ -323,7 +323,7 @@ public class TorneoReglasTest {
 
     @Test
     @DisplayName("Los premios se otorgan una sola vez: un torneo finalizado no se vuelve a finalizar")
-    void premiosUnaSolaVez() {
+    public void premiosUnaSolaVez() {
         TorneoIndividual torneo = DatosPruebaTorneo.torneoDeHoy("PREMIO", TipoTorneo.COMPETITIVO,
                 FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS, CAPACIDAD_CUATRO);
         DatosPruebaTorneo.inscribirExterno(torneo, "PR1");
@@ -361,7 +361,7 @@ public class TorneoReglasTest {
 
     @Test
     @DisplayName("Se rechaza un empate en eliminación directa")
-    void rechazaEmpateEnEliminacionDirecta() {
+    public void rechazaEmpateEnEliminacionDirecta() {
         TorneoIndividual torneo = prepararTorneo("ELIMINACION",
                 FormatoTorneo.ELIMINACION_DIRECTA);
         EncuentroTorneo encuentro = torneo.getEncuentros().get(0);
@@ -372,7 +372,7 @@ public class TorneoReglasTest {
 
     @Test
     @DisplayName("No finaliza un torneo con un encuentro pendiente")
-    void noFinalizaConEncuentroPendiente() {
+    public void noFinalizaConEncuentroPendiente() {
         TorneoIndividual torneo = prepararTorneo("PENDIENTE",
                 FormatoTorneo.TODOS_CONTRA_TODOS);
         assertFalse(torneo.puedeFinalizar());
@@ -382,7 +382,7 @@ public class TorneoReglasTest {
 
     @Test
     @DisplayName("Finaliza cuando todos los encuentros terminaron")
-    void finalizaCuandoTodosLosEncuentrosTerminaron() {
+    public void finalizaCuandoTodosLosEncuentrosTerminaron() {
         TorneoIndividual torneo = prepararTorneo("FINALIZA",
                 FormatoTorneo.TODOS_CONTRA_TODOS);
         torneo.registrarResultadoEncuentro(

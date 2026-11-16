@@ -44,7 +44,7 @@ public class VentasTest {
     private UbicacionInventario bodega;
 
     @BeforeEach
-    void prepararInventario() {
+    public void prepararInventario() {
         club = new ClubDeportivo();
         socio = new Socio("S1", "Socio Uno", LocalDate.of(1998, 4, 4), "socio1", "clave");
         club.registrarUsuario(socio);
@@ -60,7 +60,7 @@ public class VentasTest {
 
     @Test
     @DisplayName("Cada rubro vende solo sus productos")
-    void rubrosSoloVendenSusProductos() {
+    public void rubrosSoloVendenSusProductos() {
         VentaTienda tienda = new VentaTienda(LocalDate.now(), socio);
         VentaCafeteria cafeteria = new VentaCafeteria(LocalDate.now(), socio);
 
@@ -73,7 +73,7 @@ public class VentasTest {
 
     @Test
     @DisplayName("Una compra en tienda descuenta el inventario, registra la salida y suma puntos al socio")
-    void compraEnTienda() throws InventarioInsuficienteException {
+    public void compraEnTienda() throws InventarioInsuficienteException {
         VentaTienda venta = new VentaTienda(LocalDate.now(), socio, new SinDescuento());
         venta.agregarDetalle(camiseta, 1);
         venta.finalizarVenta();
@@ -90,7 +90,7 @@ public class VentasTest {
 
     @Test
     @DisplayName("La propina de la cafetería se suma al total como cargo adicional")
-    void propinaDeCafeteria() throws InventarioInsuficienteException {
+    public void propinaDeCafeteria() throws InventarioInsuficienteException {
         VentaCafeteria venta = new VentaCafeteria(LocalDate.now(), socio, new SinDescuento());
         venta.agregarDetalle(cafe, 2);
         venta.finalizarVenta(true);
@@ -105,7 +105,7 @@ public class VentasTest {
 
     @Test
     @DisplayName("Sin unidades suficientes la venta se rechaza y el inventario no cambia")
-    void inventarioInsuficiente() {
+    public void inventarioInsuficiente() {
         VentaTienda venta = new VentaTienda(LocalDate.now(), socio);
         venta.agregarDetalle(camiseta, EXISTENCIAS + 1);
 
@@ -117,7 +117,7 @@ public class VentasTest {
 
     @Test
     @DisplayName("No se redimen más puntos que el subtotal ni más de los que tiene el socio")
-    void limitesDePuntos() {
+    public void limitesDePuntos() {
         socio.agregarPuntos(PRECIO_CAMISETA * 2);
         VentaTienda excedeSubtotal = new VentaTienda(LocalDate.now(), socio,
                 new DescuentoPuntos(PRECIO_CAMISETA + 1));
@@ -133,7 +133,7 @@ public class VentasTest {
 
     @Test
     @DisplayName("Redimir puntos descuenta 1 peso por punto y los resta al socio")
-    void redimirPuntos() throws InventarioInsuficienteException {
+    public void redimirPuntos() throws InventarioInsuficienteException {
         double puntos = 1000;
         socio.agregarPuntos(puntos);
         VentaTienda venta = new VentaTienda(LocalDate.now(), socio, new DescuentoPuntos(puntos));
@@ -148,7 +148,7 @@ public class VentasTest {
 
     @Test
     @DisplayName("El código compartido debe pertenecer a un empleado del club")
-    void codigoCompartido() throws InventarioInsuficienteException {
+    public void codigoCompartido() throws InventarioInsuficienteException {
         club.registrarUsuario(new Entrenador("E1", "Entrenador", LocalDate.of(1990, 1, 1), "e1", "clave",
                 "SENECA10"));
         VentaTienda invalida = new VentaTienda(LocalDate.now(), socio, new DescuentoCodigoCompartido("NO-EXISTE"));
@@ -163,7 +163,7 @@ public class VentasTest {
 
     @Test
     @DisplayName("Un traslado sin unidades suficientes en el origen se rechaza")
-    void trasladoInsuficiente() {
+    public void trasladoInsuficiente() {
         UbicacionInventario cafeteria = new UbicacionInventario("Cafetería");
         club.registrarUbicacionInventario(cafeteria);
 

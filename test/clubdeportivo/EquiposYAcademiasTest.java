@@ -54,7 +54,7 @@ public class EquiposYAcademiasTest {
     private int consecutivoSocios;
 
     @BeforeEach
-    void prepararClub() {
+    public void prepararClub() {
         club = new ClubDeportivo();
         futbol = new DeporteConjunto("Fútbol", MINIMO_JUGADORES, 3, 1, true);
         delantero = new Posicion("Delantero");
@@ -72,7 +72,7 @@ public class EquiposYAcademiasTest {
 
         @Test
         @DisplayName("Un deporte de conjunto sin posiciones se rechaza")
-        void deporteSinPosiciones() {
+        public void deporteSinPosiciones() {
             DeporteConjunto sinPosiciones = new DeporteConjunto("Rugby", 7, 4, 2, true);
 
             assertThrows(IllegalArgumentException.class,
@@ -81,7 +81,7 @@ public class EquiposYAcademiasTest {
 
         @Test
         @DisplayName("El equipo se crea vacío e indica cuántos jugadores le faltan")
-        void equipoNuevoEstaIncompleto() {
+        public void equipoNuevoEstaIncompleto() {
             assertAll("equipo vacío",
                     () -> assertEquals(0, equipo.contarMiembros()),
                     () -> assertFalse(equipo.cumpleMinimoJugadores()),
@@ -90,7 +90,7 @@ public class EquiposYAcademiasTest {
 
         @Test
         @DisplayName("Al registrar los miembros mínimos el equipo queda completo")
-        void equipoConMiembrosSuficientes() {
+        public void equipoConMiembrosSuficientes() {
             for (int i = 1; i <= MINIMO_JUGADORES; i++) {
                 inscribir(nuevoSocio(), equipo, i);
             }
@@ -102,7 +102,7 @@ public class EquiposYAcademiasTest {
 
         @Test
         @DisplayName("Un nombre de equipo repetido se rechaza aunque sea de otro deporte")
-        void nombreRepetidoEnOtroDeporte() {
+        public void nombreRepetidoEnOtroDeporte() {
             DeporteConjunto baloncesto = new DeporteConjunto("Baloncesto", 5, 2, 0, false);
             baloncesto.agregarPosicion(new Posicion("Base"));
             club.registrarDeporteConjunto(baloncesto);
@@ -119,7 +119,7 @@ public class EquiposYAcademiasTest {
 
         @Test
         @DisplayName("Un socio no puede estar en dos equipos activos de la misma disciplina y categoría")
-        void noEstaEnDosEquiposDeLaMismaCategoria() {
+        public void noEstaEnDosEquiposDeLaMismaCategoria() {
             Socio socio = nuevoSocio();
             inscribir(socio, equipo, 9);
             Equipo otro = registrarEquipo("Séneca B");
@@ -132,7 +132,7 @@ public class EquiposYAcademiasTest {
 
         @Test
         @DisplayName("Si su equipo fue dado de baja, el socio puede unirse a otro de la misma categoría")
-        void equipoDadoDeBajaLiberaAlSocio() {
+        public void equipoDadoDeBajaLiberaAlSocio() {
             Socio socio = nuevoSocio();
             inscribir(socio, equipo, 9);
             club.darDeBajaEquipo(equipo);
@@ -145,7 +145,7 @@ public class EquiposYAcademiasTest {
 
         @Test
         @DisplayName("Un socio retirado puede volver a inscribirse en el mismo equipo")
-        void socioRetiradoVuelve() {
+        public void socioRetiradoVuelve() {
             Socio socio = nuevoSocio();
             inscribir(socio, equipo, 9);
             club.retirarSocioDeEquipo(socio, equipo);
@@ -160,7 +160,7 @@ public class EquiposYAcademiasTest {
 
         @Test
         @DisplayName("La camiseta de un retirado queda libre; la de un integrante no")
-        void camisetaRepetida() {
+        public void camisetaRepetida() {
             Socio primero = nuevoSocio();
             inscribir(primero, equipo, 10);
 
@@ -172,7 +172,7 @@ public class EquiposYAcademiasTest {
 
         @Test
         @DisplayName("Una posición que no es del deporte se rechaza")
-        void posicionDeOtroDeporte() {
+        public void posicionDeOtroDeporte() {
             Socio socio = nuevoSocio();
 
             assertThrows(IllegalArgumentException.class,
@@ -181,7 +181,7 @@ public class EquiposYAcademiasTest {
 
         @Test
         @DisplayName("Un equipo con el cupo lleno no recibe más integrantes")
-        void equipoLleno() {
+        public void equipoLleno() {
             for (int i = 1; i <= CUPO_EQUIPO; i++) {
                 inscribir(nuevoSocio(), equipo, i);
             }
@@ -191,7 +191,7 @@ public class EquiposYAcademiasTest {
 
         @Test
         @DisplayName("Las inscripciones del socio incluyen las suspendidas y no las retiradas")
-        void consultarEquiposDelSocio() {
+        public void consultarEquiposDelSocio() {
             Socio socio = nuevoSocio();
             InscripcionEquipo inscripcion = inscribir(socio, equipo, 9);
             inscripcion.suspender();
@@ -212,14 +212,14 @@ public class EquiposYAcademiasTest {
         private DeporteIndividual tenis;
 
         @BeforeEach
-        void registrarTenis() {
+        public void registrarTenis() {
             tenis = new DeporteIndividual("Tenis", 3);
             club.registrarDeporteIndividual(tenis);
         }
 
         @Test
         @DisplayName("El socio queda inscrito con su nivel")
-        void inscribeSocio() {
+        public void inscribeSocio() {
             Socio socio = nuevoSocio();
 
             InscripcionAcademia inscripcion = club.inscribirSocioEnAcademia(socio, tenis, Nivel.AVANZADO);
@@ -232,7 +232,7 @@ public class EquiposYAcademiasTest {
 
         @Test
         @DisplayName("Un socio suspendido en la academia no puede inscribirse otra vez")
-        void noSeInscribeDosVeces() {
+        public void noSeInscribeDosVeces() {
             Socio socio = nuevoSocio();
             club.inscribirSocioEnAcademia(socio, tenis, Nivel.PRINCIPIANTE).suspender();
 
@@ -242,7 +242,7 @@ public class EquiposYAcademiasTest {
 
         @Test
         @DisplayName("Después de retirarse el socio puede volver a la academia")
-        void vuelveDespuesDeRetirarse() {
+        public void vuelveDespuesDeRetirarse() {
             Socio socio = nuevoSocio();
             club.inscribirSocioEnAcademia(socio, tenis, Nivel.PRINCIPIANTE).retirar();
 
@@ -251,7 +251,7 @@ public class EquiposYAcademiasTest {
 
         @Test
         @DisplayName("El ranking de la academia ordena por puntaje de mayor a menor")
-        void rankingDeAcademia() {
+        public void rankingDeAcademia() {
             InscripcionAcademia bajo = club.inscribirSocioEnAcademia(nuevoSocio(), tenis, Nivel.INTERMEDIO);
             InscripcionAcademia alto = club.inscribirSocioEnAcademia(nuevoSocio(), tenis, Nivel.INTERMEDIO);
             bajo.sumarPuntaje(3);
@@ -270,7 +270,7 @@ public class EquiposYAcademiasTest {
 
         @Test
         @DisplayName("El equipo queda inactivo y se retiran sus inscripciones en torneos abiertos y competencias")
-        void retiraInscripciones() {
+        public void retiraInscripciones() {
             completar(equipo);
             TorneoConjunto torneo = registrarTorneo("TB-1");
             InscripcionEquipoTorneo enTorneo = club.inscribirEquipoEnTorneo(torneo, equipo, TipoCupo.REGULAR);
@@ -287,7 +287,7 @@ public class EquiposYAcademiasTest {
 
         @Test
         @DisplayName("Se rechaza si el equipo juega un torneo en curso")
-        void rechazaConTorneoEnCurso() {
+        public void rechazaConTorneoEnCurso() {
             completar(equipo);
             Equipo rival = registrarEquipo("Rival");
             completar(rival);
@@ -302,7 +302,7 @@ public class EquiposYAcademiasTest {
 
         @Test
         @DisplayName("Se rechaza si el equipo tiene partidos oficiales programados")
-        void rechazaConPartidosPendientes() {
+        public void rechazaConPartidosPendientes() {
             completar(equipo);
             Competencia liga = registrarLiga();
             club.inscribirEquipoEnCompetencia(liga, equipo);
@@ -314,7 +314,7 @@ public class EquiposYAcademiasTest {
 
         @Test
         @DisplayName("Un equipo ya dado de baja no se da de baja otra vez ni recibe miembros")
-        void equipoInactivo() {
+        public void equipoInactivo() {
             club.darDeBajaEquipo(equipo);
 
             assertAll("equipo inactivo",
@@ -325,7 +325,7 @@ public class EquiposYAcademiasTest {
 
     @Test
     @DisplayName("El ranking de equipos ordena por puntaje histórico y omite los dados de baja")
-    void rankingDeEquipos() {
+    public void rankingDeEquipos() {
         Equipo segundo = registrarEquipo("Segundo");
         Equipo inactivo = registrarEquipo("Inactivo");
         equipo.sumarPuntajeHistorico(3);

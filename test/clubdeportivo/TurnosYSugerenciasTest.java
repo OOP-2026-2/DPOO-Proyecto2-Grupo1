@@ -37,7 +37,7 @@ public class TurnosYSugerenciasTest {
     private Fisioterapeuta fisioterapeuta;
 
     @BeforeEach
-    void prepararPersonal() {
+    public void prepararPersonal() {
         club = new ClubDeportivo();
         administrador = new Administrador("A1", "Admin", LocalDate.of(1980, 1, 1), "admin", "clave");
         primero = new Entrenador("E1", "Entrenador Uno", LocalDate.of(1990, 1, 1), "e1", "clave", "COD1");
@@ -51,14 +51,14 @@ public class TurnosYSugerenciasTest {
 
     @Test
     @DisplayName("Un turno fuera del horario del club se rechaza")
-    void turnoFueraDelHorario() {
+    public void turnoFueraDelHorario() {
         assertThrows(IllegalArgumentException.class, () -> club.asignarTurno(primero,
                 new Turno(DiaSemana.LUNES, club.getHoraApertura().minusHours(1), FIN)));
     }
 
     @Test
     @DisplayName("El turno cumple la cobertura mínima con dos entrenadores y un fisioterapeuta")
-    void coberturaMinima() {
+    public void coberturaMinima() {
         Turno lunes = new Turno(DiaSemana.LUNES, INICIO, FIN);
         club.asignarTurno(primero, lunes);
         club.asignarTurno(segundo, new Turno(DiaSemana.LUNES, INICIO, FIN));
@@ -71,7 +71,7 @@ public class TurnosYSugerenciasTest {
 
     @Test
     @DisplayName("Un cambio que deja el turno sin cobertura no se puede aprobar")
-    void cambioSinCoberturaSeRechaza() {
+    public void cambioSinCoberturaSeRechaza() {
         Turno turno = new Turno(DiaSemana.LUNES, INICIO, FIN);
         club.asignarTurno(primero, turno);
         club.asignarTurno(segundo, new Turno(DiaSemana.LUNES, INICIO, FIN));
@@ -89,7 +89,7 @@ public class TurnosYSugerenciasTest {
 
     @Test
     @DisplayName("El administrador puede rechazar una solicitud pendiente una sola vez")
-    void rechazarSolicitud() {
+    public void rechazarSolicitud() {
         Turno turno = new Turno(DiaSemana.LUNES, INICIO, FIN);
         club.asignarTurno(primero, turno);
         SolicitudCambioTurno solicitud = club.solicitarCambioTurno(primero, turno, DiaSemana.MARTES,
@@ -103,7 +103,7 @@ public class TurnosYSugerenciasTest {
 
     @Test
     @DisplayName("Una sugerencia aprobada crea el producto en el club")
-    void aprobarSugerencia() {
+    public void aprobarSugerencia() {
         SugerenciaProducto sugerencia = new SugerenciaProducto("Termo", "Termo de agua caliente", primero);
         club.registrarSugerencia(sugerencia);
 
@@ -116,7 +116,7 @@ public class TurnosYSugerenciasTest {
 
     @Test
     @DisplayName("El producto de la aprobación debe corresponder a la sugerencia")
-    void productoDistintoALaSugerencia() {
+    public void productoDistintoALaSugerencia() {
         SugerenciaProducto sugerencia = new SugerenciaProducto("Termo", "Termo de agua caliente", primero);
         club.registrarSugerencia(sugerencia);
 

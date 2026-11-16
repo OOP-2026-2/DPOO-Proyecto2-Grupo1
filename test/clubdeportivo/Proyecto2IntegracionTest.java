@@ -92,7 +92,7 @@ public class Proyecto2IntegracionTest {
     private Path carpetaTemporal;
 
     @BeforeEach
-    void prepararClub() {
+    public void prepararClub() {
         club = new ClubDeportivo();
         tenis = new DeporteIndividual("Tenis", 20);
         club.registrarDeporteIndividual(tenis);
@@ -101,7 +101,7 @@ public class Proyecto2IntegracionTest {
     }
 
     @AfterEach
-    void borrarArchivosTemporales() throws IOException {
+    public void borrarArchivosTemporales() throws IOException {
         if (carpetaTemporal == null) {
             return;
         }
@@ -123,7 +123,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Con datos válidos el torneo queda registrado en estado ABIERTO")
-        void registraTorneoAbierto() {
+        public void registraTorneoAbierto() {
             TorneoIndividual torneo = crearTorneoIndividual("T01", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS);
 
@@ -136,7 +136,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Con capacidad 12 se reservan 3 cupos preferenciales y 9 regulares")
-        void calculaCupos() {
+        public void calculaCupos() {
             TorneoIndividual torneo = new TorneoIndividual("T01-C", "Cupos", fechaTorneo,
                     LocalTime.of(10, 0), LocalTime.of(12, 0), FormatoTorneo.TODOS_CONTRA_TODOS,
                     CAPACIDAD_HISTORIA_T01, TipoTorneo.RECREATIVO, fechaLiberacion(),
@@ -151,7 +151,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Un torneo recreativo con tarifa mayor que cero se rechaza")
-        void rechazaRecreativoConTarifa() {
+        public void rechazaRecreativoConTarifa() {
             assertThrows(IllegalArgumentException.class,
                     () -> new TorneoIndividual("T01-R", "Recreativo", fechaTorneo,
                             LocalTime.of(10, 0), LocalTime.of(12, 0),
@@ -162,7 +162,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Un torneo fuera del horario del club se rechaza")
-        void rechazaTorneoFueraDelHorario() {
+        public void rechazaTorneoFueraDelHorario() {
             TorneoIndividual nocturno = new TorneoIndividual("T01-N", "Nocturno", fechaTorneo,
                     club.getHoraCierre(), club.getHoraCierre().plusHours(1),
                     FormatoTorneo.TODOS_CONTRA_TODOS, CAPACIDAD, TipoTorneo.RECREATIVO,
@@ -175,7 +175,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Un torneo con fecha pasada se rechaza")
-        void rechazaFechaPasada() {
+        public void rechazaFechaPasada() {
             TorneoIndividual pasado = crearTorneoIndividual("T01-P", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS, fechaTorneo.minusDays(2));
 
@@ -185,7 +185,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Un identificador repetido se rechaza")
-        void rechazaIdentificadorRepetido() {
+        public void rechazaIdentificadorRepetido() {
             club.registrarTorneo(crearTorneoIndividual("T01-D", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS));
 
@@ -202,7 +202,7 @@ public class Proyecto2IntegracionTest {
         private TorneoIndividual competitivo;
 
         @BeforeEach
-        void registrarTorneos() {
+        public void registrarTorneos() {
             recreativo = crearTorneoIndividual("T02-R", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS);
             competitivo = crearTorneoIndividual("T02-C", TipoTorneo.COMPETITIVO,
@@ -213,7 +213,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Al filtrar por COMPETITIVO solo se muestran los competitivos")
-        void filtraPorTipo() {
+        public void filtraPorTipo() {
             List<Torneo> resultado = club.consultarTorneos(TipoTorneo.COMPETITIVO, null);
 
             assertEquals(1, resultado.size());
@@ -222,13 +222,13 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Sin filtros se muestran todos los torneos")
-        void sinFiltrosMuestraTodos() {
+        public void sinFiltrosMuestraTodos() {
             assertEquals(2, club.consultarTorneos(null, null).size());
         }
 
         @Test
         @DisplayName("Un torneo seleccionado da acceso a inscripciones, encuentros, posiciones y premios")
-        void historialDelTorneo() {
+        public void historialDelTorneo() {
             inscribirExterno(recreativo, "T02-P1");
             inscribirExterno(recreativo, "T02-P2");
             club.iniciarTorneo(recreativo);
@@ -254,7 +254,7 @@ public class Proyecto2IntegracionTest {
         private TorneoConjunto torneo;
 
         @BeforeEach
-        void prepararEquipo() {
+        public void prepararEquipo() {
             futbol = new DeporteConjunto("Fútbol", 2, 3, 1, true);
             delantero = new Posicion("Delantero");
             futbol.agregarPosicion(delantero);
@@ -273,7 +273,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Un equipo activo que cumple deporte, categoría y mínimo queda inscrito")
-        void inscribeEquipoCompleto() {
+        public void inscribeEquipoCompleto() {
             club.inscribirSocioEnEquipo(crearSocio("S-COMPANERO"), equipo, delantero, 9);
 
             InscripcionEquipoTorneo inscripcion = club.inscribirEquipoEnTorneo(
@@ -287,7 +287,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Un equipo sin el mínimo de jugadores se rechaza indicando cuántos tiene")
-        void rechazaEquipoIncompleto() {
+        public void rechazaEquipoIncompleto() {
             IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
                     () -> club.inscribirEquipoEnTorneo(torneo, equipo, TipoCupo.REGULAR, capitan));
 
@@ -296,7 +296,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Si el equipo ya está inscrito se rechaza la nueva solicitud")
-        void rechazaEquipoRepetido() {
+        public void rechazaEquipoRepetido() {
             club.inscribirSocioEnEquipo(crearSocio("S-COMPANERO"), equipo, delantero, 9);
             club.inscribirEquipoEnTorneo(torneo, equipo, TipoCupo.REGULAR, capitan);
 
@@ -306,7 +306,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Sin puntaje histórico se rechaza el cupo preferencial")
-        void rechazaPreferencialSinPuntaje() {
+        public void rechazaPreferencialSinPuntaje() {
             club.inscribirSocioEnEquipo(crearSocio("S-COMPANERO"), equipo, delantero, 9);
 
             assertThrows(IllegalArgumentException.class,
@@ -315,7 +315,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Un socio que no es integrante no puede inscribir al equipo")
-        void rechazaSocioAjeno() {
+        public void rechazaSocioAjeno() {
             club.inscribirSocioEnEquipo(crearSocio("S-COMPANERO"), equipo, delantero, 9);
             Socio ajeno = crearSocio("S-AJENO");
 
@@ -331,7 +331,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("En SENCILLOS se registra una persona válida")
-        void inscribeSencillos() {
+        public void inscribeSencillos() {
             TorneoIndividual torneo = registrar(crearTorneoIndividual("T04-S", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS));
 
@@ -342,7 +342,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("En DOBLES se registra la pareja")
-        void inscribePareja() {
+        public void inscribePareja() {
             TorneoIndividual torneo = registrar(crearTorneoIndividual("T04-D", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.DOBLES));
             ParticipanteExterno primero = crearExterno("T04-P1");
@@ -358,7 +358,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Si la cantidad no corresponde a la modalidad se rechaza")
-        void rechazaCantidadIncorrecta() {
+        public void rechazaCantidadIncorrecta() {
             TorneoIndividual torneo = registrar(crearTorneoIndividual("T04-X", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.DOBLES));
 
@@ -376,7 +376,7 @@ public class Proyecto2IntegracionTest {
         private InscripcionIndividualTorneo inscripcion;
 
         @BeforeEach
-        void inscribir() {
+        public void inscribir() {
             torneo = registrar(crearTorneoIndividual("T05", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS));
             participante = crearExterno("T05-P1");
@@ -386,7 +386,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("El participante consulta sus inscripciones desde el club")
-        void consultaSusInscripciones() {
+        public void consultaSusInscripciones() {
             List<InscripcionTorneo> inscripciones = club.consultarInscripcionesDe(participante);
 
             assertEquals(1, inscripciones.size());
@@ -395,7 +395,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Con el torneo ABIERTO la inscripción pasa a RETIRADA y libera el cupo")
-        void retiraYLiberaCupo() {
+        public void retiraYLiberaCupo() {
             int cuposAntes = torneo.cantidadCuposDisponibles();
 
             club.retirarInscripcionTorneo(participante, inscripcion);
@@ -407,7 +407,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Con el torneo EN_CURSO se rechaza el retiro")
-        void rechazaRetiroEnCurso() {
+        public void rechazaRetiroEnCurso() {
             inscribirExterno(torneo, "T05-P2");
             club.iniciarTorneo(torneo);
 
@@ -417,7 +417,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Una inscripción ya retirada no se puede retirar otra vez")
-        void rechazaRetiroRepetido() {
+        public void rechazaRetiroRepetido() {
             club.retirarInscripcionTorneo(participante, inscripcion);
 
             assertThrows(IllegalStateException.class,
@@ -426,7 +426,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Nadie puede retirar una inscripción ajena")
-        void rechazaRetiroAjeno() {
+        public void rechazaRetiroAjeno() {
             ParticipanteExterno otro = crearExterno("T05-OTRO");
 
             assertThrows(IllegalArgumentException.class,
@@ -441,7 +441,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("El 20 % de la capacidad se separa como cupo preferencial, redondeado hacia arriba")
-        void separaCuposPreferenciales() {
+        public void separaCuposPreferenciales() {
             TorneoIndividual torneo = crearTorneoIndividual("T06-C", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS);
 
@@ -450,7 +450,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Un socio con ranking mayor que cero puede tomar el cupo preferencial")
-        void socioConRankingTomaPreferencial() {
+        public void socioConRankingTomaPreferencial() {
             TorneoIndividual torneo = registrar(crearTorneoIndividual("T06-S", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS, fechaFutura));
             Socio socio = crearSocioAcademia("S-PREF", 100);
@@ -463,7 +463,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Al liberarse, los cupos preferenciales sin usar se ocupan como regulares")
-        void liberadosCuentanComoRegulares() {
+        public void liberadosCuentanComoRegulares() {
             TorneoIndividual torneo = registrar(crearTorneoIndividual("T06-L", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS, fechaFutura));
 
@@ -488,7 +488,7 @@ public class Proyecto2IntegracionTest {
         private DiaSemana diaTorneo;
 
         @BeforeEach
-        void prepararTorneo() {
+        public void prepararTorneo() {
             torneo = registrar(crearTorneoIndividual("T07", TipoTorneo.COMPETITIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS));
             entrenador = new Entrenador("E1", "Entrenador Uno", LocalDate.of(1990, 1, 1),
@@ -499,7 +499,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Sin turno ese día la inscripción se registra y no paga en un torneo competitivo")
-        void inscribeEmpleadoSinTurno() {
+        public void inscribeEmpleadoSinTurno() {
             DiaSemana otroDia = DiaSemana.values()[(diaTorneo.ordinal() + 1) % DiaSemana.values().length];
             club.asignarTurno(entrenador, new Turno(otroDia, LocalTime.of(8, 0), LocalTime.of(12, 0)));
 
@@ -511,7 +511,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Con turno el día del torneo se rechaza, aunque el turno sea en otro horario")
-        void rechazaEmpleadoConTurnoEseDia() {
+        public void rechazaEmpleadoConTurnoEseDia() {
             club.asignarTurno(entrenador, new Turno(diaTorneo, LocalTime.of(14, 0), LocalTime.of(18, 0)));
 
             IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
@@ -522,7 +522,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Un administrador no es empleado ni participante: no entra a la consola del empleado")
-        void rechazaAdministrador() {
+        public void rechazaAdministrador() {
             club.registrarUsuario(new Administrador("A1", "Admin", LocalDate.of(1985, 5, 5),
                     "admin", "clave"));
             Usuario usuario = club.autenticar("admin", "clave");
@@ -539,7 +539,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Con el torneo EN_CURSO y un marcador válido se actualizan las posiciones")
-        void actualizaPosiciones() {
+        public void actualizaPosiciones() {
             TorneoIndividual torneo = prepararTorneoConDosExternos("T08", TipoTorneo.RECREATIVO);
             club.iniciarTorneo(torneo);
             EncuentroTorneo encuentro = torneo.getEncuentros().get(0);
@@ -555,7 +555,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("En eliminación directa se rechaza un empate")
-        void rechazaEmpate() {
+        public void rechazaEmpate() {
             TorneoIndividual torneo = prepararTorneoConDosExternos("T08-E", TipoTorneo.RECREATIVO,
                     FormatoTorneo.ELIMINACION_DIRECTA);
             club.iniciarTorneo(torneo);
@@ -566,7 +566,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Un encuentro que no pertenece a un torneo del club se rechaza")
-        void rechazaEncuentroAjeno() {
+        public void rechazaEncuentroAjeno() {
             TorneoIndividual ajeno = crearTorneoIndividual("T08-AJENO", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS);
             ajeno.inscribirParticipantes(lista(new ParticipanteExterno("X1", "X1",
@@ -586,13 +586,13 @@ public class Proyecto2IntegracionTest {
         private TorneoIndividual torneo;
 
         @BeforeEach
-        void prepararTorneo() {
+        public void prepararTorneo() {
             torneo = prepararTorneoConDosExternos("T09", TipoTorneo.COMPETITIVO);
         }
 
         @Test
         @DisplayName("ABIERTO: se muestran las inscripciones actuales")
-        void abiertoMuestraInscripciones() {
+        public void abiertoMuestraInscripciones() {
             assertAll("torneo abierto",
                     () -> assertEquals(EstadoTorneo.ABIERTO, torneo.getEstado()),
                     () -> assertEquals(2, torneo.getInscripcionesActivas().size()),
@@ -601,7 +601,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("EN_CURSO: se muestran encuentros y posiciones")
-        void enCursoMuestraEncuentros() {
+        public void enCursoMuestraEncuentros() {
             club.iniciarTorneo(torneo);
 
             assertAll("torneo en curso",
@@ -611,7 +611,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("FINALIZADO: se conserva todo el historial con sus nombres y premios")
-        void finalizadoConservaHistorial() {
+        public void finalizadoConservaHistorial() {
             club.iniciarTorneo(torneo);
             club.registrarResultadoEncuentro(torneo.getEncuentros().get(0), "1-0");
             club.finalizarTorneo(torneo);
@@ -632,7 +632,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Con todos los encuentros terminados se determina el ganador y se generan premios")
-        void determinaGanadorYPremios() {
+        public void determinaGanadorYPremios() {
             TorneoIndividual torneo = prepararTorneoConDosExternos("T10", TipoTorneo.COMPETITIVO);
             club.iniciarTorneo(torneo);
             club.registrarResultadoEncuentro(torneo.getEncuentros().get(0), "0-2");
@@ -648,7 +648,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Un torneo finalizado no se vuelve a finalizar ni repite los premios")
-        void premiosUnaSolaVez() {
+        public void premiosUnaSolaVez() {
             Socio socio = crearSocioAcademia("S-T10", 10);
             TorneoIndividual torneo = registrar(crearTorneoIndividual("T10-U", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS));
@@ -668,7 +668,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Un participante externo que gana un torneo recreativo no recibe bono")
-        void externoNoRecibeBono() {
+        public void externoNoRecibeBono() {
             TorneoIndividual torneo = prepararTorneoConDosExternos("T10-R", TipoTorneo.RECREATIVO);
             club.iniciarTorneo(torneo);
             club.registrarResultadoEncuentro(torneo.getEncuentros().get(0), "2-0");
@@ -678,7 +678,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Con un encuentro pendiente se rechaza la finalización")
-        void rechazaConPendientes() {
+        public void rechazaConPendientes() {
             TorneoIndividual torneo = prepararTorneoConDosExternos("T10-P", TipoTorneo.RECREATIVO);
             club.iniciarTorneo(torneo);
 
@@ -687,7 +687,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("En un torneo competitivo el premio sale del recaudo")
-        void premioCompetitivoSaleDelRecaudo() {
+        public void premioCompetitivoSaleDelRecaudo() {
             TorneoIndividual torneo = prepararTorneoConDosExternos("T10-C", TipoTorneo.COMPETITIVO);
             club.iniciarTorneo(torneo);
             club.registrarResultadoEncuentro(torneo.getEncuentros().get(0), "3-1");
@@ -703,7 +703,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Si gana un empleado no se le entrega dinero")
-        void empleadoGanadorNoRecibeDinero() {
+        public void empleadoGanadorNoRecibeDinero() {
             TorneoIndividual torneo = registrar(crearTorneoIndividual("T10-E", TipoTorneo.COMPETITIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS));
             Entrenador entrenador = new Entrenador("E-GANA", "Entrenador", LocalDate.of(1990, 1, 1),
@@ -734,7 +734,7 @@ public class Proyecto2IntegracionTest {
         private UbicacionInventario tienda;
 
         @BeforeEach
-        void ganarBono() {
+        public void ganarBono() {
             ganador = crearSocioAcademia("S-BONO", 50);
             TorneoIndividual torneo = registrar(crearTorneoIndividual("T11", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS));
@@ -756,7 +756,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Con un bono propio y disponible se aplica el descuento y el bono queda usado")
-        void aplicaBono() throws Exception {
+        public void aplicaBono() throws Exception {
             VentaTienda venta = new VentaTienda(LocalDate.now(), ganador, new DescuentoBonoTorneo(bono));
             venta.agregarDetalle(camiseta, 1);
             venta.finalizarVenta();
@@ -771,7 +771,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Un bono ya usado se rechaza")
-        void rechazaBonoUsado() throws Exception {
+        public void rechazaBonoUsado() throws Exception {
             VentaTienda primera = new VentaTienda(LocalDate.now(), ganador, new DescuentoBonoTorneo(bono));
             primera.agregarDetalle(camiseta, 1);
             club.procesarVenta(primera, tienda);
@@ -781,7 +781,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("El bono de otro socio se rechaza")
-        void rechazaBonoAjeno() {
+        public void rechazaBonoAjeno() {
             Socio otro = crearSocio("S-OTRO");
             VentaTienda venta = new VentaTienda(LocalDate.now(), otro, new DescuentoBonoTorneo(bono));
             venta.agregarDetalle(camiseta, 1);
@@ -797,7 +797,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Con credenciales válidas se obtiene el usuario de su rol")
-        void credencialesValidas() {
+        public void credencialesValidas() {
             ParticipanteExterno participante = crearExterno("T12");
 
             assertSame(participante, club.autenticar("login-T12", "clave"));
@@ -805,7 +805,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Con credenciales incorrectas no se obtiene ningún usuario")
-        void credencialesIncorrectas() {
+        public void credencialesIncorrectas() {
             crearExterno("T12-X");
 
             assertNull(club.autenticar("login-T12-X", "incorrecta"));
@@ -813,7 +813,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Un usuario de otro rol no corresponde al tipo que exige la consola")
-        void otroRolSeRechaza() {
+        public void otroRolSeRechaza() {
             Administrador administrador = new Administrador("A-T12", "Admin", LocalDate.of(1980, 1, 1),
                     "admin-t12", "clave");
             club.registrarUsuario(administrador);
@@ -831,7 +831,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Todos contra todos crea un encuentro por cada pareja de inscritos")
-        void todosContraTodos() {
+        public void todosContraTodos() {
             TorneoIndividual torneo = registrar(crearTorneoIndividual("T13", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS));
             int inscritos = 3;
@@ -849,7 +849,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Eliminación directa genera la primera ronda")
-        void eliminacionDirecta() {
+        public void eliminacionDirecta() {
             TorneoIndividual torneo = prepararTorneoConDosExternos("T13-E", TipoTorneo.RECREATIVO,
                     FormatoTorneo.ELIMINACION_DIRECTA);
 
@@ -860,7 +860,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Un torneo no se puede iniciar antes de su fecha")
-        void rechazaInicioAnticipado() {
+        public void rechazaInicioAnticipado() {
             TorneoIndividual torneo = registrar(crearTorneoIndividual("T13-F", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS, fechaFutura));
             inscribirExterno(torneo, "T13-F1");
@@ -872,7 +872,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Con tres inscritos los encuentros quedan en horas distintas del día del torneo")
-        void encuentrosSinCruces() {
+        public void encuentrosSinCruces() {
             TorneoIndividual torneo = registrar(crearTorneoIndividual("T13-H", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS));
 
@@ -894,7 +894,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Con una sola inscripción se rechaza el inicio")
-        void rechazaUnaInscripcion() {
+        public void rechazaUnaInscripcion() {
             TorneoIndividual torneo = registrar(crearTorneoIndividual("T13-U", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS));
             inscribirExterno(torneo, "T13-SOLO");
@@ -909,7 +909,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Un estudiante de la institución del club puede participar")
-        void estudianteDeLaInstitucion() {
+        public void estudianteDeLaInstitucion() {
             TorneoIndividual torneo = registrar(crearTorneoIndividual("T14", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS));
             EstudianteUniversidad estudiante = crearEstudiante("EST-1", club.getInstitucion());
@@ -922,7 +922,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Un estudiante de otra institución no puede inscribirse")
-        void estudianteDeOtraInstitucion() {
+        public void estudianteDeOtraInstitucion() {
             TorneoIndividual torneo = registrar(crearTorneoIndividual("T14-O", TipoTorneo.RECREATIVO,
                     FormatoTorneo.TODOS_CONTRA_TODOS, Modalidad.SENCILLOS));
             EstudianteUniversidad estudiante = crearEstudiante("EST-2", "Otra Universidad");
@@ -933,7 +933,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Un participante externo queda registrado con su contacto")
-        void registraExterno() {
+        public void registraExterno() {
             ParticipanteExterno externo = crearExterno("EXT-1");
 
             assertAll("externo",
@@ -943,7 +943,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Un identificador o un login repetido se rechaza")
-        void rechazaDuplicados() {
+        public void rechazaDuplicados() {
             crearExterno("EXT-DUP");
 
             assertAll("duplicados",
@@ -960,7 +960,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Si los archivos existen la persistencia reconstruye el club")
-        void reconstruyeElClub() throws IOException {
+        public void reconstruyeElClub() throws IOException {
             carpetaTemporal = Files.createTempDirectory("hu-t15-");
             TorneoIndividual torneo = prepararTorneoConDosExternos("T15", TipoTorneo.RECREATIVO);
             club.iniciarTorneo(torneo);
@@ -981,7 +981,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Si un archivo no existe su colección inicia vacía")
-        void archivoInexistente() throws IOException {
+        public void archivoInexistente() throws IOException {
             carpetaTemporal = Files.createTempDirectory("hu-t15-vacia-");
             ClubDeportivo vacio = new ClubDeportivo();
 
@@ -994,7 +994,7 @@ public class Proyecto2IntegracionTest {
 
         @Test
         @DisplayName("Al guardar se escriben los mismos archivos de la carpeta de datos")
-        void guardaEnLosMismosArchivos() throws IOException {
+        public void guardaEnLosMismosArchivos() throws IOException {
             carpetaTemporal = Files.createTempDirectory("hu-t15-guardar-");
             crearExterno("T15-G");
             PersistenciaClub persistencia = new PersistenciaClub(carpetaTemporal);

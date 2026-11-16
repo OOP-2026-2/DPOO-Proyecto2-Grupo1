@@ -1,0 +1,8 @@
+S-001;Ana Pérez;2006-10-06;ana;ana123;1071.0
+S-002;Juan Díaz;2005-10-06;juan;juan123;236.0
+S-003;Camila Vargas;2004-10-06;camila;camila123;0.0
+S-004;Andrés Castro;2003-10-06;andres;andres123;0.0
+S-005;Valentina Ríos;2002-10-06;valentina;valentina123;162.0
+S-006;Santiago Mora;2001-10-06;santiago;santiago123;0.0
+S-007;Isabela Cruz;2000-10-06;isabela;isabela123;0.0
+S-008;Tomás Herrera;1999-10-06;tomas;tomas123;0.0

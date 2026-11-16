@@ -64,7 +64,7 @@ public class PersistenciaClubTest {
     private Posicion posicion;
 
     @BeforeEach
-    void crearCarpetaTemporal() throws IOException {
+    public void crearCarpetaTemporal() throws IOException {
         carpeta = Files.createTempDirectory("persistencia-club-");
         persistencia = new PersistenciaClub(carpeta);
         club = new ClubDeportivo();
@@ -75,7 +75,7 @@ public class PersistenciaClubTest {
     }
 
     @AfterEach
-    void borrarCarpetaTemporal() throws IOException {
+    public void borrarCarpetaTemporal() throws IOException {
         File[] archivos = carpeta.toFile().listFiles();
 
         if (archivos != null) {
@@ -89,7 +89,7 @@ public class PersistenciaClubTest {
 
     @Test
     @DisplayName("Las suspensiones, el puntaje y las estadísticas de un partido oficial se conservan")
-    void conservaSuspensionesYPuntaje() throws IOException {
+    public void conservaSuspensionesYPuntaje() throws IOException {
         Equipo equipo = registrarEquipo("Séneca FC", Categoria.MAYORES);
         Socio expulsado = inscribirSocio("S1", equipo, 20);
         inscribirSocio("S2", equipo, 20);
@@ -120,7 +120,7 @@ public class PersistenciaClubTest {
 
     @Test
     @DisplayName("Un equipo dado de baja después de jugar se vuelve a cargar con su partido e inscripción retirada")
-    void equipoDadoDeBajaConHistorial() throws IOException {
+    public void equipoDadoDeBajaConHistorial() throws IOException {
         Equipo equipo = registrarEquipo("Séneca FC", Categoria.MAYORES);
         inscribirSocio("S1", equipo, 20);
         inscribirSocio("S2", equipo, 20);
@@ -143,7 +143,7 @@ public class PersistenciaClubTest {
 
     @Test
     @DisplayName("Un socio que superó la edad de su categoría se sigue cargando en su equipo")
-    void socioQueCumplioAnios() throws IOException {
+    public void socioQueCumplioAnios() throws IOException {
         Equipo juvenil = registrarEquipo("Séneca Sub 17", Categoria.SUB_17);
         inscribirSocio("S-JOVEN", juvenil, 16);
         persistencia.guardar(club);
@@ -167,7 +167,7 @@ public class PersistenciaClubTest {
 
     @Test
     @DisplayName("Una reserva de cancha de conjunto conserva su deporte")
-    void reservaConDeporte() throws Exception {
+    public void reservaConDeporte() throws Exception {
         Instalacion cancha = new Instalacion("CANCHA-1", TipoInstalacion.CANCHA_CONJUNTO, 22, false);
         club.registrarInstalacion(cancha);
         Socio socio = registrarSocio("S-RESERVA", 30);
@@ -184,7 +184,7 @@ public class PersistenciaClubTest {
 
     @Test
     @DisplayName("Una venta conserva el precio del día aunque el producto cambie de precio")
-    void ventaConservaPrecioHistorico() throws Exception {
+    public void ventaConservaPrecioHistorico() throws Exception {
         Socio socio = registrarSocio("S-COMPRA", 30);
         ArticuloTienda gorra = new ArticuloTienda("Gorra", PRECIO_ORIGINAL, "Ropa");
         UbicacionInventario tienda = new UbicacionInventario("Tienda");
@@ -206,7 +206,7 @@ public class PersistenciaClubTest {
 
     @Test
     @DisplayName("Los pagos de mensualidad se conservan en el historial del socio")
-    void conservaPagos() throws IOException {
+    public void conservaPagos() throws IOException {
         Socio socio = registrarSocio("S-PAGO", 30);
         club.registrarPagoMensualidad(new PagoMensualidad(LocalDate.now(), "2026-11", MENSUALIDAD, socio));
 
@@ -219,7 +219,7 @@ public class PersistenciaClubTest {
 
     @Test
     @DisplayName("Las estadísticas de un jugador que se retiró después del partido se siguen cargando")
-    void estadisticasDeJugadorRetirado() throws IOException {
+    public void estadisticasDeJugadorRetirado() throws IOException {
         Equipo equipo = registrarEquipo("Séneca FC", Categoria.MAYORES);
         Socio goleador = inscribirSocio("S1", equipo, 20);
         inscribirSocio("S2", equipo, 20);
@@ -240,7 +240,7 @@ public class PersistenciaClubTest {
 
     @Test
     @DisplayName("Las ventas guardadas con el formato del Proyecto 1 se cargan con su descuento")
-    void ventaConFormatoAnterior() throws Exception {
+    public void ventaConFormatoAnterior() throws Exception {
         double precio = 50000;
         double descuentoEmpleado = 0.15;
         club.registrarUsuario(new Entrenador("E1", "Entrenador", LocalDate.of(1990, 1, 1), "e1", "clave",
@@ -258,7 +258,7 @@ public class PersistenciaClubTest {
 
     @Test
     @DisplayName("Un archivo con datos inválidos se informa como error de lectura con su causa")
-    void archivoDanado() throws IOException {
+    public void archivoDanado() throws IOException {
         Files.write(carpeta.resolve("socios.txt"),
                 Arrays.asList("S1;Socio;no-es-fecha;login;clave;0"), StandardCharsets.UTF_8);
 
